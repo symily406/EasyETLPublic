@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.machine.mapper.MachineMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="machineResultMap" type="com.easy.etl.machine.entity.Machine">
+        <id column="MACHINE_ID" property="machineId"/>
+        <result column="COMPUTER_NAME" property="computerName"/>
+        <result column="COMPUTER_IP" property="computerIp"/>
+        <result column="USER_DIR" property="userDir"/>
+        <result column="OS_NAME" property="osName"/>
+        <result column="OS_ARCH" property="osArch"/>
+        <result column="REPORT_TIME" property="reportTime"/>
+        <result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D
+        .
+        *
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            <!--主键md5(IP)-->
+            <if test="param.machineId != null and param.machineId != ''">
+                AND D.MACHINE_ID =#{param.machineId}
+            </if>
+            <!--服务器名称-->
+            <if test="param.computerName != null and param.computerName != ''">
+                AND D.COMPUTER_NAME =#{param.computerName}
+            </if>
+            <!--服务器Ip-->
+            <if test="param.computerIp != null and param.computerIp != ''">
+                AND D.COMPUTER_IP =#{param.computerIp}
+            </if>
+            <!--项目路径-->
+            <if test="param.userDir != null and param.userDir != ''">
+                AND D.USER_DIR =#{param.userDir}
+            </if>
+            <!--操作系统-->
+            <if test="param.osName != null and param.osName != ''">
+                AND D.OS_NAME =#{param.osName}
+            </if>
+            <!--系统架构-->
+            <if test="param.osArch != null and param.osArch != ''">
+                AND D.OS_ARCH =#{param.osArch}
+            </if>
+            <!--上报时间-->
+            <if test="param.reportTime != null and param.reportTime != ''">
+                AND D.REPORT_TIME =#{param.reportTime}
+            </if>
+            <!--显示排序-->
+            <if test="param.showOrder != null">
+                AND D.SHOW_ORDER =#{param.showOrder}
+            </if>
+        </where>
+    </sql>
+
+    <!--分页-->
+    <select id="queryMachinePage" resultType="com.easy.etl.machine.vo.MachineVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_MACHINE D
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.REPORT_TIME DESC
+    </select>
+
+    <!--查询所有-->
+    <select id="queryMachineAll" resultType="com.easy.etl.machine.vo.MachineVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_MACHINE D
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.REPORT_TIME DESC
+    </select>
+
+    <!--根据条件查询单个-->
+    <select id="queryMachineByCondition" resultType="com.easy.etl.machine.vo.MachineVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_MACHINE D
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.REPORT_TIME DESC LIMIT 1
+    </select>
+    <!-- 代码生成器生成代码结束 -->
+</mapper>

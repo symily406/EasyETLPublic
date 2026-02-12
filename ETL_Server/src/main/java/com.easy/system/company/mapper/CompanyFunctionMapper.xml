@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.easy.system.company.mapper.CompanyFunctionMapper">
+	<!-- 通用查询映射结果 -->
+	<resultMap id="companyFunctionResultMap"
+		type="com.easy.system.company.entity.CompanyFunction">
+		<id column="CF_ID" property="cfId" />
+		<result column="COMPANY_ID" property="companyId" />
+		<result column="F_ID" property="fId" />
+	</resultMap>
+
+	<!-- 代码生成器生成代码开始 -->
+
+	<!-- 字段 -->
+	<sql id="queryColumns">
+		D.*
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="queryConditions">
+		<where>
+			<!--主键 -->
+			<if test="param.cfId != null and param.cfId != ''">
+				AND D.CF_ID =#{param.cfId}
+			</if>
+			<!--主键 -->
+			<if test="param.companyId != null and param.companyId != ''">
+				AND D.COMPANY_ID =#{param.companyId}
+			</if>
+			<!--功能主键 -->
+			<if test="param.fId != null and param.fId != ''">
+				AND D.F_ID =#{param.fId}
+			</if>
+			<!--层级 -->
+			<if test="param.leval != null">
+				AND D.LEVAL =#{param.leval}
+			</if>
+
+		</where>
+	</sql>
+
+
+	<!--查询所有 -->
+	<select id="queryCompanyFunctionAll"
+		resultType="com.easy.system.company.vo.CompanyFunctionVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_COMPANY_FUNCTION D
+		<include refid="queryConditions" />
+	</select>
+	<!-- 代码生成器生成代码结束 -->
+</mapper>

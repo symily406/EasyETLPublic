@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.projectMember.mapper.ProjectMemberMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="projectMemberResultMap" type="com.easy.etl.projectMember.entity.ProjectMember">
+        <id column="MEMBER_ID" property="memberId"/>
+        <result column="PROJECT_ID" property="projectId"/>
+        <result column="STAFF_ID" property="staffId"/>
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D.MEMBER_ID,
+        D.STAFF_ID,
+        D.PROJECT_ID,
+        D1.PROJECT_NAME,
+        D2.USER_NAME,
+        D3.NAME,
+        D3.PHONE,
+        D.ENABLE,
+        D.ALLOW_EDIT,
+        D.ALLOW_DELETE,
+        D.ADD_TIME
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            <!--主键-->
+            <if test="param.memberId != null and param.memberId != ''">
+                AND D.MEMBER_ID =#{param.memberId}
+            </if>
+            <!--归属项目-->
+            <if test="param.projectId != null and param.projectId != ''">
+                AND D.PROJECT_ID =#{param.projectId}
+            </if>
+            <!--用户ID-->
+            <if test="param.staffId != null and param.staffId != ''">
+                AND D.STAFF_ID =#{param.staffId}
+            </if>
+        </where>
+    </sql>
+
+     <!--分页-->
+     <select id="queryProjectMemberPage" resultType="com.easy.etl.projectMember.vo.ProjectMemberVo">
+         SELECT
+         <include refid="queryColumns" />
+         FROM
+         TF_PROJECT_MEMBER D
+         LEFT JOIN TF_PROJECT D1 ON D.PROJECT_ID = D1.PROJECT_ID
+         LEFT JOIN TD_STAFF D2 ON D.STAFF_ID=D2.STAFF_ID
+         LEFT JOIN TD_STAFF_INFO D3 ON D.STAFF_ID=D3.STAFF_ID
+        <include refid="queryConditions" />
+         ORDER BY D.ADD_TIME ASC
+      </select>
+    <!-- 代码生成器生成代码结束 -->
+    <select id="queryProjectMemberWorkSpace" resultType="com.easy.etl.projectMember.vo.ProjectMemberWorkSpaceVo">
+        WITH TASK AS (
+            SELECT
+                D.PROJECT_ID,
+                D.WORK_SPACE_TYPE,
+                COUNT(*) AS TASK_NUM
+            FROM TF_PROJECT_TASK d where D.IS_DEL=1 GROUP BY D.PROJECT_ID,d.WORK_SPACE_TYPE
+        ),FAIL_TASK AS(
+            SELECT
+                D.PROJECT_ID,
+                D.WORK_SPACE_TYPE,
+                COUNT(D.TASK_ID) AS FAIL_TASK_NUM
+            FROM
+            TF_RUN_TASK_JOB D WHERE DATE_FORMAT(D.ADD_TIME,'%Y-%m-%d')=DATE_FORMAT(NOW(),'%Y-%m-%d')
+                AND D.STATUS=-1
+            GROUP BY D.PROJECT_ID,D.WORK_SPACE_TYPE
+        )
+        SELECT
+            DISTINCT
+            D.PROJECT_ID,
+            D.PROJECT_WORK_SPACE_ID,
+            D2.WORK_SPACE_NAME,
+            D2.WORK_SPACE_TYPE,
+            IFNULL(D3.TASK_NUM,0) AS TASK_NUM,
+            IFNULL(D4.FAIL_TASK_NUM,0) AS  FAIL_TASK_NUM
+        FROM
+            TF_PROJECT_MEMBER_SPACE_LAYER_REL D
+                LEFT JOIN TF_PROJECT_WORK_SPACE_LAYER_REL D1 ON D.PROJECT_WORK_SPACE_LAYER_REL_ID = D1.PROJECT_WORK_SPACE_LAYER_REL_ID AND D1.ENABLE = 1
+                LEFT JOIN TF_PROJECT_WORK_SPACE D2 ON D1.WORK_SPACE_ID=D2.WORK_SPACE_ID
+                LEFT JOIN TASK D3 ON D.PROJECT_ID = D3.PROJECT_ID AND D2.WORK_SPACE_TYPE=D3.WORK_SPACE_TYPE
+                LEFT JOIN FAIL_TASK D4 ON D.PROJECT_ID = D4.PROJECT_ID AND D2.WORK_SPACE_TYPE=D4.WORK_SPACE_TYPE
+        <include refid="queryConditions" />
+        ORDER BY D2.SHOW_ORDER DESC,D2.ADD_TIME ASC
+    </select>
+
+    <!--查询人员工作空间目录层级-->
+    <select id="queryProjectMemberWorkSpaceLayer" resultType="com.easy.etl.projectMember.vo.ProjectMemberWorkSpaceVo">
+        SELECT
+            D.PROJECT_ID,
+            D.PROJECT_WORK_SPACE_LAYER_REL_ID,
+            D.PROJECT_WORK_SPACE_ID,
+            D.WORK_SPACE_LAYER_ID,
+            D2.WORK_SPACE_LAYER_NAME,
+            D3.WORK_SPACE_TYPE
+        FROM
+            TF_PROJECT_MEMBER_SPACE_LAYER_REL D
+            LEFT JOIN TF_PROJECT_WORK_SPACE_LAYER_REL D1 ON D.PROJECT_ID = D1.PROJECT_ID AND D.PROJECT_WORK_SPACE_LAYER_REL_ID = D1.PROJECT_WORK_SPACE_LAYER_REL_ID AND D.ENABLE = 1
+            LEFT JOIN TF_PROJECT_WORK_SPACE_LAYER D2 ON D.WORK_SPACE_LAYER_ID=D2.WORK_SPACE_LAYER_ID
+            LEFT JOIN TF_PROJECT_WORK_SPACE D3 ON D.WORK_SPACE_ID=D3.WORK_SPACE_ID
+        <where>
+            <!--归属项目-->
+            <if test="param.projectId != null and param.projectId != ''">
+                AND D.PROJECT_ID =#{param.projectId}
+            </if>
+            <!--用户ID-->
+            <if test="param.staffId != null and param.staffId != ''">
+                AND D.STAFF_ID =#{param.staffId}
+            </if>
+            <if test="param.projectWorkSpaceId != null and param.projectWorkSpaceId != ''">
+             AND D.PROJECT_WORK_SPACE_ID = #{param.projectWorkSpaceId}
+            </if>
+            AND D2.ENABLE=1 AND D2.IS_DEL=1
+            ORDER BY D2.SHOW_ORDER DESC,D2.ADD_TIME ASC
+        </where>
+    </select>
+
+</mapper>

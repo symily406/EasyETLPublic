@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.dbSourceDatax.mapper.DbSourceDataxMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="dbSourceDataxResultMap" type="com.easy.etl.dbSourceDatax.entity.DbSourceDatax">
+        <id column="TEMPLATE_ID" property="templateId"/>
+        <result column="TEMPLATE_CODE" property="templateCode"/>
+        <result column="CONTENT" property="content"/>
+        <result column="COMPANY_ID" property="companyId"/>
+        <result column="ORG_ID" property="orgId"/>
+        <result column="ALLOW_EDIT" property="allowEdit"/>
+        <result column="ALLOW_DELETE" property="allowDelete"/>
+        <result column="ENABLE" property="enable"/>
+        <result column="IS_DEL" property="isDel"/>
+        <result column="ADD_TIME" property="addTime"/>
+        <result column="ADD_USER_ID" property="addUserId"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="UPDATE_USER_ID" property="updateUserId"/>
+        <result column="VERSION" property="version"/>
+        <result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D.*,D1.NAME TEMPLATE_NAME
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            D.IS_DEL=1 AND D.ENABLE=1
+            <!--主键-->
+            <if test="param.templateId != null and param.templateId != ''">
+                AND D.TEMPLATE_ID =#{param.templateId}
+            </if>
+            <!--模板类型-->
+            <if test="param.templateCode != null and param.templateCode != ''">
+                AND D.TEMPLATE_CODE =#{param.templateCode}
+            </if>
+            <!--模板内容-->
+            <if test="param.content != null and param.content != ''">
+                AND D.CONTENT =#{param.content}
+            </if>
+            <!--启用:0未启用,1:启用-->
+            <if test="param.enable != null">
+                AND D.ENABLE =#{param.enable}
+            </if>
+            <!--显示排序-->
+            <if test="param.showOrder != null">
+                AND D.SHOW_ORDER =#{param.showOrder}
+            </if>
+
+            <!--归属企业 -->
+            <if test="param.companyId != null and param.companyId != ''">
+                AND D.COMPANY_ID =#{param.companyId}
+            </if>
+            <!--归属机构 -->
+            <if test="param.orgId != null and param.orgId != ''">
+                AND D.ORG_ID =#{param.orgId}
+            </if>
+            <!--用户 -->
+            <if test="param.addUserId != null and param.addUserId != ''">
+                AND D.ADD_USER_ID =#{param.addUserId}
+            </if>
+        </where>
+    </sql>
+
+    <!--分页-->
+    <select id="queryDbSourceDataxPage" resultType="com.easy.etl.dbSourceDatax.vo.DbSourceDataxVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TD_DB_SOURCE_DATAX D LEFT JOIN TD_DICT_VALUES D1 ON D.TEMPLATE_CODE=D1.VALUE AND D1.DICT_CODE='DATAX_SYNC_TEMPLATE'
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC
+    </select>
+
+    <!--查询所有-->
+    <select id="queryDbSourceDataxAll" resultType="com.easy.etl.dbSourceDatax.vo.DbSourceDataxVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TD_DB_SOURCE_DATAX D LEFT JOIN TD_DICT_VALUES D1 ON D.TEMPLATE_CODE=D1.VALUE AND D1.DICT_CODE='DATAX_SYNC_TEMPLATE'
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC
+    </select>
+
+    <!--根据条件查询单个-->
+    <select id="queryDbSourceDataxByCondition" resultType="com.easy.etl.dbSourceDatax.vo.DbSourceDataxVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TD_DB_SOURCE_DATAX D LEFT JOIN TD_DICT_VALUES D1 ON D.TEMPLATE_CODE=D1.VALUE AND D1.DICT_CODE='DATAX_SYNC_TEMPLATE'
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC LIMIT 1
+    </select>
+    <!-- 代码生成器生成代码结束 -->
+</mapper>

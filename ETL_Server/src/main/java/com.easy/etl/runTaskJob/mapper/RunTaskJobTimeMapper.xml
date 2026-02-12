@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.runTaskJob.mapper.RunTaskJobTimeMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="runTaskJobTimeResultMap" type="com.easy.etl.runTaskJob.entity.RunTaskJobTime">
+        <id column="TIME_ID" property="timeId"/>
+        <result column="JOB_ID" property="jobId"/>
+        <result column="TASK_ID" property="taskId"/>
+        <result column="START_TIME" property="startTime"/>
+        <result column="END_TIME" property="endTime"/>
+        <result column="USAGE_TIME" property="usageTime"/>
+
+    </resultMap>
+
+
+</mapper>

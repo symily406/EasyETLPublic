@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.batchTask.batchProjectLayerTaskWrite.mapper.BatchProjectLayerTaskWriteMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="batchProjectLayerTaskWriteResultMap"
+               type="com.easy.etl.batchTask.batchProjectLayerTaskWrite.entity.BatchProjectLayerTaskWrite">
+        <id column="WRITE_ID" property="writeId"/>
+        <result column="TASK_ID" property="taskId"/>
+        <result column="PROJECT_ID" property="projectId"/>
+        <result column="LAYER_ID" property="layerId"/>
+        <result column="IS_HIVE" property="isHive"/>
+        <result column="DB_SOURCE_ID" property="dbSourceId"/>
+        <result column="SCHEAM" property="scheam"/>
+        <result column="TABLE_NAME" property="tableName"/>
+        <result column="PRE_SQL" property="preSql"/>
+        <result column="POST_SQL" property="postSql"/>
+        <result column="WRITE_MODE" property="writeMode"/>
+        <result column="HIVE_MODE" property="hiveMode"/>
+        <result column="QUERY_CONDITION" property="queryCondition"/>
+        <result column="SPLIT_PK" property="splitPk"/>
+        <result column="CONFIGURATION" property="configuration"/>
+        <result column="ALLOW_EDIT" property="allowEdit"/>
+        <result column="ALLOW_DELETE" property="allowDelete"/>
+        <result column="ENABLE" property="enable"/>
+        <result column="IS_DEL" property="isDel"/>
+        <result column="ADD_TIME" property="addTime"/>
+        <result column="ADD_USER_ID" property="addUserId"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="UPDATE_USER_ID" property="updateUserId"/>
+        <result column="VERSION" property="version"/>
+        <result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+    <select id="queryBatchProjectLayerTaskWrite"
+            resultType="com.easy.etl.batchTask.batchProjectLayerTaskWrite.vo.BatchProjectLayerTaskWriteVo">
+        SELECT
+            D.DB_SOURCE_ID,
+            D.DB_SCHEMA,
+            D.DB_CATALOG,
+            D.TABLE_NAME,
+            D.PRE_SQL,
+            D.POST_SQL,
+            D.IS_HIVE,
+            D.WRITE_MODE,
+            D.HIVE_MODE,
+            D.PT,
+            D.TABLE_PATH,
+            D1.JDBC_URL,
+            D1.USER_NAME,
+            D1.PASSWORD,
+            D1.DEFAULT_FS,
+            D1.HAVE_KERBEROS,
+            D1.KERBEROS_KEYTAB_FILE_PATH,
+            D1.KERBEROS_PRINCIPAL,
+            D1.FILE_TYPE,
+            D1.IS_CONN,
+            D1.JDBC_DRIVE,
+            D2.SOURCE_TYPE,
+            D2.SOURCE_TYPE_CODE
+        FROM
+            TF_BATCH_PROJECT_LAYER_TASK_WRITE D
+                LEFT JOIN TD_DB_SOURCE D1 ON D.DB_SOURCE_ID=D1.DB_SOURCE_ID
+                LEFT JOIN TD_DB_SOURCE_TYPE D2 ON D1.SOURCE_TYPE_ID=D2.SOURCE_TYPE_ID
+        WHERE
+            D.TASK_ID = #{taskId}
+    </select>
+</mapper>

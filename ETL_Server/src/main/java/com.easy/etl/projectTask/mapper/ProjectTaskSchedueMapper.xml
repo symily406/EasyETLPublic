@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.projectTask.mapper.ProjectTaskSchedueMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="projectTaskSchedueResultMap" type="com.easy.etl.projectTask.entity.ProjectTaskSchedue">
+        <id column="TASK_ID" property="taskId"/>
+        <result column="PROJECT_ID" property="projectId"/>
+        <result column="PROJECT_WORK_SPACE_LAYER_REL_ID" property="projectWorkSpaceLayerRelId"/>
+        <result column="PROJECT_WORK_SPACE_ID" property="projectWorkSpaceId"/>
+        <result column="WORK_SPACE_TYPE" property="workSpaceType"/>
+        <result column="TASK_FOLDER_ID" property="taskFolderId"/>
+        <result column="CORN_STATUS" property="cornStatus"/>
+        <result column="START_DATE" property="startDate"/>
+        <result column="END_DATE" property="endDate"/>
+        <result column="CORN" property="corn"/>
+        <result column="FAILURE_POLICY" property="failurePolicy"/>
+        <result column="SCHEDULE_TYPE" property="scheduleType"/>
+        <result column="SCHEDUE_HOUR" property="schedueHour"/>
+        <result column="SCHEDUE_MINUTE" property="schedueMinute"/>
+        <result column="SCHEDUE_WEEK" property="schedueWeek"/>
+        <result column="SCHEDUE_DAY" property="schedueDay"/>
+        <result column="SCHEDUE_MONTH" property="schedueMonth"/>
+        <result column="TIME_INTERVAL" property="timeInterval"/>
+
+    </resultMap>
+
+
+</mapper>

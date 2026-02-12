@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.system.file.mapper.FileFolderMapper">
+	<!-- 通用查询映射结果 -->
+	<resultMap id="fileFolderResultMap"
+		type="com.easy.system.file.entity.FileFolder">
+		<id column="FOLDER_ID" property="folderId" />
+		<result column="FOLDER_NAME" property="folderName" />
+		<result column="CONFIG_ID" property="configId" />
+		<result column="PARENT_FOLDER_ID" property="parentFolderId" />
+		<result column="COMPANY_ID" property="companyId" />
+		<result column="ORG_ID" property="orgId" />
+		<result column="ALLOW_EDIT" property="allowEdit" />
+		<result column="ALLOW_DELETE" property="allowDelete" />
+		<result column="ENABLE" property="enable" />
+		<result column="IS_DEL" property="isDel" />
+		<result column="ADD_TIME" property="addTime" />
+		<result column="ADD_USER_ID" property="addUserId" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="UPDATE_USER_ID" property="updateUserId" />
+		<result column="VERSION" property="version" />
+		<result column="SHOW_ORDER" property="showOrder" />
+
+	</resultMap>
+
+	<!-- 代码生成器生成代码开始 -->
+
+	<!-- 字段 -->
+	<sql id="queryColumns">
+		D.*
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="queryConditions">
+		<where>
+			D.IS_DEL=1 AND D.ENABLE=1
+			<!--文件夹 -->
+			<if test="param.folderId != null and param.folderId != ''">
+				AND D.FOLDER_ID =#{param.folderId}
+			</if>
+			<!--文件夹名称 -->
+			<if test="param.folderName != null and param.folderName != ''">
+				AND D.FOLDER_NAME =#{param.folderName}
+			</if>
+			<!--归属文件配置 -->
+			<if test="param.configId != null and param.configId != ''">
+				AND D.CONFIG_ID =#{param.configId}
+			</if>
+			<!--上级文件夹 -->
+			<if
+				test="param.parentFolderId != null and param.parentFolderId != ''">
+				AND D.PARENT_FOLDER_ID =#{param.parentFolderId}
+			</if>
+
+			<if test="param.companyId != null and param.companyId != ''">
+				AND D.COMPANY_ID =#{param.companyId}
+			</if>
+
+			<if test="param.orgId != null and param.orgId != ''">
+				AND D.ORG_ID =#{param.orgId}
+			</if>
+			
+			<if test="param.addUserId != null and param.addUserId != ''">
+				AND D.ADD_USER_ID =#{param.addUserId}
+			</if>
+
+		</where>
+	</sql>
+
+	<!--分页 -->
+	<select id="queryFileFolderPage"
+		resultType="com.easy.system.file.vo.FileFolderVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_FILE_FOLDER D
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC
+	</select>
+
+	<!--查询所有 -->
+	<select id="queryFileFolderAll"
+		resultType="com.easy.system.file.vo.FileFolderVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_FILE_FOLDER D
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC
+	</select>
+
+	<!--根据条件查询单个 -->
+	<select id="queryFileFolderByCondition"
+		resultType="com.easy.system.file.vo.FileFolderVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_FILE_FOLDER D
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC LIMIT 1
+	</select>
+	<!-- 代码生成器生成代码结束 -->
+</mapper>

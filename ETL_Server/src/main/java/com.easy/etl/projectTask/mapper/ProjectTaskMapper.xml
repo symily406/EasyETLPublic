@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.projectTask.mapper.ProjectTaskMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="projectTaskResultMap" type="com.easy.etl.projectTask.entity.ProjectTask">
+        <id column="TASK_ID" property="taskId"/>
+        <result column="PROJECT_ID" property="projectId"/>
+        <result column="TASK_FOLDER_ID" property="taskFolderId"/>
+        <result column="TADK_TYPE" property="tadkType"/>
+        <result column="TASK_NAME" property="taskName"/>
+        <result column="CALCULATE_TYPES" property="calculateTypes"/>
+        <result column="ALLOW_EDIT" property="allowEdit"/>
+        <result column="ALLOW_DELETE" property="allowDelete"/>
+        <result column="ENABLE" property="enable"/>
+        <result column="IS_DEL" property="isDel"/>
+        <result column="ADD_TIME" property="addTime"/>
+        <result column="ADD_USER_ID" property="addUserId"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="UPDATE_USER_ID" property="updateUserId"/>
+        <result column="VERSION" property="version"/>
+        <result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D.TASK_ID,
+        D.PROJECT_ID,
+        D.PROJECT_WORK_SPACE_LAYER_REL_ID,
+        D.PROJECT_WORK_SPACE_ID,
+        D.WORK_SPACE_TYPE,
+        D.TASK_FOLDER_ID,
+        D.TASK_NAME,
+        D.REMARK,
+        D.TASK_STEP,
+        D.DB_SOURCE_ID,
+        D.CORN_STATUS,
+        D.START_DATE,
+        D.END_DATE,
+        D.CORN,
+        D.FAILURE_POLICY,
+        D.ALLOW_EDIT,
+        D.ALLOW_DELETE,
+        D.ENABLE,
+        D.IS_DEL,
+        D.ADD_TIME,
+        D.ADD_USER_ID,
+        D.UPDATE_TIME,
+        D.UPDATE_USER_ID,
+        D.VERSION,
+        D.SHOW_ORDER,
+        D1.PROJECT_NAME,
+        D2.NAME AS WORK_SPACE_TYPE_DESC
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            D.IS_DEL=1 AND D.ENABLE=1
+            <!--主键-->
+            <if test="param.taskId != null and param.taskId != ''">
+                AND D.TASK_ID =#{param.taskId}
+            </if>
+            <if test="param.keyword != null and param.keyword != ''">
+                AND (INSTR(D.TASK_NAME,#{param.keyword})>0 or D.TASK_ID IN(SELECT TASK_ID FROM TF_PROJECT_TASK_SCRIPT WHERE INSTR(SCRIPT_CONTENT,#{param.keyword})>0))
+            </if>
+            <!--归属项目-->
+            <if test="param.projectId != null and param.projectId != ''">
+                AND D.PROJECT_ID =#{param.projectId}
+            </if>
+            <!--归属目录-->
+            <if test="param.taskFolderId != null and param.taskFolderId != ''">
+                AND D.TASK_FOLDER_ID =#{param.taskFolderId}
+            </if>
+            <if test="param.projectWorkSpaceLayerRelId != null and param.projectWorkSpaceLayerRelId != ''">
+                AND D.PROJECT_WORK_SPACE_LAYER_REL_ID =#{param.projectWorkSpaceLayerRelId}
+            </if>
+            <if test="param.projectWorkSpaceId != null and param.projectWorkSpaceId != ''">
+                AND D.PROJECT_WORK_SPACE_ID =#{param.projectWorkSpaceId}
+            </if>
+            <if test="param.workSpaceType!= null and param.workSpaceType != ''">
+                AND D.WORK_SPACE_TYPE =#{param.workSpaceType}
+            </if>
+            <!--任务名称-->
+            <if test="param.taskName != null and param.taskName != ''">
+                AND D.TASK_NAME =#{param.taskName}
+            </if>
+            <!--显示排序-->
+            <if test="param.showOrder != null">
+                AND D.SHOW_ORDER =#{param.showOrder}
+            </if>
+            <if test="param.taskStep != null">
+                AND D.TASK_STEP =#{param.taskStep}
+            </if>
+            <!--用户 -->
+            <if test="param.addUserId != null and param.addUserId != ''">
+                AND D.ADD_USER_ID =#{param.addUserId}
+            </if>
+            <if test="param.projectIds!= null and param.projectIds.size() > 0">
+                AND D.PROJECT_ID IN
+                <foreach collection="param.projectIds" item="item" index="index" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+
+            <if test="param.noWorkSpaceTypes!= null and param.noWorkSpaceTypes.size() > 0">
+                AND D.WORK_SPACE_TYPE NOT IN
+                <foreach collection="param.noWorkSpaceTypes" item="item" index="index" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="param.currentTaskId != null and param.currentTaskId != ''">
+                AND D.TASK_ID NOT IN(SELECT LAZY_TASK_ID FROM TF_PROJECT_TASK_LAZY WHERE TASK_ID=#{param.currentTaskId})
+                AND D.TASK_ID !=#{param.currentTaskId}
+            </if>
+        </where>
+    </sql>
+
+    <!--分页-->
+    <select id="queryProjectTaskPage" resultType="com.easy.etl.projectTask.vo.ProjectTaskVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_PROJECT_TASK D
+        LEFT JOIN TF_PROJECT D1 ON D.PROJECT_ID = D1.PROJECT_ID
+        LEFT JOIN TD_DICT_VALUES D2 ON D.WORK_SPACE_TYPE=D2.`VALUE` AND D2.DICT_CODE='TASK_TYPE'
+        <include refid="queryConditions"/>
+        ORDER BY ${param.orderBy}
+    </select>
+
+    <!--查询所有-->
+    <select id="queryProjectTaskAll" resultType="com.easy.etl.projectTask.vo.ProjectTaskVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_PROJECT_TASK D
+        LEFT JOIN TF_PROJECT D1 ON D.PROJECT_ID = D1.PROJECT_ID
+        LEFT JOIN TD_DICT_VALUES D2 ON D.WORK_SPACE_TYPE=D2.`VALUE` AND D2.DICT_CODE='TASK_TYPE'
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME ASC
+    </select>
+
+    <!-- 代码生成器生成代码结束 -->
+
+
+    <!-- 代码生成器生成代码结束 -->
+
+    <select id="queryProjectTaskById" resultType="com.easy.etl.projectTask.vo.ProjectTaskVo">
+        SELECT
+            D.TASK_ID,
+            D.PROJECT_ID,
+            D.PROJECT_WORK_SPACE_LAYER_REL_ID,
+            D.PROJECT_WORK_SPACE_ID,
+            D.WORK_SPACE_TYPE,
+            D2.NAME AS WORK_SPACE_TYPE_DESC,
+            D.TASK_FOLDER_ID,
+            D.TASK_NAME,
+            D.REMARK,
+            D.TASK_STEP,
+            D.DB_SOURCE_ID,
+            D.CORN_STATUS,
+            D.START_DATE,
+            D.END_DATE,
+            D.CORN,
+            D.FAILURE_POLICY,
+            D.ALLOW_EDIT,
+            D.ALLOW_DELETE,
+            D.ENABLE,
+            D.IS_DEL,
+            D.ADD_TIME,
+            D.ADD_USER_ID,
+            D.UPDATE_TIME,
+            D.UPDATE_USER_ID,
+            D.VERSION,
+            D.SHOW_ORDER,
+            D1.USER_NAME
+        FROM
+            TF_PROJECT_TASK D
+                LEFT JOIN TD_STAFF D1 ON D.ADD_USER_ID = D1.STAFF_ID
+                LEFT JOIN TD_DICT_VALUES D2 ON D.WORK_SPACE_TYPE=D2.`VALUE` AND D2.DICT_CODE='TASK_TYPE'
+        WHERE
+            D.TASK_ID = #{taskId}
+    </select>
+</mapper>

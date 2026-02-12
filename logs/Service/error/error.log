@@ -1,0 +1,70 @@
+2025-12-21 13:59:44.630 [easy-etl-executor2] ERROR o.s.d.r.s.DefaultStreamMessageListenerContainer$LoggingErrorHandler -
+				Unexpected error occurred in scheduled task.
+org.springframework.data.redis.RedisSystemException: Redis command interrupted; nested exception is io.lettuce.core.RedisCommandInterruptedException: Command interrupted
+	at org.springframework.data.redis.connection.lettuce.LettuceExceptionConverter.convert(LettuceExceptionConverter.java:62)
+	at org.springframework.data.redis.connection.lettuce.LettuceExceptionConverter.convert(LettuceExceptionConverter.java:41)
+	at org.springframework.data.redis.PassThroughExceptionTranslationStrategy.translate(PassThroughExceptionTranslationStrategy.java:44)
+	at org.springframework.data.redis.FallbackExceptionTranslationStrategy.translate(FallbackExceptionTranslationStrategy.java:42)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnection.convertLettuceAccessException(LettuceConnection.java:272)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnection.await(LettuceConnection.java:1063)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnection.lambda$doInvoke$4(LettuceConnection.java:920)
+	at org.springframework.data.redis.connection.lettuce.LettuceInvoker$Synchronizer.invoke(LettuceInvoker.java:673)
+	at org.springframework.data.redis.connection.lettuce.LettuceInvoker$DefaultManyInvocationSpec.toList(LettuceInvoker.java:618)
+	at org.springframework.data.redis.connection.lettuce.LettuceStreamCommands.xReadGroup(LettuceStreamCommands.java:354)
+	at org.springframework.data.redis.stream.DefaultStreamMessageListenerContainer.lambda$null$3(DefaultStreamMessageListenerContainer.java:259)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:224)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:191)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:178)
+	at org.springframework.data.redis.stream.DefaultStreamMessageListenerContainer.lambda$getReadFunction$4(DefaultStreamMessageListenerContainer.java:258)
+	at org.springframework.data.redis.stream.StreamPollTask.readRecords(StreamPollTask.java:166)
+	at org.springframework.data.redis.stream.StreamPollTask.doLoop(StreamPollTask.java:147)
+	at org.springframework.data.redis.stream.StreamPollTask.run(StreamPollTask.java:132)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:750)
+Caused by: io.lettuce.core.RedisCommandInterruptedException: Command interrupted
+	at io.lettuce.core.protocol.AsyncCommand.await(AsyncCommand.java:87)
+	at io.lettuce.core.internal.Futures.awaitOrCancel(Futures.java:244)
+	at io.lettuce.core.LettuceFutures.awaitOrCancel(LettuceFutures.java:74)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnection.await(LettuceConnection.java:1061)
+	... 15 common frames omitted
+Caused by: java.lang.InterruptedException: null
+	at java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:347)
+	at java.util.concurrent.CompletableFuture.get(CompletableFuture.java:1928)
+	at io.lettuce.core.protocol.AsyncCommand.await(AsyncCommand.java:83)
+	... 18 common frames omitted
+2025-12-21 13:59:44.630 [easy-etl-executor1] ERROR o.s.d.r.s.DefaultStreamMessageListenerContainer$LoggingErrorHandler -
+				Unexpected error occurred in scheduled task.
+org.springframework.data.redis.RedisSystemException: Redis command interrupted; nested exception is io.lettuce.core.RedisCommandInterruptedException: Command interrupted
+	at org.springframework.data.redis.connection.lettuce.LettuceExceptionConverter.convert(LettuceExceptionConverter.java:62)
+	at org.springframework.data.redis.connection.lettuce.LettuceExceptionConverter.convert(LettuceExceptionConverter.java:41)
+	at org.springframework.data.redis.PassThroughExceptionTranslationStrategy.translate(PassThroughExceptionTranslationStrategy.java:44)
+	at org.springframework.data.redis.FallbackExceptionTranslationStrategy.translate(FallbackExceptionTranslationStrategy.java:42)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnection.convertLettuceAccessException(LettuceConnection.java:272)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnection.await(LettuceConnection.java:1063)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnection.lambda$doInvoke$4(LettuceConnection.java:920)
+	at org.springframework.data.redis.connection.lettuce.LettuceInvoker$Synchronizer.invoke(LettuceInvoker.java:673)
+	at org.springframework.data.redis.connection.lettuce.LettuceInvoker$DefaultManyInvocationSpec.toList(LettuceInvoker.java:618)
+	at org.springframework.data.redis.connection.lettuce.LettuceStreamCommands.xReadGroup(LettuceStreamCommands.java:354)
+	at org.springframework.data.redis.stream.DefaultStreamMessageListenerContainer.lambda$null$3(DefaultStreamMessageListenerContainer.java:259)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:224)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:191)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:178)
+	at org.springframework.data.redis.stream.DefaultStreamMessageListenerContainer.lambda$getReadFunction$4(DefaultStreamMessageListenerContainer.java:258)
+	at org.springframework.data.redis.stream.StreamPollTask.readRecords(StreamPollTask.java:166)
+	at org.springframework.data.redis.stream.StreamPollTask.doLoop(StreamPollTask.java:147)
+	at org.springframework.data.redis.stream.StreamPollTask.run(StreamPollTask.java:132)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:750)
+Caused by: io.lettuce.core.RedisCommandInterruptedException: Command interrupted
+	at io.lettuce.core.protocol.AsyncCommand.await(AsyncCommand.java:87)
+	at io.lettuce.core.internal.Futures.awaitOrCancel(Futures.java:244)
+	at io.lettuce.core.LettuceFutures.awaitOrCancel(LettuceFutures.java:74)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnection.await(LettuceConnection.java:1061)
+	... 15 common frames omitted
+Caused by: java.lang.InterruptedException: null
+	at java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:347)
+	at java.util.concurrent.CompletableFuture.get(CompletableFuture.java:1928)
+	at io.lettuce.core.protocol.AsyncCommand.await(AsyncCommand.java:83)
+	... 18 common frames omitted

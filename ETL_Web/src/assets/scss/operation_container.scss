@@ -1,0 +1,23 @@
+#app{
+	.operation-container{
+		width:100%;
+		height: 100%;
+		background:#fff;
+		.el-scrollbar{
+			height: 100%;
+			padding: 5px;
+		}
+		.scrollbar-wrapper {
+		  overflow-x: hidden !important;
+		  .el-scrollbar__view{
+			  height: 100%;
+		  }
+		}
+		.el-card__header {
+		    padding: 10px 10px;
+		}
+		.el-card__body{
+			padding: 0px
+		}
+	}
+}

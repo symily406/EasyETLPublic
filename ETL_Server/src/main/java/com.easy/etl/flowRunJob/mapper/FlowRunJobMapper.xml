@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.flowRunJob.mapper.FlowRunJobMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="flowRunJobResultMap" type="com.easy.etl.flowRunJob.entity.FlowRunJob">
+        <id column="FLOW_JOB_ID" property="flowJobId"/>
+        <result column="FLOW_RUN_JOB_ID" property="flowRunJobId"/>
+        <result column="TASK_ID" property="taskId"/>
+        <result column="STATUS" property="status"/>
+        <result column="EXECUTE_TIME" property="executeTime"/>
+
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D.FLOW_RUN_JOB_ID,D.FLOW_JOB_ID,D.TASK_ID,D.`STATUS`,D.PLANE_TIME,D.EXECUTE_TIME,D.COMPLETED_TIME,D.FAILED_TASK_NUM,D.ADD_TYPE,D.ADD_TIME,D.USAGE_TIME,
+        D2.CORN_STATUS,
+	    D2.TASK_NAME,
+	    D2.PROJECT_ID,
+        D5.PROJECT_NAME,
+	    D2.PROJECT_WORK_SPACE_LAYER_REL_ID,
+	    D2.PROJECT_WORK_SPACE_ID,
+        D2.WORK_SPACE_TYPE,
+	   	D3.`NAME` AS STATUS_NAME,
+	    D4.`NAME` AS ADD_TYPE_NAME
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            <!--主键-->
+            <if test="param.flowRunJobId != null and param.flowRunJobId != ''">
+                AND D.FLOW_RUN_JOB_ID =#{param.flowRunJobId}
+            </if>
+            <!--归属工作流JOB-->
+            <if test="param.flowJobId != null and param.flowJobId != ''">
+                AND D.FLOW_JOB_ID =#{param.flowJobId}
+            </if>
+            <!--归属任务-->
+            <if test="param.taskId != null and param.taskId != ''">
+                AND D.TASK_ID =#{param.taskId}
+            </if>
+            <!--状态:1待运行,2正在运行,0运行成功,-1运行失败-->
+            <if test="param.status != null">
+                AND D.STATUS =#{param.status}
+            </if>
+            <!--下次执行时间-->
+            <if test="param.executeTime != null and param.executeTime != ''">
+                AND D.EXECUTE_TIME =#{param.executeTime}
+            </if>
+            <if test="param.projectMember != null and param.projectMember != ''">
+                AND D2.PROJECT_ID IN(SELECT PROJECT_ID FROM TF_PROJECT_MEMBER WHERE STAFF_ID=#{param.projectMember})
+            </if>
+
+            <if test="param.planeDate != null and param.planeDate != ''">
+                AND  DATE_FORMAT(D.PLANE_TIME,'%Y-%m-%d')=#{param.planeDate}
+            </if>
+        </where>
+    </sql>
+
+    <!--分页-->
+    <select id="queryFlowRunJobPage" resultType="com.easy.etl.flowRunJob.vo.FlowRunJobVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_FLOW_RUN_JOB D
+        LEFT JOIN TF_FLOW_JOB D1 ON D.FLOW_JOB_ID=D1.FLOW_JOB_ID
+        LEFT JOIN TF_PROJECT_TASK D2 ON D1.TASK_ID=D2.TASK_ID
+        LEFT JOIN TD_DICT_VALUES D3 ON D.`STATUS`=D3.`VALUE` AND D3.DICT_CODE='TASK_STATUS_ENUM'
+        LEFT JOIN TD_DICT_VALUES D4 ON D.ADD_TYPE=D4.`VALUE` AND D4.DICT_CODE='TASK_ADD_TYPE_ENUM'
+        LEFT JOIN TF_PROJECT D5 ON D2.PROJECT_ID=D5.PROJECT_ID
+        <include refid="queryConditions"/>
+        ORDER BY ${param.orderBy}
+    </select>
+
+    <!--查询所有-->
+    <select id="queryFlowRunJobAll" resultType="com.easy.etl.flowRunJob.vo.FlowRunJobVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_FLOW_RUN_JOB D
+        LEFT JOIN TF_FLOW_JOB D1 ON D.FLOW_JOB_ID=D1.FLOW_JOB_ID
+        LEFT JOIN TF_PROJECT_TASK D2 ON D1.TASK_ID=D2.TASK_ID
+        LEFT JOIN TD_DICT_VALUES D3 ON D.`STATUS`=D3.`VALUE` AND D3.DICT_CODE='TASK_STATUS_ENUM'
+        LEFT JOIN TD_DICT_VALUES D4 ON D.ADD_TYPE=D4.`VALUE` AND D4.DICT_CODE='TASK_ADD_TYPE_ENUM'
+        <include refid="queryConditions"/>
+        ORDER BY  D.ADD_TIME DESC
+    </select>
+
+    <!--根据条件查询单个-->
+    <select id="queryFlowRunJobByCondition" resultType="com.easy.etl.flowRunJob.vo.FlowRunJobVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_FLOW_RUN_JOB D
+        LEFT JOIN TF_FLOW_JOB D1 ON D.FLOW_JOB_ID=D1.FLOW_JOB_ID
+        LEFT JOIN TF_PROJECT_TASK D2 ON D1.TASK_ID=D2.TASK_ID
+        LEFT JOIN TD_DICT_VALUES D3 ON D.`STATUS`=D3.`VALUE` AND D3.DICT_CODE='TASK_STATUS_ENUM'
+        LEFT JOIN TD_DICT_VALUES D4 ON D.ADD_TYPE=D4.`VALUE` AND D4.DICT_CODE='TASK_ADD_TYPE_ENUM'
+        <include refid="queryConditions"/>
+        ORDER BY  D.ADD_TIME DESC LIMIT 1
+    </select>
+    <!-- 代码生成器生成代码结束 -->
+</mapper>

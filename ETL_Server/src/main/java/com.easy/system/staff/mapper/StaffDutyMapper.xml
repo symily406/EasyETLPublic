@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.system.staff.mapper.StaffDutyMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="staffDutyResultMap" type="com.easy.system.staff.entity.StaffDuty">
+	<id column="ID" property="id"/>
+ 	<result column="STAFF_ID" property="staffId"/>
+<result column="DUTY_ID" property="dutyId"/>
+
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+    
+    <!-- 字段 -->
+    <sql id="queryColumns">
+          D.*,d1.DUTY_NAME
+    </sql>
+   
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+	<where>
+		<!--用户主键 -->
+		<if test="param.staffId != null and param.staffId != ''">
+			AND D.STAFF_ID =#{param.staffId}
+		</if>
+		<!--岗位ID -->
+		<if test="param.dutyId != null and param.dutyId != ''">
+			AND D.DUTY_ID =#{param.dutyId}
+		</if>
+
+	</where>
+</sql>
+    
+     <!--分页-->
+     <select id="queryStaffDutyPage" resultType="com.easy.system.staff.vo.StaffDutyVo">
+         SELECT 
+         <include refid="queryColumns" />
+         FROM TD_STAFF_DUTY D LEFT JOIN TD_DUTY D1 ON D.DUTY_ID = D1.DUTY_ID 
+        <include refid="queryConditions" />
+      </select>
+
+      <!--查询所有-->
+     <select id="queryStaffDutyAll" resultType="com.easy.system.staff.vo.StaffDutyVo">
+         SELECT 
+         <include refid="queryColumns" />
+         FROM TD_STAFF_DUTY D LEFT JOIN TD_DUTY D1 ON D.DUTY_ID = D1.DUTY_ID 
+        <include refid="queryConditions" />
+      </select>
+      
+      <!--根据条件查询单个-->
+     <select id="queryStaffDutyByCondition" resultType="com.easy.system.staff.vo.StaffDutyVo">
+         SELECT 
+         <include refid="queryColumns" />
+         FROM TD_STAFF_DUTY D LEFT JOIN TD_DUTY D1 ON D.DUTY_ID = D1.DUTY_ID 
+        <include refid="queryConditions" />
+        LIMIT 1
+      </select>
+      <!-- 代码生成器生成代码结束 -->
+</mapper>

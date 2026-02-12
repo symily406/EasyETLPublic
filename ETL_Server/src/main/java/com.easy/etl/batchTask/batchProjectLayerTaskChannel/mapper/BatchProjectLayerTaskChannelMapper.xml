@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.batchTask.batchProjectLayerTaskChannel.mapper.BatchProjectLayerTaskChannelMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="batchProjectLayerTaskChannelResultMap"
+               type="com.easy.etl.batchTask.batchProjectLayerTaskChannel.entity.BatchProjectLayerTaskChannel">
+        <id column="CHANNEL_ID" property="channelId"/>
+        <result column="TASK_ID" property="taskId"/>
+        <result column="PROJECT_ID" property="projectId"/>
+        <result column="TASK_SPEED" property="taskSpeed"/>
+        <result column="TASK_PROCESS" property="taskProcess"/>
+        <result column="ERROR_RECORD" property="errorRecord"/>
+        <result column="PERCENTAGE" property="percentage"/>
+        <result column="ALLOW_EDIT" property="allowEdit"/>
+        <result column="ALLOW_DELETE" property="allowDelete"/>
+        <result column="ENABLE" property="enable"/>
+        <result column="IS_DEL" property="isDel"/>
+        <result column="ADD_TIME" property="addTime"/>
+        <result column="ADD_USER_ID" property="addUserId"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="UPDATE_USER_ID" property="updateUserId"/>
+        <result column="VERSION" property="version"/>
+        <result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+
+</mapper>

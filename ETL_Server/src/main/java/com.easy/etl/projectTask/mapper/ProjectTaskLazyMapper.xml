@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.projectTask.mapper.ProjectTaskLazyMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="projectTaskLazyResultMap" type="com.easy.etl.projectTask.entity.ProjectTaskLazy">
+        <id column="TASK_LAZY_ID" property="taskLazyId"/>
+        <result column="TASK_ID" property="taskId"/>
+        <result column="LAZY_TASK_ID" property="lazyTaskId"/>
+        <result column="ADD_TIME" property="addTime"/>
+
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D.TASK_ID,D.TASK_LAZY_ID,D.LAZY_TASK_ID,D1.TASK_NAME,D1.CORN
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            <!--主键-->
+            <if test="param.taskLazyId != null and param.taskLazyId != ''">
+                AND D.TASK_LAZY_ID =#{param.taskLazyId}
+            </if>
+            <!--归属任务-->
+            <if test="param.taskId != null and param.taskId != ''">
+                AND D.TASK_ID =#{param.taskId}
+            </if>
+            <!--依懒任务ID-->
+            <if test="param.lazyTaskId != null and param.lazyTaskId != ''">
+                AND D.LAZY_TASK_ID =#{param.lazyTaskId}
+            </if>
+            <if test="param.taskIds != null and param.taskIds != ''">
+                AND D.TASK_ID in
+                <foreach item="item" collection="param.taskIds " open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+
+        </where>
+    </sql>
+
+    <!--分页-->
+    <select id="queryProjectTaskLazyPage" resultType="com.easy.etl.projectTask.vo.ProjectTaskLazyVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_PROJECT_TASK_LAZY D
+        LEFT JOIN TF_PROJECT_TASK D1 ON D.LAZY_TASK_ID = D1.TASK_ID
+        <include refid="queryConditions"/>
+        ORDER BY D.ADD_TIME DESC
+    </select>
+
+    <!--查询所有-->
+    <select id="queryProjectTaskLazyAll" resultType="com.easy.etl.projectTask.vo.ProjectTaskLazyVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_PROJECT_TASK_LAZY D
+        LEFT JOIN TF_PROJECT_TASK D1 ON D.LAZY_TASK_ID = d1.TASK_ID
+        <include refid="queryConditions"/>
+        ORDER BY D.ADD_TIME DESC
+    </select>
+
+
+    <!-- 代码生成器生成代码结束 -->
+</mapper>

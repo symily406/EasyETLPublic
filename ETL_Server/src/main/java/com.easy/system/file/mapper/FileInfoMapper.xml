@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.system.file.mapper.FileInfoMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="fileInfoResultMap" type="com.easy.system.file.entity.FileInfo">
+	<id column="FILE_ID" property="fileId"/>
+ 	<result column="MD5" property="md5"/>
+<result column="FILE_NAME" property="fileName"/>
+<result column="SAVE_FOLDER" property="saveFolder"/>
+<result column="FILE_SIZE" property="fileSize"/>
+<result column="SAVE_NAME" property="saveName"/>
+<result column="SUFFIX" property="suffix"/>
+<result column="COMPANY_ID" property="companyId"/>
+<result column="ORG_ID" property="orgId"/>
+<result column="ALLOW_EDIT" property="allowEdit"/>
+<result column="ALLOW_DELETE" property="allowDelete"/>
+<result column="ENABLE" property="enable"/>
+<result column="IS_DEL" property="isDel"/>
+<result column="ADD_TIME" property="addTime"/>
+<result column="ADD_USER_ID" property="addUserId"/>
+<result column="UPDATE_TIME" property="updateTime"/>
+<result column="UPDATE_USER_ID" property="updateUserId"/>
+<result column="VERSION" property="version"/>
+<result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+    
+    <!-- 字段 -->
+    <sql id="queryColumns">
+          D.*
+    </sql>
+   
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            D.IS_DEL=1 AND D.ENABLE=1
+            <!--主键-->
+<if test="param.fileId != null and param.fileId != ''">
+ AND  D.FILE_ID =#{param.fileId}
+</if>
+<!--MD5-->
+<if test="param.md5 != null and param.md5 != ''">
+ AND  D.MD5 =#{param.md5}
+</if>
+<!--文件名-->
+<if test="param.fileName != null and param.fileName != ''">
+ AND  D.FILE_NAME =#{param.fileName}
+</if>
+<!--保存文件夹-->
+<if test="param.saveFolder != null and param.saveFolder != ''">
+ AND  D.SAVE_FOLDER =#{param.saveFolder}
+</if>
+<!--文件大小-->
+<if test="param.fileSize != null">
+ AND  D.FILE_SIZE =#{param.fileSize}
+</if>
+<!--保存文件名-->
+<if test="param.saveName != null and param.saveName != ''">
+ AND  D.SAVE_NAME =#{param.saveName}
+</if>
+<!--文件后缀-->
+<if test="param.suffix != null and param.suffix != ''">
+ AND  D.SUFFIX =#{param.suffix}
+</if>
+<!--启用:0未启用,1:启用-->
+<if test="param.enable != null">
+ AND  D.ENABLE =#{param.enable}
+</if>
+<!--显示排序-->
+<if test="param.showOrder != null">
+ AND  D.SHOW_ORDER =#{param.showOrder}
+</if>
+
+        </where>
+    </sql>
+    
+     <!--分页-->
+     <select id="queryFileInfoPage" resultType="com.easy.system.file.vo.FileInfoVo">
+         SELECT 
+         <include refid="queryColumns" />
+         FROM TD_FILE_INFO D
+        <include refid="queryConditions" />
+         ORDER BY D.ADD_TIME ASC
+      </select>
+
+      <!--查询所有-->
+     <select id="queryFileInfoAll" resultType="com.easy.system.file.vo.FileInfoVo">
+         SELECT 
+         <include refid="queryColumns" />
+         FROM TD_FILE_INFO D
+        <include refid="queryConditions" />
+         ORDER BY D.ADD_TIME ASC
+      </select>
+      
+      <!--根据条件查询单个-->
+     <select id="queryFileInfoByCondition" resultType="com.easy.system.file.vo.FileInfoVo">
+         SELECT 
+         <include refid="queryColumns" />
+         FROM TD_FILE_INFO D
+        <include refid="queryConditions" />
+         ORDER BY D.ADD_TIME ASC LIMIT 1
+      </select>
+      <!-- 代码生成器生成代码结束 -->
+</mapper>

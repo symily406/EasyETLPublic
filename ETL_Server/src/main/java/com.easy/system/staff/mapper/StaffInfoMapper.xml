@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.system.staff.mapper.StaffInfoMapper">
+	<!-- 通用查询映射结果 -->
+	<resultMap id="staffInfoResultMap"
+		type="com.easy.system.staff.entity.StaffInfo">
+		<id column="STAFF_ID" property="staffId" />
+		<result column="NAME" property="name" />
+		<result column="HEAD_PORTRAIT" property="headPortrait" />
+		<result column="PHONE" property="phone" />
+
+	</resultMap>
+
+	<!-- 代码生成器生成代码开始 -->
+
+	<!-- 字段 -->
+	<sql id="queryColumns">
+		D.*
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="queryConditions">
+		<where>
+			D.IS_DEL=1 AND D.ENABLE=1
+			<!--主键 -->
+			<if test="param.staffId != null and param.staffId != ''">
+				AND D.STAFF_ID =#{param.staffId}
+			</if>
+			<!--姓名 -->
+			<if test="param.name != null and param.name != ''">
+				AND D.NAME =#{param.name}
+			</if>
+			<!--头像 -->
+			<if test="param.headPortrait != null and param.headPortrait != ''">
+				AND D.HEAD_PORTRAIT =#{param.headPortrait}
+			</if>
+			<!--手机号码 -->
+			<if test="param.phone != null and param.phone != ''">
+				AND D.PHONE =#{param.phone}
+			</if>
+
+		</where>
+	</sql>
+
+	<!--分页 -->
+	<select id="queryStaffInfoPage"
+		resultType="com.easy.system.staff.vo.StaffInfoVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_STAFF_INFO D
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC
+	</select>
+
+	<!--查询所有 -->
+	<select id="queryStaffInfoAll"
+		resultType="com.easy.system.staff.vo.StaffInfoVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_STAFF_INFO D
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC
+	</select>
+
+	<!--根据条件查询单个 -->
+	<select id="queryStaffInfoByCondition"
+		resultType="com.easy.system.staff.vo.StaffInfoVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_STAFF_INFO D
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC LIMIT 1
+	</select>
+	<!-- 代码生成器生成代码结束 -->
+</mapper>

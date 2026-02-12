@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.projectTaskFlow.mapper.FlowJobMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="flowJobResultMap" type="com.easy.etl.projectTaskFlow.entity.FlowJob">
+        <id column="FLOW_JOB_ID" property="flowJobId"/>
+        <result column="TASK_ID" property="taskId"/>
+        <result column="CORN_STATUS" property="cornStatus"/>
+        <result column="STATUS" property="status"/>
+        <result column="START_DATE" property="startDate"/>
+        <result column="END_DATE" property="endDate"/>
+        <result column="CORN" property="corn"/>
+        <result column="NEXT_EXECUTE_TIME" property="nextExecuteTime"/>
+        <result column="ALLOW_EDIT" property="allowEdit"/>
+        <result column="ALLOW_DELETE" property="allowDelete"/>
+        <result column="ENABLE" property="enable"/>
+        <result column="IS_DEL" property="isDel"/>
+        <result column="ADD_TIME" property="addTime"/>
+        <result column="ADD_USER_ID" property="addUserId"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="UPDATE_USER_ID" property="updateUserId"/>
+        <result column="VERSION" property="version"/>
+        <result column="SHOW_ORDER" property="showOrder"/>
+    </resultMap>
+
+    <select id="queryFlowJob" resultType="com.easy.etl.projectTaskFlow.vo.FlowJobVo">
+        SELECT * FROM TF_FLOW_JOB D WHERE D.CORN_STATUS=1 AND D.`STATUS`=#{status} AND D.NEXT_EXECUTE_TIME <![CDATA[<=]]>#{currentTime} LIMIT #{size}
+    </select>
+</mapper>

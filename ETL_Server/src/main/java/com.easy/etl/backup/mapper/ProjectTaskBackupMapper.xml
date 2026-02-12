@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.backup.mapper.ProjectTaskBackupMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="projectTaskBackupResultMap" type="com.easy.etl.backup.entity.ProjectTaskBackup">
+        <result column="TASK_ID" property="taskId"/>
+        <result column="BACKUP_TASK_ID" property="backupTaskId"/>
+        <result column="PROJECT_ID" property="projectId"/>
+        <result column="PROJECT_WORK_SPACE_LAYER_REL_ID" property="projectWorkSpaceLayerRelId"/>
+        <result column="PROJECT_WORK_SPACE_ID" property="projectWorkSpaceId"/>
+        <result column="WORK_SPACE_TYPE" property="workSpaceType"/>
+        <result column="TASK_FOLDER_ID" property="taskFolderId"/>
+        <result column="TASK_NAME" property="taskName"/>
+        <result column="REMARK" property="remark"/>
+        <result column="TASK_STEP" property="taskStep"/>
+        <result column="DB_SOURCE_ID" property="dbSourceId"/>
+        <result column="CORN_STATUS" property="cornStatus"/>
+        <result column="START_DATE" property="startDate"/>
+        <result column="END_DATE" property="endDate"/>
+        <result column="CORN" property="corn"/>
+        <result column="FAILURE_POLICY" property="failurePolicy"/>
+        <result column="ALLOW_EDIT" property="allowEdit"/>
+        <result column="ALLOW_DELETE" property="allowDelete"/>
+        <result column="ENABLE" property="enable"/>
+        <result column="IS_DEL" property="isDel"/>
+        <result column="ADD_TIME" property="addTime"/>
+        <result column="ADD_USER_ID" property="addUserId"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="UPDATE_USER_ID" property="updateUserId"/>
+        <result column="VERSION" property="version"/>
+        <result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+
+    <select id="queryDeleteProjectTaskBackup" resultType="com.easy.etl.backup.vo.ProjectTaskBackupVo">
+        SELECT d.TASK_ID
+        from (SELECT d.TASK_ID,
+                     ROW_NUMBER() OVER (ORDER BY d.ADD_TIME desc) AS serial_number
+              FROM TF_PROJECT_TASK_BACKUP d
+              WHERE d.BACKUP_TASK_ID = #{taskId}) d
+        where d.serial_number >= 10
+    </select>
+    <!-- 代码生成器生成代码开始 -->
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        d.TASK_ID,
+        D.BACKUP_TASK_ID,
+        D1.NAME,
+        D.REMARK,
+        D.ADD_TIME
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            D.IS_DEL=1 AND D.ENABLE=1
+            <!--主键-->
+            <if test="param.taskId != null and param.taskId != ''">
+                AND D.TASK_ID =#{param.taskId}
+            </if>
+            <!--备份来源任务-->
+            <if test="param.backupTaskId != null and param.backupTaskId != ''">
+                AND D.BACKUP_TASK_ID =#{param.backupTaskId}
+            </if>
+            <!--归属项目-->
+            <if test="param.projectId != null and param.projectId != ''">
+                AND D.PROJECT_ID =#{param.projectId}
+            </if>
+            <!--工作空间分层-->
+            <if test="param.projectWorkSpaceLayerRelId != null and param.projectWorkSpaceLayerRelId != ''">
+                AND D.PROJECT_WORK_SPACE_LAYER_REL_ID =#{param.projectWorkSpaceLayerRelId}
+            </if>
+            <!--项目空间ID-->
+            <if test="param.projectWorkSpaceId != null and param.projectWorkSpaceId != ''">
+                AND D.PROJECT_WORK_SPACE_ID =#{param.projectWorkSpaceId}
+            </if>
+            <!--与字典表关联code=WORK_SPACE_TASK_TYPE-->
+            <if test="param.workSpaceType != null and param.workSpaceType != ''">
+                AND D.WORK_SPACE_TYPE =#{param.workSpaceType}
+            </if>
+            <!--目录ID-->
+            <if test="param.taskFolderId != null and param.taskFolderId != ''">
+                AND D.TASK_FOLDER_ID =#{param.taskFolderId}
+            </if>
+            <!--任务名称-->
+            <if test="param.taskName != null and param.taskName != ''">
+                AND D.TASK_NAME =#{param.taskName}
+            </if>
+            <!--备注-->
+            <if test="param.remark != null and param.remark != ''">
+                AND D.REMARK =#{param.remark}
+            </if>
+            <!--步骤-->
+            <if test="param.taskStep != null">
+                AND D.TASK_STEP =#{param.taskStep}
+            </if>
+            <!--数据源ID-->
+            <if test="param.dbSourceId != null and param.dbSourceId != ''">
+                AND D.DB_SOURCE_ID =#{param.dbSourceId}
+            </if>
+            <!--状态1:开启调度-->
+            <if test="param.cornStatus != null">
+                AND D.CORN_STATUS =#{param.cornStatus}
+            </if>
+            <!--调度开始时间-->
+            <if test="param.startDate != null and param.startDate != ''">
+                AND D.START_DATE =#{param.startDate}
+            </if>
+            <!--调度结束时间-->
+            <if test="param.endDate != null and param.endDate != ''">
+                AND D.END_DATE =#{param.endDate}
+            </if>
+            <!--调度时间-->
+            <if test="param.corn != null and param.corn != ''">
+                AND D.CORN =#{param.corn}
+            </if>
+            <!--失败策略0:失败结束,1:失败继续-->
+            <if test="param.failurePolicy != null">
+                AND D.FAILURE_POLICY =#{param.failurePolicy}
+            </if>
+
+        </where>
+    </sql>
+
+
+    <!--查询所有-->
+    <select id="queryProjectTaskBackupAll" resultType="com.easy.etl.backup.vo.ProjectTaskBackupVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_PROJECT_TASK_BACKUP D
+        LEFT JOIN TD_STAFF_INFO D1 ON D.ADD_USER_ID = D1.STAFF_ID
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC
+    </select>
+
+
+    <select id="queryProjectTaskLazyBackupPage" resultType="com.easy.etl.projectTask.vo.ProjectTaskLazyVo">
+        SELECT
+        D.TASK_LAZY_ID,D.LAZY_TASK_ID,D1.TASK_NAME,D1.CORN,D.BACKUP_TASK_LAZY_ID,D.BACKUP_TASK_ID,D.BACKUP_LAZY_TASK_ID
+        FROM TF_PROJECT_TASK_LAZY_BACKUP D
+        LEFT JOIN TF_PROJECT_TASK D1 ON D.LAZY_TASK_ID = D1.TASK_ID
+        <where>
+            <!--主键-->
+            <if test="param.taskLazyId != null and param.taskLazyId != ''">
+                AND D.TASK_LAZY_ID =#{param.taskLazyId}
+            </if>
+            <!--归属任务-->
+            <if test="param.taskId != null and param.taskId != ''">
+                AND D.TASK_ID =#{param.taskId}
+            </if>
+            <!--依懒任务ID-->
+            <if test="param.lazyTaskId != null and param.lazyTaskId != ''">
+                AND D.LAZY_TASK_ID =#{param.lazyTaskId}
+            </if>
+
+
+        </where>
+        ORDER BY D.ADD_TIME DESC
+    </select>
+
+
+    <select id="queryProjectTaskBackupById" resultType="com.easy.etl.projectTask.vo.ProjectTaskVo">
+        SELECT
+            D.TASK_ID,
+            D.BACKUP_TASK_ID,
+            D.PROJECT_ID,
+            D.PROJECT_WORK_SPACE_LAYER_REL_ID,
+            D.PROJECT_WORK_SPACE_ID,
+            D.WORK_SPACE_TYPE,
+            D2.NAME AS WORK_SPACE_TYPE_DESC,
+            D.TASK_FOLDER_ID,
+            D.TASK_NAME,
+            D.REMARK,
+            D.TASK_STEP,
+            D.DB_SOURCE_ID,
+            D.CORN_STATUS,
+            D.START_DATE,
+            D.END_DATE,
+            D.CORN,
+            D.FAILURE_POLICY,
+            D.ALLOW_EDIT,
+            D.ALLOW_DELETE,
+            D.ENABLE,
+            D.IS_DEL,
+            D.ADD_TIME,
+            D.ADD_USER_ID,
+            D.UPDATE_TIME,
+            D.UPDATE_USER_ID,
+            D.VERSION,
+            D.SHOW_ORDER,
+            D1.USER_NAME
+        FROM
+            TF_PROJECT_TASK_BACKUP D
+                LEFT JOIN TD_STAFF D1 ON D.ADD_USER_ID = D1.STAFF_ID
+                LEFT JOIN TD_DICT_VALUES D2 ON D.WORK_SPACE_TYPE=D2.`VALUE` AND D2.DICT_CODE='TASK_TYPE'
+        WHERE
+            D.TASK_ID = #{taskId}
+    </select>
+
+    <select id="queryBatchProjectLayerTaskReadFieldBakeupAll"
+            resultType="com.easy.etl.batchTask.batchProjectLayerTaskReadField.vo.BatchProjectLayerTaskReadFieldVo">
+        SELECT
+        D.*,IFNULL(D1.VALUE,0) AS IS_NUM
+        FROM TF_BATCH_PROJECT_LAYER_TASK_READ_FIELD_BACKUP D LEFT JOIN TD_DICT_VALUES D1 ON D.FIELD_TYPE=D1.NAME AND D1.DICT_CODE='DB_NUMBER'
+        <where>
+            D.IS_DEL=1
+            <!--主键-->
+            <if test="param.readFieldId != null and param.readFieldId != ''">
+                AND D.READ_FIELD_ID =#{param.readFieldId}
+            </if>
+            <!--批处理分层任务来源ID-->
+            <if test="param.readId != null and param.readId != ''">
+                AND D.READ_ID =#{param.readId}
+            </if>
+            <!--归属任务-->
+            <if test="param.taskId != null and param.taskId != ''">
+                AND D.TASK_ID =#{param.taskId}
+            </if>
+            <!--归属项目-->
+            <if test="param.projectId != null and param.projectId != ''">
+                AND D.PROJECT_ID =#{param.projectId}
+            </if>
+            <!--字段名-->
+            <if test="param.fieldName != null and param.fieldName != ''">
+                AND LOWER(D.FIELD_NAME) =LOWER(#{param.fieldName})
+            </if>
+            <!--字段类型-->
+            <if test="param.fieldType != null and param.fieldType != ''">
+                AND D.FIELD_TYPE =#{param.fieldType}
+            </if>
+            <!--字段注释-->
+            <if test="param.comment != null and param.comment != ''">
+                AND D.COMMENT =#{param.comment}
+            </if>
+            <!--字段长度-->
+            <if test="param.columnSize != null and param.columnSize != ''">
+                AND D.COLUMN_SIZE =#{param.columnSize}
+            </if>
+            <if test="param.fieldFormat != null and param.fieldFormat != ''">
+                AND LOWER(D.FIELD_FORMAT) =LOWER(#{param.fieldFormat})
+            </if>
+            <!--小数位数-->
+            <if test="param.point != null and param.point != ''">
+                AND D.POINT =#{param.point}
+            </if>
+        </where>
+        ORDER BY D.SHOW_ORDER ASC
+    </select>
+
+    <select id="queryBatchProjectLayerTaskFieldMapBackupAll"
+            resultType="com.easy.etl.batchTask.batchProjectLayerTaskFieldMap.vo.BatchProjectLayerTaskFieldMapVo">
+        SELECT
+        M.READ_FIELD_ID,
+        M.WRITE_FIELD_ID,
+        M.SHOW_ORDER,
+        R.FIELD_NAME AS READ_FIELD_NAME,
+        R.FIELD_TYPE AS READ_FIELD_TYPE,
+        R.COLUMN_SIZE AS READ_COLUMN_SIZE,
+        R.POINT AS READ_POINT,
+        R.FIELD_FORMAT AS READ_FIELD_FORMAT,
+        W.FIELD_NAME AS WRITE_FIELD_NAME,
+        W.FIELD_TYPE AS WRITE_FIELD_TYPE,
+        W.COLUMN_SIZE AS WRITE_COLUMN_SIZE,
+        W.POINT AS WRITE_POINT
+        FROM TF_BATCH_PROJECT_LAYER_TASK_FIELD_MAP_BACKUP M
+        LEFT JOIN TF_BATCH_PROJECT_LAYER_TASK_READ_FIELD_BACKUP R ON M.TASK_ID = R.TASK_ID AND M.READ_FIELD_ID=R.READ_FIELD_ID AND M.READ_ID=R.READ_ID
+        LEFT JOIN TF_BATCH_PROJECT_LAYER_TASK_WRITE_FIELD_BACKUP W ON M.TASK_ID = W.TASK_ID AND M.WRITE_FIELD_ID=W.WRITE_FIELD_ID AND M.WRITE_ID=W.WRITE_ID
+        <where>
+            M.IS_DEL=1 AND M.ENABLE=1
+            <!--归属任务-->
+            <if test="param.taskId != null and param.taskId != ''">
+                AND M.TASK_ID =#{param.taskId}
+            </if>
+            <!--归属项目-->
+            <if test="param.projectId != null and param.projectId != ''">
+                AND  M.PROJECT_ID =#{param.projectId}
+            </if>
+            <!--任务来源ID-->
+            <if test="param.readId != null and param.readId != ''">
+                AND  M.READ_ID =#{param.readId}
+            </if>
+            <!--任务写入ID-->
+            <if test="param.writeId != null and param.writeId != ''">
+                AND  M.WRITE_ID =#{param.writeId}
+            </if>
+            <!--来源字段-->
+            <if test="param.readFieldId != null and param.readFieldId != ''">
+                AND  M.READ_FIELD_ID =#{param.readFieldId}
+            </if>
+            <!--写入字段-->
+            <if test="param.writeFieldId != null and param.writeFieldId != ''">
+                AND  M.WRITE_FIELD_ID =#{param.writeFieldId}
+            </if>
+        </where>
+        ORDER BY M.SHOW_ORDER ASC
+    </select>
+</mapper>

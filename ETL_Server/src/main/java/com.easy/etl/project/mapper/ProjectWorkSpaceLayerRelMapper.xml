@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.project.mapper.ProjectWorkSpaceLayerRelMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="projectWorkSpaceLayerRelResultMap" type="com.easy.etl.project.entity.ProjectWorkSpaceLayerRel">
+        <id column="PROJECT_WORK_SPACE_LAYER_REL_ID" property="projectWorkSpaceLayerRelId"/>
+        <result column="PROJECT_ID" property="projectId"/>
+        <result column="WORK_SPACE_ID" property="workSpaceId"/>
+        <result column="WORK_SPACE_LAYER_ID" property="workSpaceLayerId"/>
+        <result column="WORK_SPACE_TYPE" property="workSpaceType"/>
+        <result column="ALLOW_EDIT" property="allowEdit"/>
+        <result column="ALLOW_DELETE" property="allowDelete"/>
+        <result column="ENABLE" property="enable"/>
+        <result column="IS_DEL" property="isDel"/>
+        <result column="ADD_TIME" property="addTime"/>
+        <result column="ADD_USER_ID" property="addUserId"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="UPDATE_USER_ID" property="updateUserId"/>
+        <result column="VERSION" property="version"/>
+        <result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+
+    <select id="queryProjectWorkSpaceLayer" resultType="com.easy.etl.project.vo.ProjectWorkSpaceLayerRelVo">
+        SELECT
+            d.PROJECT_WORK_SPACE_LAYER_REL_ID,
+            d.PROJECT_WORK_SPACE_ID,
+            d.WORK_SPACE_ID,
+            d1.WORK_SPACE_NAME,
+            d2.WORK_SPACE_LAYER_ID,
+            d2.WORK_SPACE_LAYER_NAME
+        FROM
+            TF_PROJECT_WORK_SPACE_LAYER_REL d
+                left join TF_PROJECT_WORK_SPACE d1 on d.WORK_SPACE_ID=d1.WORK_SPACE_ID
+                left join TF_PROJECT_WORK_SPACE_LAYER d2 on d.WORK_SPACE_LAYER_ID=d2.WORK_SPACE_LAYER_ID
+        WHERE
+            D.PROJECT_ID = #{projectId} AND D.ENABLE=1
+        ORDER BY D1.SHOW_ORDER DESC,D2.SHOW_ORDER DESC
+    </select>
+</mapper>

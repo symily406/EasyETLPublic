@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.dbSourceType.mapper.DbSourceTypeMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="dbSourceTypeResultMap" type="com.easy.etl.dbSourceType.entity.DbSourceType">
+        <id column="SOURCE_TYPE_ID" property="sourceTypeId"/>
+        <result column="SOURCE_TYPE_NAME" property="sourceTypeName"/>
+        <result column="SOURCE_TYPE_IMAGE" property="sourceTypeImage"/>
+        <result column="JDBC_DRIVE" property="jdbcDrive"/>
+        <result column="SOURCE_TYPE" property="sourceType"/>
+        <result column="COMPANY_ID" property="companyId"/>
+        <result column="ORG_ID" property="orgId"/>
+        <result column="ALLOW_EDIT" property="allowEdit"/>
+        <result column="ALLOW_DELETE" property="allowDelete"/>
+        <result column="ENABLE" property="enable"/>
+        <result column="IS_DEL" property="isDel"/>
+        <result column="ADD_TIME" property="addTime"/>
+        <result column="ADD_USER_ID" property="addUserId"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="UPDATE_USER_ID" property="updateUserId"/>
+        <result column="VERSION" property="version"/>
+        <result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D.SOURCE_TYPE_ID,
+        D.SOURCE_TYPE_CODE,
+        D.SOURCE_TYPE_IMAGE,
+        D.JDBC_DRIVE,
+        D.SOURCE_TYPE,
+        D.IS_CATALOG,
+        D.IS_SCHEMA,
+        D.IS_ACCOUNT,
+        D.IS_PASSWORD,
+        D.ENABLE_CREATE_DDL,
+        D.COMPANY_ID,
+        D.ORG_ID,
+        D.ALLOW_EDIT,
+        D.ALLOW_DELETE,
+        D.ENABLE,
+        D.IS_DEL,
+        D.ADD_TIME,
+        D.ADD_USER_ID,
+        D.UPDATE_TIME,
+        D.UPDATE_USER_ID,
+        D.VERSION,
+        D.SHOW_ORDER,
+        D1.NAME AS SOURCE_TYPE_NAME
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            D.IS_DEL=1 AND D.ENABLE=1
+            <!--主键-->
+            <if test="param.sourceTypeId != null and param.sourceTypeId != ''">
+                AND D.SOURCE_TYPE_ID =#{param.sourceTypeId}
+            </if>
+            <!--名称-->
+            <if test="param.sourceTypeName != null and param.sourceTypeName != ''">
+                AND D.SOURCE_TYPE_NAME =#{param.sourceTypeName}
+            </if>
+            <!--图片-->
+            <if test="param.sourceTypeImage != null and param.sourceTypeImage != ''">
+                AND D.SOURCE_TYPE_IMAGE =#{param.sourceTypeImage}
+            </if>
+            <!--驱动-->
+            <if test="param.jdbcDrive != null and param.jdbcDrive != ''">
+                AND D.JDBC_DRIVE =#{param.jdbcDrive}
+            </if>
+            <!--数据源类型-->
+            <if test="param.sourceType != null">
+                AND D.SOURCE_TYPE =#{param.sourceType}
+            </if>
+            <!--启用:0未启用,1:启用-->
+            <if test="param.enable != null">
+                AND D.ENABLE =#{param.enable}
+            </if>
+            <!--显示排序-->
+            <if test="param.showOrder != null">
+                AND D.SHOW_ORDER =#{param.showOrder}
+            </if>
+
+            <!--归属企业 -->
+            <if test="param.companyId != null and param.companyId != ''">
+                AND D.COMPANY_ID =#{param.companyId}
+            </if>
+            <!--归属机构 -->
+            <if test="param.orgId != null and param.orgId != ''">
+                AND D.ORG_ID =#{param.orgId}
+            </if>
+            <!--用户 -->
+            <if test="param.addUserId != null and param.addUserId != ''">
+                AND D.ADD_USER_ID =#{param.addUserId}
+            </if>
+        </where>
+    </sql>
+
+    <!--分页-->
+    <select id="queryDbSourceTypePage" resultType="com.easy.etl.dbSourceType.vo.DbSourceTypeVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TD_DB_SOURCE_TYPE D
+        LEFT JOIN TD_DICT_VALUES D1 ON D.SOURCE_TYPE_CODE = D1.VALUE AND D1.DICT_CODE = 'DB_SOURCE_TYPE'
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC
+    </select>
+
+    <!--查询所有-->
+    <select id="queryDbSourceTypeAll" resultType="com.easy.etl.dbSourceType.vo.DbSourceTypeVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TD_DB_SOURCE_TYPE D
+        LEFT JOIN TD_DICT_VALUES D1 ON D.SOURCE_TYPE_CODE = D1.VALUE AND D1.DICT_CODE = 'DB_SOURCE_TYPE'
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC
+    </select>
+
+    <!--根据条件查询单个-->
+    <select id="queryDbSourceTypeByCondition" resultType="com.easy.etl.dbSourceType.vo.DbSourceTypeVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TD_DB_SOURCE_TYPE D
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC LIMIT 1
+    </select>
+    <!-- 代码生成器生成代码结束 -->
+</mapper>

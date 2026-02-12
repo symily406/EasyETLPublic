@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.projectTaskFlow.mapper.ProjectTaskFlowSourceTargetNodeMapper">
+
+    <select id="queryProjectTaskFlowSourceTargetNodes" resultType="com.easy.etl.projectTaskFlow.vo.ProjectTaskFlowSourceTargetNodeVo">
+        SELECT D.TASK_ID,
+               D.NODE_ID AS EXECUTE_NODE_ID,
+               D.EXECUTE_TASK_ID,
+               D1.SOURCE_NODE_ID,
+               D2.EXECUTE_TASK_ID AS SOURCE_TASK_ID,
+               D3.WORK_SPACE_TYPE,
+               D.NODE_TYPE
+        FROM TF_PROJECT_TASK_FLOW_NODE D
+            LEFT JOIN TF_PROJECT_TASK_FLOW_SOURCE_TARGET_NODE D1 ON D.NODE_ID = D1.TARGET_NODE_ID
+            LEFT JOIN TF_PROJECT_TASK_FLOW_NODE D2 ON D1.SOURCE_NODE_ID = D2.NODE_ID
+            LEFT JOIN TF_PROJECT_TASK D3 ON D.EXECUTE_TASK_ID=D3.TASK_ID
+        WHERE  D.TASK_ID = #{taskId}
+    </select>
+</mapper>

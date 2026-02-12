@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.system.org.mapper.OrgMapper">
+	<!-- 通用查询映射结果 -->
+	<resultMap id="orgResultMap"
+		type="com.easy.system.org.entity.Org">
+		<id column="ORG_ID" property="orgId" />
+		<result column="COMPANY_ID" property="companyId" />
+		<result column="ORG_FULL_NAME" property="orgFullName" />
+		<result column="ORG_NAME" property="orgName" />
+		<result column="ORG_CODE" property="orgCode" />
+		<result column="P_ORG_ID" property="pOrgId" />
+		<result column="ORG_PATH" property="orgPath" />
+		<result column="ALLOW_EDIT" property="allowEdit" />
+		<result column="ALLOW_DELETE" property="allowDelete" />
+		<result column="ENABLE" property="enable" />
+		<result column="IS_DEL" property="isDel" />
+		<result column="ADD_TIME" property="addTime" />
+		<result column="ADD_USER_ID" property="addUserId" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="UPDATE_USER_ID" property="updateUserId" />
+		<result column="VERSION" property="version" />
+		<result column="SHOW_ORDER" property="showOrder" />
+
+	</resultMap>
+
+
+
+	<!-- 代码生成器生成代码开始 -->
+
+	<!-- 字段 -->
+	<sql id="queryColumns">
+		D.*
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="queryConditions">
+		<where>
+			D.IS_DEL=1 AND D.ENABLE=1
+			<!--主键 -->
+			<if test="param.orgId != null and param.orgId != ''">
+				AND D.ORG_ID =#{param.orgId}
+			</if>
+			<!--归属企业 -->
+			<if test="param.companyId != null and param.companyId != ''">
+				AND D.COMPANY_ID =#{param.companyId}
+			</if>
+			<if test="param.orgId != null and param.orgId != ''">
+				AND D.ORG_ID =#{param.orgId}
+			</if>
+			<!--机构全称 -->
+			<if test="param.orgFullName != null and param.orgFullName != ''">
+				AND D.ORG_FULL_NAME =#{param.orgFullName}
+			</if>
+			<!--机构简称 -->
+			<if test="param.orgName != null and param.orgName != ''">
+				AND D.ORG_NAME =#{param.orgName}
+			</if>
+			<!--机构编码 -->
+			<if test="param.orgCode != null and param.orgCode != ''">
+				AND D.ORG_CODE =#{param.orgCode}
+			</if>
+			<!--上级机构 -->
+			<if test="param.pOrgId != null and param.pOrgId != ''">
+				AND D.P_ORG_ID =#{param.pOrgId}
+			</if>
+			<!--机构路径 -->
+			<if test="param.orgPath != null and param.orgPath != ''">
+				AND D.ORG_PATH =#{param.orgPath}
+			</if>
+
+		</where>
+	</sql>
+
+	<!--分页 -->
+	<select id="queryOrgPage"
+		resultType="com.easy.system.org.vo.OrgVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_ORG D
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC
+	</select>
+
+	<!--查询所有 -->
+	<select id="queryOrgAll"
+		resultType="com.easy.system.org.vo.OrgVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_ORG D
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC
+	</select>
+
+	<!--根据条件查询单个 -->
+	<select id="queryOrgByCondition"
+		resultType="com.easy.system.org.vo.OrgVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_ORG D
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC LIMIT 1
+	</select>
+	<!-- 代码生成器生成代码结束 -->
+</mapper>

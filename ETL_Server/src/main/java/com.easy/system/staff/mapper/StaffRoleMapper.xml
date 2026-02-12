@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.easy.system.staff.mapper.StaffRoleMapper">
+	<!-- 通用查询映射结果 -->
+	<resultMap id="staffRoleResultMap"
+		type="com.easy.system.staff.entity.StaffRole">
+		<id column="SR_ID" property="srId" />
+		<result column="STAFF_ID" property="staffId" />
+		<result column="ROLE_ID" property="roleId" />
+	</resultMap>
+
+
+	<!--用户权限 -->
+	<select id="queryStaffRole"
+		resultType="java.lang.String">
+		SELECT ROLE FROM TD_MENU_ROLE WHERE ROLE_ID IN(SELECT F_ID
+		FROM TR_ROLE_FUNCTION WHERE R_ID IN(SELECT ROLE_ID FROM TR_STAFF_ROLE
+		WHERE STAFF_ID =#{staffId}))
+	</select>
+
+	<!-- 代码生成器生成代码开始 -->
+
+	<!-- 字段 -->
+	<sql id="queryColumns">
+		D.*,O.NAME
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="queryConditions">
+		<where>
+			<!--主键 -->
+			<if test="param.srId != null and param.srId != ''">
+				AND D.SR_ID =#{param.srId}
+			</if>
+			<!--用户 -->
+			<if test="param.staffId != null and param.staffId != ''">
+				AND D.STAFF_ID =#{param.staffId}
+			</if>
+			<!--角色 -->
+			<if test="param.roleId != null and param.roleId != ''">
+				AND D.ROLE_ID =#{param.roleId}
+			</if>
+		</where>
+	</sql>
+
+	<!--分页 -->
+	<select id="queryStaffRolePage"
+		resultType="com.easy.system.staff.vo.StaffRoleVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TR_STAFF_ROLE D LEFT JOIN TD_ROLE O ON D.ROLE_ID=O.R_ID 
+		<include refid="queryConditions" />
+		ORDER BY D.SR_ID ASC
+	</select>
+
+	<!--查询所有 -->
+	<select id="queryStaffRoleAll"
+		resultType="com.easy.system.staff.vo.StaffRoleVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TR_STAFF_ROLE D LEFT JOIN TD_ROLE O ON D.ROLE_ID=O.R_ID 
+		<include refid="queryConditions" />
+		ORDER BY D.SR_ID ASC
+	</select>
+
+	<!--根据条件查询单个 -->
+	<select id="queryStaffRoleByCondition"
+		resultType="com.easy.system.staff.vo.StaffRoleVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TR_STAFF_ROLE D LEFT JOIN TD_ROLE O ON D.ROLE_ID=O.R_ID 
+		<include refid="queryConditions" />
+		ORDER BY D.SR_ID ASC LIMIT 1
+	</select>
+	<!-- 代码生成器生成代码结束 -->
+</mapper>

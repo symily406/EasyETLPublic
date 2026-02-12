@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.system.role.mapper.RoleMapper">
+	<!-- 通用查询映射结果 -->
+	<resultMap id="roleResultMap"
+		type="com.easy.system.role.entity.Role">
+		<id column="R_ID" property="rId" />
+		<result column="NAME" property="name" />
+		<result column="COMPANY_ID" property="companyId" />
+		<result column="STATE" property="state" />
+		<result column="INDEX_PATH" property="indexPath" />
+		<result column="ALLOW_EDIT" property="allowEdit" />
+		<result column="ALLOW_DELETE" property="allowDelete" />
+		<result column="ENABLE" property="enable" />
+		<result column="IS_DEL" property="isDel" />
+		<result column="ADD_TIME" property="addTime" />
+		<result column="ADD_USER_ID" property="addUserId" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="UPDATE_USER_ID" property="updateUserId" />
+		<result column="VERSION" property="version" />
+		<result column="SHOW_ORDER" property="showOrder" />
+
+	</resultMap>
+	
+	
+		<!--用户权限编码 -->
+	<select id="queryStaffRole"
+		resultType="com.easy.system.role.vo.RoleVo">
+		SELECT D.* FROM TD_ROLE D WHERE D.R_ID IN(SELECT ROLE_ID FROM TR_STAFF_ROLE WHERE STAFF_ID=#{staffId})
+	</select>
+
+	<!-- 代码生成器生成代码开始 -->
+
+	<!-- 字段 -->
+	<sql id="queryColumns">
+		D.*
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="queryConditions">
+		<where>
+			D.IS_DEL=1 AND D.ENABLE=1
+			<!--角色名称 -->
+			<if test="param.name != null and param.name != ''">
+				AND D.NAME =#{param.name}
+			</if>
+			<!--归属企业 -->
+			<if test="param.companyId != null and param.companyId != ''">
+				AND D.COMPANY_ID =#{param.companyId}
+			</if>
+			<!--状态0:用户添加1:系统初始化 -->
+			<if test="param.state != null">
+				AND D.STATE =#{param.state}
+			</if>
+			<!--首页路径 -->
+			<if test="param.indexPath != null and param.indexPath != ''">
+				AND D.INDEX_PATH =#{param.indexPath}
+			</if>
+
+		</where>
+	</sql>
+
+	<!--分页 -->
+	<select id="queryRolePage"
+		resultType="com.easy.system.role.vo.RoleVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_ROLE D
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC
+	</select>
+
+	<!--查询所有 -->
+	<select id="queryRoleAll"
+		resultType="com.easy.system.role.vo.RoleVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_ROLE D
+		<include refid="queryConditions" />
+		ORDER BY D.SHOW_ORDER desc,D.ADD_TIME ASC
+	</select>
+
+	<!--根据条件查询单个 -->
+	<select id="queryRoleByCondition"
+		resultType="com.easy.system.role.vo.RoleVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_ROLE D
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC LIMIT 1
+	</select>
+	<!-- 代码生成器生成代码结束 -->
+</mapper>

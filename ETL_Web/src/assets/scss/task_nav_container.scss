@@ -1,0 +1,89 @@
+#app{
+	.task-nav-container{
+		width: 100%;
+		.el-header{
+			padding: 0px;
+			height: 100% !important;
+		}
+		.navbar{
+			padding-left: 1rem;
+			padding-right:1rem;
+			line-height: $logoNavHeight;
+			height: $logoNavHeight;
+		}
+		
+		.menuMode{
+			width: 1.5rem;
+			float: left;
+			height: $logoNavHeight;
+			overflow: hidden;
+		}
+		
+		.menuMode button{
+			font-size: 1.5rem;
+			color: #000;
+			padding: 0px;
+			margin-top: 10px;
+		}
+		
+		.breadcrumb{
+			float: left;
+			padding:1rem;
+			font-weight: bold;
+			color: #000;
+		}
+		
+		.toolbar{
+			float: right;
+			height: $logoNavHeight;
+			overflow: hidden;
+			.el-button{
+				font-size: 1.2rem;
+				color: #000;
+			}
+			span{
+				padding-right: 5px;
+				float:left;
+			}
+		}
+
+		
+		.tagbar{
+			height:$tagHeight;
+			.el-tabs--border-card {
+			    background: none;
+			    border:0px;
+			    box-shadow:none;
+			}
+			.el-tabs__item {
+			    height: 2.4rem;
+			    box-sizing: border-box;
+			    line-height: 2.4rem;
+			    display: inline-block;
+			    list-style: none;
+			    font-size: 14px;
+			    font-weight: normal;
+			    color: #303133;
+			    position: relative;
+			}
+			.el-tabs__nav-next, .el-tabs__nav-prev {
+			    line-height: 2.4rem;
+			}
+			.el-tabs{
+				width: 100%;
+				height: $tagHeight;
+				overflow: hidden;
+				.el-tabs__content{
+					display: none;
+				}
+				.el-tabs__header{
+					border-bottom: none;
+				}
+			}
+			.tagbar-dropdown{
+				background-color: #fff;
+				    border-bottom: 3px solid #E4E7ED;
+			}
+		}
+	}
+}

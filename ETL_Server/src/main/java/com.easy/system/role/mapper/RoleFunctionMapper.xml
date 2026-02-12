@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.system.role.mapper.RoleFunctionMapper">
+	<!-- 通用查询映射结果 -->
+	<resultMap id="roleFunctionResultMap"
+		type="com.easy.system.role.entity.RoleFunction">
+		<id column="ID" property="id" />
+		<result column="R_ID" property="rId" />
+		<result column="F_ID" property="fId" />
+		<result column="LEVAL" property="leval" />
+
+	</resultMap>
+
+	<!-- 代码生成器生成代码开始 -->
+
+	<!-- 字段 -->
+	<sql id="queryColumns">
+		D.*
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="queryConditions">
+		<where>
+			<!--功能主键 -->
+			<if test="param.rId != null and param.rId != ''">
+				AND D.R_ID =#{param.rId}
+			</if>
+			<!--功能主键 -->
+			<if test="param.fId != null and param.fId != ''">
+				AND D.F_ID =#{param.fId}
+			</if>
+			<!--层级0:功能,1:菜单,2:权限 -->
+			<if test="param.leval != null">
+				AND D.LEVAL =#{param.leval}
+			</if>
+
+		</where>
+	</sql>
+
+
+	<!--查询所有 -->
+	<select id="queryRoleFunctionAll"
+		resultType="com.easy.system.role.vo.RoleFunctionVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TR_ROLE_FUNCTION D
+		<include refid="queryConditions" />
+	</select>
+
+	<!-- 代码生成器生成代码结束 -->
+</mapper>

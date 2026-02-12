@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.flowRunJob.mapper.FlowRunJobNodeMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="flowrunJobNodeResultMap" type="com.easy.etl.flowRunJob.entity.FlowRunJobNode">
+        <id column="JOB_RUN_NODE_ID" property="jobRunNodeId"/>
+        <result column="FLOW_RUN_JOB_ID" property="flowRunJobId"/>
+        <result column="FLOW_JOB_ID" property="flowJobId"/>
+        <result column="TASK_ID" property="taskId"/>
+        <result column="WORK_SPACE_TYPE" property="workSpaceType"/>
+        <result column="EXECUTE_NODE_ID" property="executeNodeId"/>
+        <result column="EXECUTE_TASK_ID" property="executeTaskId"/>
+        <result column="NODE_TYPE" property="nodeType"/>
+        <result column="STATUS" property="status"/>
+        <result column="PLANE_TIME" property="planeTime"/>
+        <result column="EXECUTE_TIME" property="executeTime"/>
+        <result column="COMPLETED_TIME" property="completedTime"/>
+
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D.JOB_RUN_NODE_ID,
+        D.FLOW_RUN_JOB_ID,
+        D.FLOW_JOB_ID,
+        D.TASK_ID,
+        D.WORK_SPACE_TYPE,
+        D.EXECUTE_NODE_ID,
+        D.EXECUTE_TASK_ID,
+        D.NODE_TYPE,
+        D.STATUS,
+        D.PLANE_TIME,
+        D.EXECUTE_TIME,
+        D.COMPLETED_TIME,
+        D.USAGE_TIME,
+        D.ADD_TIME,
+        D1.CORN_STATUS,
+        D1.TASK_NAME,
+        D1.PROJECT_ID,
+        D5.PROJECT_NAME,
+        D1.PROJECT_WORK_SPACE_LAYER_REL_ID,
+        D1.PROJECT_WORK_SPACE_ID,
+        D1.WORK_SPACE_TYPE,
+        D2.`NAME` AS STATUS_DESC,
+	    D3.`NAME` AS WORK_SPACE_TYPE_DESC,
+        D6.JOB_ID
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            <!--主键-->
+            <if test="param.jobRunNodeId != null and param.jobRunNodeId != ''">
+                AND D.JOB_RUN_NODE_ID =#{param.jobRunNodeId}
+            </if>
+            <!--归属执行工和流-->
+            <if test="param.flowRunJobId != null and param.flowRunJobId != ''">
+                AND D.FLOW_RUN_JOB_ID =#{param.flowRunJobId}
+            </if>
+            <!--归属工作流NODE-->
+            <if test="param.flowJobId != null and param.flowJobId != ''">
+                AND D.FLOW_JOB_ID =#{param.flowJobId}
+            </if>
+            <!--归属任务-->
+            <if test="param.taskId != null and param.taskId != ''">
+                AND D.TASK_ID =#{param.taskId}
+            </if>
+            <!--与字典表关联code=WORK_SPACE_TASK_TYPE-->
+            <if test="param.workSpaceType != null and param.workSpaceType != ''">
+                AND D.WORK_SPACE_TYPE =#{param.workSpaceType}
+            </if>
+            <!--执行节点ID-->
+            <if test="param.executeNodeId != null and param.executeNodeId != ''">
+                AND D.EXECUTE_NODE_ID =#{param.executeNodeId}
+            </if>
+            <!--执行任务ID-->
+            <if test="param.executeTaskId != null and param.executeTaskId != ''">
+                AND D.EXECUTE_TASK_ID =#{param.executeTaskId}
+            </if>
+            <!--节点类型-->
+            <if test="param.nodeType != null">
+                AND D.NODE_TYPE =#{param.nodeType}
+            </if>
+            <!--执行脚本内容-->
+            <if test="param.scriptContent != null and param.scriptContent != ''">
+                AND D.SCRIPT_CONTENT =#{param.scriptContent}
+            </if>
+            <!--状态:10:待父级依懒运行,1待运行,2正在运行,0运行成功,-1运行失败-->
+            <if test="param.status != null">
+                AND D.STATUS =#{param.status}
+            </if>
+            <!--计划执行时间-->
+            <if test="param.planeTime != null and param.planeTime != ''">
+                AND D.PLANE_TIME =#{param.planeTime}
+            </if>
+            <!--下次执行时间-->
+            <if test="param.executeTime != null and param.executeTime != ''">
+                AND D.EXECUTE_TIME =#{param.executeTime}
+            </if>
+            <!--完成时间-->
+            <if test="param.completedTime != null and param.completedTime != ''">
+                AND D.COMPLETED_TIME =#{param.completedTime}
+            </if>
+
+            <!--判断是否为空-->
+               <if test="param.flowRunJobIds !=null and param.flowRunJobIds.size>0">
+                   D.FLOW_RUN_JOB_ID in
+             <!--进行foreacd遍历-->
+                   <foreach collection="param.flowRunJobIds" index="index" item="item" open="(" separator="," close=")">
+                        #{item}
+                   </foreach>
+               </if>
+            <!--判断是否为空-->
+            <if test="param.notInNodeTypes !=null and param.notInNodeTypes.size>0">
+               AND D.NODE_TYPE NOT IN
+                <!--进行foreacd遍历-->
+                <foreach collection="param.notInNodeTypes" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+
+    <!--查询所有-->
+    <select id="queryFlowRunJobNodeAll" resultType="com.easy.etl.flowRunJob.vo.FlowRunJobNodeVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_FLOW_RUN_JOB_NODE D
+        LEFT JOIN TF_PROJECT_TASK D1 ON D.EXECUTE_TASK_ID = D1.TASK_ID
+        LEFT JOIN TD_DICT_VALUES D2 ON D.`STATUS`=D2.`VALUE` AND D2.DICT_CODE='TASK_STATUS_ENUM'
+        LEFT JOIN TD_DICT_VALUES D3 ON D1.WORK_SPACE_TYPE=D3.`VALUE` AND D3.DICT_CODE='WORK_SPACE_TASK_TYPE'
+        LEFT JOIN TF_PROJECT D5 ON D1.PROJECT_ID=D5.PROJECT_ID
+        LEFT JOIN TF_RUN_TASK_JOB D6 ON D.JOB_RUN_NODE_ID=D6.JOB_RUN_NODE_ID
+        <include refid="queryConditions"/>
+        ORDER BY D.SEQ_INDEX ASC,D.FLOW_RUN_JOB_ID ASC
+    </select>
+
+    <select id="groupNodeStatusByIds" resultType="com.easy.etl.flowRunJob.vo.FlowRunJobNodeStatusVo">
+        WITH A AS (
+        SELECT
+        D.FLOW_RUN_JOB_ID,
+        COUNT(*) AS TOTAL,
+        SUM(D.USAGE_TIME) AS TOTAL_USAGE_TIME
+        FROM
+        TF_FLOW_RUN_JOB_NODE D
+        WHERE
+
+        D.FLOW_RUN_JOB_ID in
+        <foreach item="item" collection="runJobNodeIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ),B AS (
+        SELECT
+        D.FLOW_RUN_JOB_ID,
+        COUNT(*) AS SUCCED
+        FROM
+        TF_FLOW_RUN_JOB_NODE D
+        WHERE D.STATUS=#{succedStatus}
+        AND D.FLOW_RUN_JOB_ID in
+        <foreach item="item" collection="runJobNodeIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ),C AS (
+        SELECT
+        D.FLOW_RUN_JOB_ID,
+        COUNT(*) AS FAILED
+        FROM
+        TF_FLOW_RUN_JOB_NODE D
+        WHERE
+        D.STATUS=#{failedStatus}
+        AND D.FLOW_RUN_JOB_ID in
+        <foreach item="item" collection="runJobNodeIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        )
+        SELECT ifnull(A1.FLOW_RUN_JOB_ID,'-') as FLOW_RUN_JOB_ID,A1.FLOW_RUN_JOB_ID,IFNULL(A1.TOTAL,0) AS
+        TOTAL,IFNULL(A1.TOTAL_USAGE_TIME,0) AS TOTAL_USAGE_TIME,IFNULL(B1.SUCCED,0) SUCCED,IFNULL(C1.FAILED,0) FAILED
+        FROM A A1
+        LEFT JOIN B B1 ON A1.FLOW_RUN_JOB_ID=B1.FLOW_RUN_JOB_ID
+        LEFT JOIN C C1 ON A1.FLOW_RUN_JOB_ID=c1.FLOW_RUN_JOB_ID
+        where A1.FLOW_RUN_JOB_ID IN
+        <foreach item="item" collection="runJobNodeIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryFlowRunTasks" resultType="com.easy.etl.flowRunJob.vo.FlowRunJobNodeVo">
+        SELECT
+        D.*,
+        D2.PROJECT_ID,
+        D2.TASK_FOLDER_ID,
+        D2.PROJECT_WORK_SPACE_LAYER_REL_ID,
+        D2.PROJECT_WORK_SPACE_ID
+        FROM
+        TF_FLOW_RUN_JOB_NODE D
+        LEFT JOIN TF_PROJECT_TASK_FLOW D2 ON D.TASK_ID = D2.TASK_ID
+        where D.PLANE_TIME <![CDATA[<=]]>#{dateTime} and D.STATUS= #{toBeAllocated}
+            LIMIT #{size}
+    </select>
+
+</mapper>

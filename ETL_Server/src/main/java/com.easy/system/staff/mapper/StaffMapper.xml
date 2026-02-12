@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.system.staff.mapper.StaffMapper">
+	<!-- 通用查询映射结果 -->
+	<resultMap id="staffResultMap"
+		type="com.easy.system.staff.entity.Staff">
+		<id column="STAFF_ID" property="staffId" />
+		<result column="USER_NAME" property="userName" />
+		<result column="PASSWORD" property="password" />
+		<result column="LOGIN_NUM" property="loginNum" />
+		<result column="IS_LOCK" property="isLock" />
+		<result column="EXPIRE_TIME" property="expireTime" />
+		<result column="COMPANY_ID" property="companyId" />
+		<result column="ORG_ID" property="orgId" />
+		<result column="LEVAL" property="leval" />
+		<result column="ALLOW_EDIT" property="allowEdit" />
+		<result column="ALLOW_DELETE" property="allowDelete" />
+		<result column="ENABLE" property="enable" />
+		<result column="IS_DEL" property="isDel" />
+		<result column="ADD_TIME" property="addTime" />
+		<result column="ADD_USER_ID" property="addUserId" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="UPDATE_USER_ID" property="updateUserId" />
+		<result column="VERSION" property="version" />
+		<result column="SHOW_ORDER" property="showOrder" />
+
+	</resultMap>
+	
+	
+	
+	<!-- 用户登陆 -->
+	<select id="userLogin"
+		resultType="com.easy.system.staff.vo.StaffVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_STAFF D  LEFT JOIN TD_COMPANY C ON D.COMPANY_ID=C.COMPANY_ID LEFT JOIN TD_ORG O ON D.ORG_ID=O.ORG_ID LEFT JOIN TD_STAFF_INFO I ON D.STAFF_ID=I.STAFF_ID
+		WHERE D.USER_NAME=#{userName} AND D.IS_DEL=1
+		limit 0,1
+	</select>
+	
+	<!-- 用户刷新 -->
+	<select id="userInfoRefresh"
+		resultType="com.easy.system.staff.vo.StaffVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_STAFF D  LEFT JOIN TD_COMPANY C ON D.COMPANY_ID=C.COMPANY_ID LEFT JOIN TD_ORG O ON D.ORG_ID=O.ORG_ID LEFT JOIN TD_STAFF_INFO I ON D.STAFF_ID=I.STAFF_ID
+		WHERE D.STAFF_ID=#{staffId} AND D.IS_DEL=1
+		limit 0,1
+	</select>
+	
+	
+	<!-- 查询单个用户 -->
+	<select id="queryStaffById"
+		resultType="com.easy.system.staff.vo.StaffVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_STAFF D  LEFT JOIN TD_COMPANY C ON D.COMPANY_ID=C.COMPANY_ID LEFT JOIN TD_ORG O ON D.ORG_ID=O.ORG_ID LEFT JOIN TD_STAFF_INFO I ON D.STAFF_ID=I.STAFF_ID
+		<include refid="queryConditions" />
+		limit 0,1
+	</select>
+	
+	
+	
+
+	<!-- 代码生成器生成代码开始 -->
+
+	<!-- 字段 -->
+	<sql id="queryColumns">
+		D.*,C.COMPANY_NAME,O.ORG_NAME,I.NAME,I.PHONE,I.HEAD_PORTRAIT,I.SEX
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="queryConditions">
+		<where>
+			D.IS_DEL=1 AND D.ENABLE=1
+			<!--主键 -->
+			<if test="param.staffId != null and param.staffId != ''">
+				AND D.STAFF_ID =#{param.staffId}
+			</if>
+			<!--用户名 -->
+			<if test="param.userName != null and param.userName != ''">
+				AND D.USER_NAME =#{param.userName}
+			</if>
+			<!--密码 -->
+			<if test="param.password != null and param.password != ''">
+				AND D.PASSWORD =#{param.password}
+			</if>
+			<!--登陆次数 -->
+			<if test="param.loginNum != null">
+				AND D.LOGIN_NUM =#{param.loginNum}
+			</if>
+			<!--锁定0:锁定,1:正常(锁定后不能登陆系统) -->
+			<if test="param.isLock != null" >
+				AND D.IS_LOCK =#{param.isLock}
+			</if>
+			<!--过期时间 -->
+			<if test="param.expireTime != null and param.expireTime != ''">
+				AND D.EXPIRE_TIME =#{param.expireTime}
+			</if>
+			<!--归属企业 -->
+			<if test="param.companyId != null and param.companyId != ''">
+				AND D.COMPANY_ID =#{param.companyId}
+			</if>
+			<!--归属机构 -->
+			<if test="param.orgId != null and param.orgId != ''">
+				AND D.ORG_ID =#{param.orgId}
+			</if>
+			<if test="param.isEdit != null and param.isEdit==0 and param.projectId != null and param.projectId != ''">
+				AND D.STAFF_ID NOT IN (SELECT STAFF_ID FROM TF_PROJECT_MEMBER WHERE PROJECT_ID=#{param.projectId})
+			</if>
+		</where>
+	</sql>
+
+	<!--分页 -->
+	<select id="queryStaffPage"
+		resultType="com.easy.system.staff.vo.StaffVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_STAFF D  LEFT JOIN TD_COMPANY C ON D.COMPANY_ID=C.COMPANY_ID LEFT JOIN TD_ORG O ON D.ORG_ID=O.ORG_ID LEFT JOIN TD_STAFF_INFO I ON D.STAFF_ID=I.STAFF_ID
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC
+	</select>
+
+	<!--查询所有 -->
+	<select id="queryStaffAll"
+		resultType="com.easy.system.staff.vo.StaffVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_STAFF D  LEFT JOIN TD_COMPANY C ON D.COMPANY_ID=C.COMPANY_ID LEFT JOIN TD_ORG O ON D.ORG_ID=O.ORG_ID LEFT JOIN TD_STAFF_INFO I ON D.STAFF_ID=I.STAFF_ID
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC
+	</select>
+
+	<!--根据条件查询单个 -->
+	<select id="queryStaffByCondition"
+		resultType="com.easy.system.staff.vo.StaffVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_STAFF D  LEFT JOIN TD_COMPANY C ON D.COMPANY_ID=C.COMPANY_ID LEFT JOIN TD_ORG O ON D.ORG_ID=O.ORG_ID LEFT JOIN TD_STAFF_INFO I ON D.STAFF_ID=I.STAFF_ID
+		LEFT JOIN TD_STAFF_DUTY D1 ON D.STAFF_ID=D1.STAFF_ID LEFT JOIN TD_DUTY D2 ON D1.DUTY_ID=D2.DUTY_ID
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC LIMIT 1
+	</select>
+	<!-- 代码生成器生成代码结束 -->
+</mapper>

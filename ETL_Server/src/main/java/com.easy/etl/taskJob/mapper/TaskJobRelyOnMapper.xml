@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.taskJob.mapper.TaskJobRelyOnMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="taskJobResultMap" type="com.easy.etl.taskJob.entity.TaskJobRelyOn">
+        <id column="ID" property="id"/>
+        <result column="JOB_ID" property="jobId"/>
+        <result column="TAKS_ID" property="taksId"/>
+        <result column="STATUS" property="status"/>
+
+    </resultMap>
+
+
+</mapper>

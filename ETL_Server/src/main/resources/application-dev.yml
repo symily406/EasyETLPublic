@@ -1,0 +1,239 @@
+server:
+  port: 9527
+  servlet:
+    context-path: /system
+  # 下面是配置undertow作为服务器的参数
+  undertow:
+    # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
+    io-threads: 4
+    # 阻塞任务线程池, 当执行类似servlet请求阻塞操作, undertow会从这个线程池中取得线程,它的值设置取决于系统的负载
+    worker-threads: 20
+    # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理
+    # 每块buffer的空间大小,越小的空间被利用越充分
+    buffer-size: 1024
+    # 是否分配的直接内存
+    direct-buffers: true
+  error:
+    whitelabel:
+      enabled: false
+############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
+sa-token:
+  # jwt秘钥
+  jwtSecretKey: 9CE7C4FD-679F-4262-B474-FDBDB14AC4DB
+  # token名称 (同时也是cookie名称)
+  tokenName: Access-Token
+  # token有效期，单位s 默认30天, -1代表永不过期 ,过期时间单位秒(30 * 60 * 1000,30分钟)
+  timeout: 1800000
+  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
+  isShare: true
+  # token风格
+  tokenStyle: uuid
+  # 是否输出操作日志
+  isLog: false
+  #是否在初始化配置时打印版本字符画
+  isPrint: false
+spring:
+  #rabbitmq配置
+  rabbitmq:
+    username: guest
+    password: guest
+    addresses: node02:5672
+    # 消息确认配置项
+    # 确认消息已发送到交换机(Exchange)
+    publisher-confirm-type: correlated
+    # 确认消息已发送到队列(Queue)
+    publisher-returns: true
+    #指定消息确认模式为手动确认
+    listener:
+      simple:
+        acknowledge-mode: manual
+    # 虚拟主机名称
+    virtual-host: /
+    webUrl: http://node01:15672
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    serialization:
+      write-dates-as-timestamps: false
+  database: mysql
+  #开发模式开关
+  dev: true
+  #操作日志写入数据库
+  saveLog: false
+  #返回结果长输出长度
+  resultLength: 500 #设为-1表示不限制
+  datasource:
+    timeout: 5000 #连接超时时间
+    dynamic:
+      primary: master #设置默认的数据源或者数据源组,默认值即为master
+      strict: false #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
+      datasource:
+        master:
+          url: jdbc:mysql://node01:3306/easy_etl?useUnicode=true&characterEncoding=utf8&useOldAliasMetadataBehavior=true&useTimezone=true&serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&nullCatalogMeansCurrent=true
+          username: root
+          password: 1
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          type: com.alibaba.druid.pool.DruidDataSource
+  #默认缓存ehcache,cacheType:值为redis(redis缓存),ehcache(ehcache缓存)
+  #缓存配置
+  cacheType: redis
+  #ehcache缓存配置
+  cache:
+    #用户权限缓存
+    type: redis
+    ehcache:
+      config: classpath:ehcache.xml
+  #redis缓存配置
+  redis:
+    # Redis数据库索引（默认为0）
+    database: 1
+    # Redis服务器地址
+    host: node01
+    # Redis服务器连接端口
+    port: 6379
+    # Redis服务器连接密码（默认为空）
+    password: null
+    jedis:
+      pool:
+        # 连接池最大连接数（使用负值表示没有限制）
+        max-active: -1
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1s
+        # 连接池中的最大空闲连接
+        max-idle: 500
+        # 连接池中的最小空闲连接
+        min-idle: 50
+  #文件上传配置
+  servlet:
+    path:
+      #分片文件存储路径
+      chunk: D:\\IdeaWorks\\BigDataETL\\BigDataETL\\file\\chunk
+      #文件存储路径
+      save: D:\\IdeaWorks\\BigDataETL\\BigDataETL\\file\\file
+      #文件显示host
+      fileHost: http://localhost:8084/file
+    multipart:
+      enabled: true
+      #单个文件大小
+      max-file-size: 5MB
+  #zookeeper配置
+  zookeeper:
+    address: node01:2181
+    #会话超时时间设置为30000毫秒（30秒）
+    sessionTimeout: 30000
+    #连接超时时间设置为10000毫秒（10秒）
+    connectionTimeout: 10000
+    #是否执行器
+    isExecute: false
+mybatis-plus:
+  mapper-locations: classpath:**/mapper/**/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+    call-setters-on-nulls: true
+  global-config:
+    banner: false
+    db-config:
+      logic-delete-value: 0 # 逻辑已删除值(默认为 0)
+      #系统配置
+      logic-not-delete-value: 1 # 逻辑未删除值(默认为 1)
+#其它配置
+configurer:
+  token: D3FC1DEB-6E3A-4CCF-80B3-8F4B40077997
+  #服务类型1:服务端,2:执行器
+  server:
+    type: 1
+  #字符串编码
+  charset: UTF-8
+  #ods字段配置
+  ods:
+    #表前缀
+    tablePrefix: ods
+    #表后缀
+    tableSuffix: pq
+    #字段名称
+    fieldName: ods_up_time
+    #字段类型
+    fieldType: varchar
+    #长度
+    columnSize: 256
+    #格式化
+    fieldFormat: "{dateFormat('yyyy-MM-dd HH:mm:ss')}"
+    #字段备注
+    comment: 数据同步时间
+  #Api文档
+  api:
+    #是否生成
+    create: false
+    project:
+      #项目名称
+      name: SpringBootMybatisAdmin
+      #项目路径
+      path: E:\\MavenWorks\\SpringBootAdmin\\SpringBootMybatisAdmin\\SpringBootMybatisAdmin
+  security:
+    #调试
+    debug: true
+    token:
+      #刷新jwt名称
+      refreshClaimName: refreshToken_F1DFA160E81B4BBC91BF40ED8451C0E9
+      #刷新token过期时间单位秒(24*60 * 60 * 1000,24小时)
+      refreshExpireTime: 86400000
+  #主键生成配置
+  id:
+    #设备编号
+    workerId: 1
+    #数据中心ID
+    dataCenterId: 1
+  #定时任务配轩
+  scheduled:
+    #是否启用
+    enable: true
+    #集群部署
+    cluster: false
+    #是否主节点,如果集群部署,则主节点由zookeeper管理
+    master: true
+    #清空几天之前的日志
+    clearLogDays: 7
+# 滑块验证码配置
+aj:
+  captcha:
+    # 滑动验证，底图路径，不配置将使用默认图片
+    jigsaw: classpath:images/jigsaw
+    pic-click: classpath:images/pic-click
+    cache-type: redis
+    # local缓存的阈值,达到这个值，清除缓存
+    # cache-number: 1000
+    # local定时清除过期缓存(单位秒),设置为0代表不执行
+    # timing-clear: 180
+    # 验证码类型default两种都实例化。
+    type: default
+    # 汉字统一使用Unicode,保证程序通过@value读取到是中文，可通过这个在线转换;yml格式不需要转换
+    # https://tool.chinaz.com/tools/unicode.aspx 中文转Unicode
+    # 右下角水印文字
+    water-mark: EasyEtl
+    # 校验滑动拼图允许误差偏移量(默认5像素)
+    slip-offset: 5
+    # aes加密坐标开启或者禁用(true|false)
+    aes-status: true
+    # 滑动干扰项(0/1/2)
+    interference-options: 2
+    # 点选字体样式 默认Font.BOLD
+    font-style: 1
+    # 点选字体字体大小
+    font-size: 25
+    # 历史数据清理是否启用
+    history-data-clear-enable: false
+    # 接口请求次数一分钟限制是否开启 true|false
+    req-frequency-limit-enable: false
+    # 验证失败5次，get接口锁定
+    req-get-lock-limit: 5
+    # 验证失败后，锁定时间间隔,s
+    req-get-lock-seconds: 360
+    # get接口一分钟内请求数限制
+    req-get-minute-limit: 30
+    # check接口一分钟内请求数限制
+    req-check-minute-limit: 60
+    # verify接口一分钟内请求数限制
+    req-verify-minute-limit: 60
+
+

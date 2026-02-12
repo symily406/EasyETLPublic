@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.easy.system.indexPage.mapper.IndexPageMapper">
+	<!-- 通用查询映射结果 -->
+	<resultMap id="indexPageResultMap"
+		type="com.easy.system.indexPage.entity.IndexPage">
+		<id column="MENU_ID" property="menuId" />
+		<result column="MENU_PATH" property="menuPath" />
+		<result column="MENU_NAME" property="menuName" />
+		<result column="TITLE" property="title" />
+		<result column="ROUTE_PATH" property="routePath" />
+		<result column="PAGE_NAME" property="pageName" />
+		<result column="URL" property="url" />
+		<result column="IS_EXTERNAL" property="isExternal" />
+		<result column="ALLOW_EDIT" property="allowEdit" />
+		<result column="ALLOW_DELETE" property="allowDelete" />
+		<result column="ENABLE" property="enable" />
+		<result column="IS_DEL" property="isDel" />
+		<result column="ADD_TIME" property="addTime" />
+		<result column="ADD_USER_ID" property="addUserId" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="UPDATE_USER_ID" property="updateUserId" />
+		<result column="VERSION" property="version" />
+		<result column="SHOW_ORDER" property="showOrder" />
+
+	</resultMap>
+
+	<!-- 代码生成器生成代码开始 -->
+
+	<!-- 字段 -->
+	<sql id="queryColumns">
+		D.*
+	</sql>
+
+	<sql id="queryConditions">
+		<where>
+			D.IS_DEL=1 AND D.ENABLE=1
+			<!--主键 -->
+			<if test="param.menuId != null and param.menuId != ''">
+				AND D.MENU_ID =#{param.menuId}
+			</if>
+			<!--菜单全路径 -->
+			<if test="param.menuPath != null and param.menuPath != ''">
+				AND D.MENU_PATH =#{param.menuPath}
+			</if>
+			<!--菜单名称 -->
+			<if test="param.menuName != null and param.menuName != ''">
+				instr(AND D.MENU_NAME,#{param.menuName})>0
+			</if>
+			<!--标题 -->
+			<if test="param.title != null and param.title != ''">
+				AND D.TITLE =#{param.title}
+			</if>
+			<!--路由地址 -->
+			<if test="param.routePath != null and param.routePath != ''">
+				AND D.ROUTE_PATH =#{param.routePath}
+			</if>
+			<!--页面名称 -->
+			<if test="param.pageName != null and param.pageName != ''">
+				AND D.PAGE_NAME =#{param.pageName}
+			</if>
+			<!--访问地址:如果不是外部地址则和路由地址一样 -->
+			<if test="param.url != null and param.url != ''">
+				AND D.URL =#{param.url}
+			</if>
+			<!--是否外部地址0:否,1:是 -->
+			<if test="param.isExternal != null">
+				AND D.IS_EXTERNAL =#{param.isExternal}
+			</if>
+			<!--启用:0未启用,1:启用 -->
+			<if test="param.enable != null">
+				AND D.ENABLE =#{param.enable}
+			</if>
+			<!--显示排序 -->
+			<if test="param.showOrder != null">
+				AND D.SHOW_ORDER =#{param.showOrder}
+			</if>
+			<!--归属企业 -->
+			<if test="param.companyId != null and param.companyId != ''">
+				AND D.COMPANY_ID =#{param.companyId}
+			</if>
+			<!--归属机构 -->
+			<if test="param.orgId != null and param.orgId != ''">
+				AND D.ORG_ID =#{param.orgId}
+			</if>
+
+		</where>
+	</sql>
+
+	<!--分页 -->
+	<select id="queryindexPagePage"
+		resultType="com.easy.system.indexPage.vo.IndexPageVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_SYSTEM_INDEX_PAGE D
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC
+	</select>
+
+	<!--查询所有 -->
+	<select id="queryindexPageAll"
+		resultType="com.easy.system.indexPage.vo.IndexPageVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_SYSTEM_INDEX_PAGE D
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC
+	</select>
+
+	<!--根据条件查询单个 -->
+	<select id="queryindexPageByCondition"
+		resultType="com.easy.system.indexPage.vo.IndexPageVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_SYSTEM_INDEX_PAGE D
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC LIMIT 1
+	</select>
+	<!-- 代码生成器生成代码结束 -->
+</mapper>

@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.system.area.mapper.AreaMapper">
+	<!-- 通用查询映射结果 -->
+	<resultMap id="areaResultMap"
+		type="com.easy.system.area.entity.Area">
+		<id column="AREA_ID" property="areaId" />
+		<result column="P_AREA_ID" property="pAreaId" />
+		<result column="AREA_CODE" property="areaCode" />
+		<result column="AREA_NAME" property="areaName" />
+		<result column="FULL_PATH" property="fullPath" />
+		<result column="AREA_LEVEL" property="areaLevel" />
+		<result column="FIRST_CODE" property="firstCode" />
+		<result column="ID_CARD_CODE" property="idCardCode" />
+		<result column="SHOW_ORDER" property="showOrder" />
+
+	</resultMap>
+
+	<!-- 代码生成器生成代码开始 -->
+
+	<!-- 字段 -->
+	<sql id="queryColumns">
+		D.*
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="queryConditions">
+		<where>
+			<!--主键 -->
+			<if test="param.areaId != null and param.areaId != ''">
+				AND D.AREA_ID =#{param.areaId}
+			</if>
+			<!--上级地区 -->
+			<if test="param.pAreaId != null and param.pAreaId != ''">
+				AND D.P_AREA_ID =#{param.pAreaId}
+			</if>
+			<!--编号 -->
+			<if test="param.areaCode != null and param.areaCode != ''">
+				AND D.AREA_CODE =#{param.areaCode}
+			</if>
+			<!--地区名 -->
+			<if test="param.areaName != null and param.areaName != ''">
+				AND D.AREA_NAME =#{param.areaName}
+			</if>
+			<!--地区全路径 -->
+			<if test="param.fullPath != null and param.fullPath != ''">
+				AND D.FULL_PATH =#{param.fullPath}
+			</if>
+			<!--层级 -->
+			<if test="param.areaLevel != null">
+				AND D.AREA_LEVEL =#{param.areaLevel}
+			</if>
+			<!--首字母 -->
+			<if test="param.firstCode != null and param.firstCode != ''">
+				AND D.FIRST_CODE =#{param.firstCode}
+			</if>
+			<!--身份证编码 -->
+			<if test="param.idCardCode != null and param.idCardCode != ''">
+				AND D.ID_CARD_CODE =#{param.idCardCode}
+			</if>
+
+		</where>
+	</sql>
+
+	<!--查询所有 -->
+	<select id="queryAreaAll"
+		resultType="com.easy.system.area.entity.Area">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_AREA D
+		<include refid="queryConditions" />
+		ORDER BY D.SHOW_ORDER ASC
+	</select>
+
+	<!-- 代码生成器生成代码结束 -->
+</mapper>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.projectTaskFlow.mapper.ProjectTaskFlowMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="projectTaskFlowResultMap" type="com.easy.etl.projectTaskFlow.entity.ProjectTaskFlow">
+        <id column="TASK_ID" property="taskId"/>
+        <result column="PROJECT_ID" property="projectId"/>
+        <result column="PROJECT_WORK_SPACE_LAYER_REL_ID" property="projectWorkSpaceLayerRelId"/>
+        <result column="PROJECT_WORK_SPACE_ID" property="projectWorkSpaceId"/>
+        <result column="WORK_SPACE_TYPE" property="workSpaceType"/>
+        <result column="TASK_FOLDER_ID" property="taskFolderId"/>
+        <result column="FLOW_CONTENT" property="flowContent"/>
+        <result column="ALLOW_EDIT" property="allowEdit"/>
+        <result column="ALLOW_DELETE" property="allowDelete"/>
+        <result column="ENABLE" property="enable"/>
+        <result column="IS_DEL" property="isDel"/>
+        <result column="ADD_TIME" property="addTime"/>
+        <result column="ADD_USER_ID" property="addUserId"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="UPDATE_USER_ID" property="updateUserId"/>
+        <result column="VERSION" property="version"/>
+        <result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D
+        .
+        *
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            D.IS_DEL=1 AND D.ENABLE=1
+            <!--归属任务-->
+            <if test="param.taskId != null and param.taskId != ''">
+                AND D.TASK_ID =#{param.taskId}
+            </if>
+            <!--归属项目-->
+            <if test="param.projectId != null and param.projectId != ''">
+                AND D.PROJECT_ID =#{param.projectId}
+            </if>
+            <!--工作空间分层-->
+            <if test="param.projectWorkSpaceLayerRelId != null and param.projectWorkSpaceLayerRelId != ''">
+                AND D.PROJECT_WORK_SPACE_LAYER_REL_ID =#{param.projectWorkSpaceLayerRelId}
+            </if>
+            <!--项目空间ID-->
+            <if test="param.projectWorkSpaceId != null and param.projectWorkSpaceId != ''">
+                AND D.PROJECT_WORK_SPACE_ID =#{param.projectWorkSpaceId}
+            </if>
+            <!--与字典表关联code=WORK_SPACE_TASK_TYPE-->
+            <if test="param.workSpaceType != null and param.workSpaceType != ''">
+                AND D.WORK_SPACE_TYPE =#{param.workSpaceType}
+            </if>
+            <!--目录ID-->
+            <if test="param.taskFolderId != null and param.taskFolderId != ''">
+                AND D.TASK_FOLDER_ID =#{param.taskFolderId}
+            </if>
+            <!--流程内容-->
+            <if test="param.flowContent != null and param.flowContent != ''">
+                AND D.FLOW_CONTENT =#{param.flowContent}
+            </if>
+
+            <!--归属企业 -->
+            <if test="param.companyId != null and param.companyId != ''">
+                AND D.COMPANY_ID =#{param.companyId}
+            </if>
+            <!--归属机构 -->
+            <if test="param.orgId != null and param.orgId != ''">
+                AND D.ORG_ID =#{param.orgId}
+            </if>
+            <!--用户 -->
+            <if test="param.addUserId != null and param.addUserId != ''">
+                AND D.ADD_USER_ID =#{param.addUserId}
+            </if>
+        </where>
+    </sql>
+
+    <!--分页-->
+    <select id="queryProjectTaskFlowPage" resultType="com.easy.etl.projectTaskFlow.vo.ProjectTaskFlowVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_PROJECT_TASK_FLOW D
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC
+    </select>
+
+    <!--查询所有-->
+    <select id="queryProjectTaskFlowAll" resultType="com.easy.etl.projectTaskFlow.vo.ProjectTaskFlowVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_PROJECT_TASK_FLOW D
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC
+    </select>
+
+    <!--根据条件查询单个-->
+    <select id="queryProjectTaskFlowByCondition" resultType="com.easy.etl.projectTaskFlow.vo.ProjectTaskFlowVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_PROJECT_TASK_FLOW D
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC LIMIT 1
+    </select>
+    <!-- 代码生成器生成代码结束 -->
+</mapper>

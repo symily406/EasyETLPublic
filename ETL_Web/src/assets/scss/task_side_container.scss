@@ -1,0 +1,114 @@
+#app {
+	.task-sidebar-container{
+		height: 100%;
+		background-color:#F5F5F5;
+		transition: width 0.28s;
+		top: 60px;
+		font-size: 12px;
+		.title{
+			width: 100%;
+			text-align: center;
+			height: 40px;
+			line-height: 40px;
+			.el-link{
+				margin-right: 10px;
+				font-size: 20px;
+			}
+		}
+		.task-tabs {
+			width: 100%;
+			overflow: hidden;
+			height: 100%;
+			.el-tabs--right .el-tabs__header.is-right {
+			    margin-left: 5px;
+			}
+			.el-tabs{
+				height: 100%;
+				
+			}
+			.el-tabs__item {
+				width: 30px;
+				font-size: 12px;
+			    line-height: 20px;
+			    height: auto;
+			    word-wrap: break-word;
+			    white-space: pre-line;
+				padding-left: 10px;
+				padding-right: 10px;
+				padding-top:5px;
+				padding-bottom: 5px;
+			}
+			.el-drawer__header {
+				padding: 10px 10px 0;
+				 margin-bottom: 10px;  
+			}
+			.el-card__header{
+				padding: 5px;
+				.clearfix{
+					font-size: 12px;
+					text-align: left;
+					font-weight: bold;
+				}
+			}
+			.el-tabs--left .el-tabs__header.is-left {
+			    float: left;
+			    margin-bottom: 0;
+			    margin-right: 5px;
+			}
+			.el-card__body{
+				background-color: #F5F5F5;
+				padding: 0px;
+			}
+			.el-tabs--border-card>.el-tabs__content {
+			    padding: 0px;
+			}
+			
+		}
+		.task-tree-menu{
+			position: absolute;  
+			z-index: 1000;  
+			background-color: #fff;  
+			border: 1px solid #ccc;
+			.el-card__body{
+				padding: 0px;
+				width: 100px;
+				.text{
+					text-align: left;
+					font-size: 12px;
+					a{
+						display: block;
+						padding: 5px;
+					}
+				}
+			}
+		}
+		.el-scrollbar{
+			height: 100%;
+		}
+		
+		.task-tabs .el-tabs .el-tabs__content .el-tree {
+				margin-top: 5px;
+				background-color:#fff;
+				.el-tree-node{
+					font-size: 12px;
+					.el-tree-node__expand-icon.is-leaf{
+						color: #cccccc;
+					}
+					.el-tree-node__expand-icon{
+						color: #000000;
+					}
+					.el-tree-node__content{
+						width: 100%;
+					}
+					.el-tree-node__content:hover {  
+					  background-color: #F2F9FF;
+					}
+					.icon{
+						color: #409EFF; 
+						margin-right: 5px;
+					}
+				}
+			}
+		
+	}
+}

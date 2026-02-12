@@ -1,0 +1,257 @@
+<template>
+	<div class="app-container" ref="appContainer">
+		<eHeader ref="headerContainer" :queryParams="queryParams" @searchPage="searchPage" @refreshPage="refreshPage"
+			@add="add" @batchDelete="batchDelete" />
+		<el-table size="mini" border :data="tableData" :height="tableHeight"
+			:style="{width:this.$store.state.global.tableWidth+'px'}" :header-cell-style="{textAlign:'center'}"
+			v-loading="loading" @selection-change="handleSelectionChange">
+			<el-table-column type="selection" width="40" align="center" fixed="left">
+			</el-table-column>
+			<el-table-column prop="dictCode" label="字典编码" >
+				<template slot-scope="scope">
+					{{scope.row.dictCode}}
+				</template>
+			</el-table-column>
+			<el-table-column prop="dictName" label="字典名称" width="200">
+				<template slot-scope="scope">
+					{{scope.row.dictName}}
+				</template>
+			</el-table-column>
+
+			<el-table-column prop="companyName" label="归属企业" width="150">
+				<template slot-scope="scope">
+					{{scope.row.companyName}}
+				</template>
+			</el-table-column>
+			<el-table-column prop="orgName" label="归属部门" width="150">
+				<template slot-scope="scope">
+					{{scope.row.orgName}}
+				</template>
+			</el-table-column>
+			<el-table-column prop="addTime" label="添加时间" width="150" align="center">
+				<template slot-scope="scope">
+					{{scope.row.addTime}}
+				</template>
+			</el-table-column>
+			<el-table-column prop="showOrder" label="排序" width="150" align="center">
+				<template slot-scope="scope">
+					{{scope.row.showOrder}}
+				</template>
+			</el-table-column>
+			<el-table-column label="配置" width="180">
+				<template slot-scope="scope">
+					<span style="color: #F56C6C; padding-right: 5px;">{{scope.row.allowEdit==1?'可编辑':'锁定'}}</span>
+					<span style="color: #409EFF; padding-right: 5px;">{{scope.row.allowDelete==1?'可删除':'不可删'}}</span>
+					<span style="color: #E6A23C;">{{scope.row.enable==1?'启用':'未启用'}}</span>
+				</template>
+			</el-table-column>
+			<el-table-column fixed="right" label="操作" width="150" align="center">
+				<template slot-scope="scope">
+					<el-button @click.native.prevent="editRow(scope.$index)" type="text" size="small"
+						v-if="checkPermission('admin:system:dict:edit')">
+						修改
+					</el-button>
+					<el-button @click.native.prevent="dictValues(scope.$index)" type="text" size="small"
+						v-if="checkPermission('admin:system:dictValues:queryPage')">
+						字典值
+					</el-button>
+					<el-button @click.native.prevent="deleteRow(scope.$index)" type="text" size="small"
+						v-if="checkPermission('admin:system:dict:getById')">
+						删除
+					</el-button>
+
+				</template>
+			</el-table-column>
+		</el-table>
+		<ePage :page="page" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"/>
+		<eForm ref="eForm" dialogTitle="添加字典" dialogWidth="600px" dialogHeight="250px"
+			:dialogTop="this.$store.state.global.dialogTop" @eventCallBack="eventCallBack" />
+		<edit ref="edit" dialogTitle="修改字典" dialogWidth="600px" dialogHeight="250px"
+			:dialogTop="this.$store.state.global.dialogTop" @eventCallBack="eventCallBack" />
+		<dictValues ref="dictValues" dialogTitle="字典值" :dialogTop="this.$store.state.global.dialogTop"/>
+	</div>
+</template>
+<script>
+	import {indexMixin} from "@/mixins/mixins";
+	import eHeader from './module/header';
+	import eForm from './module/form';
+	import edit from './module/edit';
+	import dictValues from '../dictValues/index';
+	import ePage from "@/components/page/page";
+	export default {
+		name: 'dictIndex',
+		components: {
+			eHeader,
+			eForm,
+			edit,
+			dictValues,
+			ePage
+		},
+		props: {
+
+		},
+		mixins: [indexMixin],
+		data() {
+			return {
+				queryParams: {
+					//编码
+					dictCode: '',
+					//字典名称
+					dictName: ''
+				}
+			}
+		},
+		mounted() {
+			this.$nextTick(() => {
+				this.initTableHeight();
+			});
+		},
+		created() {
+			window.addEventListener('resize', this.initTableHeight);
+
+			this.initData(this.queryParams);
+		},
+		destroyed() {
+			window.removeEventListener('resize', this.initTableHeight)
+		},
+		methods: {
+			initData(queryParams) {
+				this.loading = true;
+				this.$ajax.get(this.getContentPath() + "/admin/system/dict/dict/queryPage", this.addPageParam(queryParams, this
+          .page)).then(res => {
+					this.loading = false;
+					this.page = this.$app.extend(this.page, this.$app.setPage(res.data));
+					this.tableData = res.data.records;
+				}).catch(error => {
+					this.loading = false;
+				});
+			},
+			reloadPage() {
+				this.initData(this.queryParams);
+			},
+			refreshPage() {
+				this.queryParams = this.$options.data().queryParams;
+				this.initData(this.queryParams);
+			},
+			searchPage() {
+				this.initData(this.queryParams);
+			},
+			add() {
+				this.$refs['eForm'].dialogVisible = true;
+			},
+			editRow(index) {
+				const row = this.tableData[index];
+				if (row.allowEdit == 0) {
+					this.$message.error('当前字典不能修改!');
+					return false;
+				}
+				this.$refs['edit'].edit(row);
+			},
+			deleteRow(index) {
+				const row = this.tableData[index];
+				if (row.allowDelete == 0) {
+					this.$message.error('当前字典不能删除!');
+					return false;
+				}
+				this.$confirm('您确定是否删除一行字典吗?<br>该操作不可恢复!!', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning',
+					dangerouslyUseHTMLString: true
+				}).then(() => {
+					this.$ajax.get(this.getContentPath() + "/admin/system/dict/dict/deleteById", {
+						"dictId": row
+							.dictId
+					}).then(
+						res => {
+							this.eventCallBack(3);
+						}).catch(err => {
+
+					});
+				}).catch((error) => {
+					
+				});
+			},
+			batchDelete() {
+				if (this.selectData.length == 0) {
+					this.$message.error('请选择要一行要删除的字典!');
+					return;
+				}
+				let allowDelete = true;
+				let dictIds = [];
+				this.selectData.forEach(item => {
+					if (item.allowDelete == 0) {
+						allowDelete = false;
+					}
+					dictIds.push(item.dictId);
+				});
+				if (allowDelete == 0) {
+					this.$message.error('选中的字典有不能被删除的!');
+					return false;
+				}
+				this.$confirm('您确定是否删除选中字典吗?<br>该操作不可恢复!!', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning',
+					dangerouslyUseHTMLString: true
+				}).then(() => {
+					this.$ajax.get(this.getContentPath() +
+							"/admin/system/dict/dict/batchDeleteById", { "dictIds": dictIds.join(",") })
+						.then(res => {
+							this.eventCallBack(3);
+						}).catch(err => {
+
+						});
+				}).catch((error) => {
+					
+				});
+			},
+			dictValues(index) {
+				const row = this.tableData[index];
+				const dictValues = this.$refs['dictValues'];
+				dictValues.queryParams.dictCode=row.dictCode;
+				dictValues.dictCode=row.dictCode;
+				dictValues.dialogVisible=true;
+			},
+			eventCallBack(eventType) {
+				switch (eventType) {
+					case 1: //添加
+						this.refreshPage();
+						this.$message({
+							message: '字典添加成功!',
+							type: 'success'
+						});
+						break;
+					case 2: //修改
+						this.reloadPage();
+						this.$message({
+							message: '字典修改成功!',
+							type: 'success'
+						});
+						break;
+					case 3: //删除
+						this.reloadPage();
+						this.$message({
+							message: '字典删除成功!',
+							type: 'success'
+						});
+						break;
+				}
+			},
+			handleSelectionChange(data) {
+				this.selectData = data;
+			},
+			initTableHeight() {
+				if(this.$refs['appContainer'].offsetHeight){
+					this.tableHeight = this.$refs['appContainer'].offsetHeight - this.$refs['headerContainer'].$el
+						.offsetHeight - 50;
+				}
+			},
+			getContentPath() {
+				return this.$app.global.systemPath;
+			}
+		}
+	}
+</script>
+<style scoped="scoped">
+</style>

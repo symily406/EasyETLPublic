@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.project.mapper.ProjectMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="projectResultMap" type="com.easy.etl.project.entity.Project">
+        <id column="PROJECT_ID" property="projectId"/>
+        <result column="PROJECT_NAME" property="projectName"/>
+        <result column="COMPANY_ID" property="companyId"/>
+        <result column="ORG_ID" property="orgId"/>
+        <result column="ALLOW_EDIT" property="allowEdit"/>
+        <result column="ALLOW_DELETE" property="allowDelete"/>
+        <result column="ENABLE" property="enable"/>
+        <result column="IS_DEL" property="isDel"/>
+        <result column="ADD_TIME" property="addTime"/>
+        <result column="ADD_USER_ID" property="addUserId"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="UPDATE_USER_ID" property="updateUserId"/>
+        <result column="VERSION" property="version"/>
+        <result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+
+    <sql id="withAsSql">
+        WITH DBSOURCE AS (
+            SELECT PROJECT_ID,COUNT(*) AS DB_SOURCE_NUM FROM TF_PROJECT_DB_SOURCE GROUP BY PROJECT_ID
+        )
+    </sql>
+    <!-- 代码生成器生成代码开始 -->
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D.*,D1.DB_SOURCE_NUM
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            D.IS_DEL=1 AND D.ENABLE=1
+            <!--主键-->
+            <if test="param.projectId != null and param.projectId != ''">
+                AND D.PROJECT_ID =#{param.projectId}
+            </if>
+            <!--项目名称-->
+            <if test="param.projectName != null and param.projectName != ''">
+                AND D.PROJECT_NAME LIKE CONCAT('%', #{param.projectName}, '%')
+            </if>
+
+            <!--启用:0未启用,1:启用-->
+            <if test="param.enable != null">
+                AND D.ENABLE =#{param.enable}
+            </if>
+
+            <if test="param.projectStaffId != null and param.projectStaffId != ''">
+                AND D.PROJECT_ID IN(SELECT PROJECT_ID FROM TF_PROJECT_MEMBER WHERE STAFF_ID=#{param.projectStaffId} AND ENABLE =1)
+            </if>
+        </where>
+    </sql>
+
+    <!--分页-->
+    <select id="queryProjectPage" resultType="com.easy.etl.project.vo.ProjectVo">
+        <include refid="withAsSql"/>
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_PROJECT D
+        LEFT JOIN DBSOURCE D1 ON D.PROJECT_ID=D1.PROJECT_ID
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC
+    </select>
+
+    <!--查询所有-->
+    <select id="queryProjectAll" resultType="com.easy.etl.project.vo.ProjectVo">
+        <include refid="withAsSql"/>
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_PROJECT D
+        LEFT JOIN DBSOURCE D1 ON D.PROJECT_ID=D1.PROJECT_ID
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC
+    </select>
+
+    <!--根据条件查询单个-->
+    <select id="queryProjectByCondition" resultType="com.easy.etl.project.vo.ProjectVo">
+        <include refid="withAsSql"/>
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_PROJECT D
+        LEFT JOIN DBSOURCE D1 ON D.PROJECT_ID=D1.PROJECT_ID
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC LIMIT 1
+    </select>
+    <!-- 代码生成器生成代码结束 -->
+</mapper>

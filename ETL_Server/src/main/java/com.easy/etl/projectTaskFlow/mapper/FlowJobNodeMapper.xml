@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.projectTaskFlow.mapper.FlowJobNodeMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="flowJobNodeResultMap" type="com.easy.etl.projectTaskFlow.entity.FlowJobNode">
+        <id column="JOB_NODE_ID" property="jobNodeId"/>
+        <result column="FLOW_JOB_ID" property="flowJobId"/>
+        <result column="TASK_ID" property="taskId"/>
+        <result column="WORK_SPACE_TYPE" property="workSpaceType"/>
+        <result column="EXECUTE_NODE_ID" property="executeNodeId"/>
+        <result column="EXECUTE_TASK_ID" property="executeTaskId"/>
+        <result column="NODE_TYPE" property="nodeType"/>
+        <result column="SCRIPT_CONTENT" property="scriptContent"/>
+
+    </resultMap>
+
+    <select id="queryflowNodes" resultType="com.easy.etl.projectTaskFlow.vo.FlowJobNodeVo">
+        SELECT D.*, D1.DB_SOURCE_ID
+        FROM TF_FLOW_JOB_NODE D
+                 LEFT JOIN TF_PROJECT_TASK D1 ON D.EXECUTE_TASK_ID = D1.TASK_ID
+        where 1=1
+        AND D.FLOW_JOB_ID IN
+        <foreach item="item" index="index" collection="flowJobIds"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

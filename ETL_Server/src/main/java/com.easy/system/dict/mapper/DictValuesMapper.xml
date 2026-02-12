@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.system.dict.mapper.DictValuesMapper">
+	<!-- 通用查询映射结果 -->
+	<resultMap id="dictValuesResultMap"
+		type="com.easy.system.dict.entity.DictValues">
+		<id column="ID" property="id" />
+		<result column="DICT_CODE" property="dictCode" />
+		<result column="CODE" property="code" />
+		<result column="NAME" property="name" />
+		<result column="VALUE" property="value" />
+		<result column="COMPANY_ID" property="companyId" />
+		<result column="ORG_ID" property="orgId" />
+		<result column="ALLOW_EDIT" property="allowEdit" />
+		<result column="ALLOW_DELETE" property="allowDelete" />
+		<result column="ENABLE" property="enable" />
+		<result column="IS_DEL" property="isDel" />
+		<result column="ADD_TIME" property="addTime" />
+		<result column="ADD_USER_ID" property="addUserId" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="UPDATE_USER_ID" property="updateUserId" />
+		<result column="VERSION" property="version" />
+		<result column="SHOW_ORDER" property="showOrder" />
+
+	</resultMap>
+
+	<!-- 代码生成器生成代码开始 -->
+
+	<!-- 字段 -->
+	<sql id="queryColumns">
+		D.*
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="queryConditions">
+		<where>
+			D.IS_DEL=1 AND D.ENABLE=1
+			<!--归属字典编码 -->
+			<if test="param.dictCode != null and param.dictCode != ''">
+				AND D.DICT_CODE =#{param.dictCode}
+			</if>
+			<!--编码 -->
+			<if test="param.code != null and param.code != ''">
+				AND D.CODE =#{param.code}
+			</if>
+			<!--名称 -->
+			<if test="param.name != null and param.name != ''">
+				AND D.NAME =#{param.name}
+			</if>
+			<!--值 -->
+			<if test="param.value != null and param.value != ''">
+				AND D.VALUE =#{param.value}
+			</if>
+			<!--归属企业 -->
+			<if test="param.companyId != null and param.companyId != ''">
+				AND D.COMPANY_ID =#{param.companyId}
+			</if>
+			<!--归属机构 -->
+			<if test="param.orgId != null and param.orgId != ''">
+				AND D.ORG_ID =#{param.orgId}
+			</if>
+
+		</where>
+	</sql>
+
+	<!--分页 -->
+	<select id="queryDictValuesPage"
+		resultType="com.easy.system.dict.vo.DictValuesVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_DICT_VALUES D
+		<include refid="queryConditions" />
+		ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME ASC
+	</select>
+
+	<!--查询所有 -->
+	<select id="queryDictValuesAll"
+		resultType="com.easy.system.dict.vo.DictValuesVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_DICT_VALUES D
+		<include refid="queryConditions" />
+		ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME ASC
+	</select>
+
+	<!--根据条件查询单个 -->
+	<select id="queryDictValuesByCondition"
+		resultType="com.easy.system.dict.vo.DictValuesVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_DICT_VALUES D
+		<include refid="queryConditions" />
+		ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME ASC LIMIT 1
+	</select>
+	<!-- 代码生成器生成代码结束 -->
+</mapper>

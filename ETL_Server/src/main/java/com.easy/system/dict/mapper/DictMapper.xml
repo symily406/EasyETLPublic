@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.system.dict.mapper.DictMapper">
+	<!-- 通用查询映射结果 -->
+	<resultMap id="dictResultMap"
+		type="com.easy.system.dict.entity.Dict">
+		<id column="DICT_ID" property="dictId" />
+		<result column="DICT_CODE" property="dictCode" />
+		<result column="DICT_NAME" property="dictName" />
+		<result column="COMPANY_ID" property="companyId" />
+		<result column="ORG_ID" property="orgId" />
+		<result column="ALLOW_EDIT" property="allowEdit" />
+		<result column="ALLOW_DELETE" property="allowDelete" />
+		<result column="ENABLE" property="enable" />
+		<result column="IS_DEL" property="isDel" />
+		<result column="ADD_TIME" property="addTime" />
+		<result column="ADD_USER_ID" property="addUserId" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="UPDATE_USER_ID" property="updateUserId" />
+		<result column="VERSION" property="version" />
+		<result column="SHOW_ORDER" property="showOrder" />
+
+	</resultMap>
+
+	
+	<!-- 代码生成器生成代码开始 -->
+
+	<!-- 字段 -->
+	<sql id="queryColumns">
+		D.*,C.COMPANY_NAME,O.ORG_NAME
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="queryConditions">
+		<where>
+			D.IS_DEL=1 AND D.ENABLE=1
+			<!--主键 -->
+			<if test="param.dictId != null and param.dictId != ''">
+				AND D.DICT_ID =#{param.dictId}
+			</if>
+			<!--编码 -->
+			<if test="param.dictCode != null and param.dictCode != ''">
+				AND INSTR(D.DICT_CODE,#{param.dictCode})>0
+			</if>
+			<!--字典名称 -->
+			<if test="param.dictName != null and param.dictName != ''">
+				AND INSTR(D.DICT_NAME,#{param.dictName})>0
+			</if>
+			<!--归属企业 -->
+			<if test="param.companyId != null and param.companyId != ''">
+				AND D.COMPANY_ID =#{param.companyId}
+			</if>
+			<!--归属机构 -->
+			<if test="param.orgId != null and param.orgId != ''">
+				AND D.ORG_ID =#{param.orgId}
+			</if>
+
+		</where>
+	</sql>
+
+	<!--分页 -->
+	<select id="queryDictPage"
+		resultType="com.easy.system.dict.vo.DictVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_DICT D
+		LEFT JOIN TD_COMPANY C ON D.COMPANY_ID = C.COMPANY_ID 
+		LEFT JOIN TD_ORG O ON D.ORG_ID=O.ORG_ID
+		<include refid="queryConditions" />
+		ORDER BY  D.SHOW_ORDER DESC,D.ADD_TIME ASC
+	</select>
+
+	<!--查询所有 -->
+	<select id="queryDictAll"
+		resultType="com.easy.system.dict.vo.DictVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_DICT D
+		LEFT JOIN TD_COMPANY C ON D.COMPANY_ID = C.COMPANY_ID 
+		LEFT JOIN TD_ORG O ON D.ORG_ID=O.ORG_ID
+		<include refid="queryConditions" />
+		ORDER BY  D.SHOW_ORDER DESC,D.ADD_TIME ASC
+	</select>
+
+	<!--根据条件查询单个 -->
+	<select id="queryDictByCondition"
+		resultType="com.easy.system.dict.vo.DictVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_DICT D
+		LEFT JOIN TD_COMPANY C ON D.COMPANY_ID = C.COMPANY_ID 
+		LEFT JOIN TD_ORG O ON D.ORG_ID=O.ORG_ID
+		<include refid="queryConditions" />
+		ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME ASC LIMIT 1
+	</select>
+	<!-- 代码生成器生成代码结束 -->
+</mapper>

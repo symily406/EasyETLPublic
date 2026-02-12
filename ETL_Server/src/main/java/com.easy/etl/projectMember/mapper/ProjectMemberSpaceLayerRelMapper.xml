@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.projectMember.mapper.ProjectMemberSpaceLayerRelMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="projectMemberSpaceLayerRelResultMap"
+               type="com.easy.etl.projectMember.entity.ProjectMemberSpaceLayerRel">
+        <id column="REL_ID" property="relId"/>
+        <result column="MEMBER_ID" property="memberId"/>
+        <result column="PROJECT_ID" property="projectId"/>
+        <result column="PROJECT_WORK_SPACE_LAYER_REL_ID" property="projectWorkSpaceLayerRelId"/>
+        <result column="PROJECT_WORK_SPACE_ID" property="projectWorkSpaceId"/>
+        <result column="STAFF_ID" property="staffId"/>
+        <result column="WORK_SPACE_ID" property="workSpaceId"/>
+        <result column="WORK_SPACE_LAYER_ID" property="workSpaceLayerId"/>
+        <result column="ENABLE" property="enable"/>
+        <result column="IS_DEL" property="isDel"/>
+        <result column="ADD_TIME" property="addTime"/>
+        <result column="ADD_USER_ID" property="addUserId"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="UPDATE_USER_ID" property="updateUserId"/>
+        <result column="VERSION" property="version"/>
+        <result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+
+</mapper>

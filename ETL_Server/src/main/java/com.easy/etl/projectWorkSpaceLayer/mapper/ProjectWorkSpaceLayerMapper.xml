@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.projectWorkSpaceLayer.mapper.ProjectWorkSpaceLayerMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="projectWorkSpaceLayerResultMap" type="com.easy.etl.projectWorkSpaceLayer.entity.ProjectWorkSpaceLayer">
+	<id column="WORK_SPACE_LAYER_ID" property="workSpaceLayerId"/>
+ 	<result column="WORK_SPACE_LAYER_NAME" property="workSpaceLayerName"/>
+<result column="ALLOW_EDIT" property="allowEdit"/>
+<result column="ALLOW_DELETE" property="allowDelete"/>
+<result column="ENABLE" property="enable"/>
+<result column="IS_DEL" property="isDel"/>
+<result column="ADD_TIME" property="addTime"/>
+<result column="ADD_USER_ID" property="addUserId"/>
+<result column="UPDATE_TIME" property="updateTime"/>
+<result column="UPDATE_USER_ID" property="updateUserId"/>
+<result column="VERSION" property="version"/>
+<result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+    
+    <!-- 字段 -->
+    <sql id="queryColumns">
+          D.*
+    </sql>
+   
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            D.IS_DEL=1 AND D.ENABLE=1
+            <!--主键-->
+            <if test="param.workSpaceLayerId != null and param.workSpaceLayerId != ''">
+                AND D.WORK_SPACE_LAYER_ID =#{param.workSpaceLayerId}
+            </if>
+            <!--名称-->
+            <if test="param.workSpaceLayerName != null and param.workSpaceLayerName != ''">
+                AND D.WORK_SPACE_LAYER_NAME =#{param.workSpaceLayerName}
+            </if>
+
+            <!--用户 -->
+            <if test="param.addUserId != null and param.addUserId != ''">
+                AND D.ADD_USER_ID =#{param.addUserId}
+            </if>
+            <if test="param.queryProjectId != null and param.queryProjectId != ''">
+                AND D.WORK_SPACE_LAYER_ID IN(SELECT DISTINCT WORK_SPACE_LAYER_ID FROM TF_PROJECT_WORK_SPACE_LAYER_REL WHERE PROJECT_ID=#{param.queryProjectId})
+            </if>
+        </where>
+    </sql>
+    
+
+
+      <!--查询所有-->
+     <select id="queryProjectWorkSpaceLayerAll" resultType="com.easy.etl.projectWorkSpaceLayer.vo.ProjectWorkSpaceLayerVo">
+         SELECT 
+         <include refid="queryColumns" />
+         FROM TF_PROJECT_WORK_SPACE_LAYER D
+        <include refid="queryConditions" />
+         ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC
+      </select>
+      
+
+</mapper>

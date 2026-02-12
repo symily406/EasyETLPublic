@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.flowRunJob.mapper.FlowRunJobPnodeMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="flowRunJobPnodeResultMap" type="com.easy.etl.flowRunJob.entity.FlowRunJobPnode">
+        <id column="ID" property="id"/>
+        <result column="FLOW_RUN_JOB_ID" property="flowRunJobId"/>
+        <result column="FLOW_JOB_ID" property="flowJobId"/>
+        <result column="TASK_ID" property="taskId"/>
+        <result column="SOURCE_NODE_ID" property="sourceNodeId"/>
+        <result column="SOURCE_TASK_ID" property="sourceTaskId"/>
+        <result column="EXECUTE_NODE_ID" property="executeNodeId"/>
+        <result column="EXECUTE_TASK_ID" property="executeTaskId"/>
+        <result column="STATUS" property="status"/>
+
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D
+        .
+        *
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            <!--主键-->
+            <if test="param.flowRunJobId != null and param.flowRunJobId != ''">
+                AND D.FLOW_RUN_JOB_ID =#{param.flowRunJobId}
+            </if>
+            <!--归属工作流-->
+            <if test="param.flowJobId != null and param.flowJobId != ''">
+                AND D.FLOW_JOB_ID =#{param.flowJobId}
+            </if>
+            <!--归属任务-->
+            <if test="param.taskId != null and param.taskId != ''">
+                AND D.TASK_ID =#{param.taskId}
+            </if>
+            <!--来源节点-->
+            <if test="param.sourceNodeId != null and param.sourceNodeId != ''">
+                AND D.SOURCE_NODE_ID =#{param.sourceNodeId}
+            </if>
+            <!--来源节点任务-->
+            <if test="param.sourceTaskId != null and param.sourceTaskId != ''">
+                AND D.SOURCE_TASK_ID =#{param.sourceTaskId}
+            </if>
+            <!--执行节点ID-->
+            <if test="param.executeNodeId != null and param.executeNodeId != ''">
+                AND D.EXECUTE_NODE_ID =#{param.executeNodeId}
+            </if>
+            <!--执行任务ID-->
+            <if test="param.executeTaskId != null and param.executeTaskId != ''">
+                AND D.EXECUTE_TASK_ID =#{param.executeTaskId}
+            </if>
+            <!--状态:10:待父级依懒运行,1待运行,2正在运行,0运行成功,-1运行失败-->
+            <if test="param.status != null">
+                AND D.STATUS =#{param.status}
+            </if>
+
+            <!--归属企业 -->
+            <if test="param.companyId != null and param.companyId != ''">
+                AND D.COMPANY_ID =#{param.companyId}
+            </if>
+            <!--归属机构 -->
+            <if test="param.orgId != null and param.orgId != ''">
+                AND D.ORG_ID =#{param.orgId}
+            </if>
+            <!--用户 -->
+            <if test="param.addUserId != null and param.addUserId != ''">
+                AND D.ADD_USER_ID =#{param.addUserId}
+            </if>
+        </where>
+    </sql>
+
+
+    <!--查询所有-->
+    <select id="queryFlowRunJobPnodeAll" resultType="com.easy.etl.flowRunJob.vo.FlowRunJobPnodeVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_FLOW_RUN_JOB_PNODE D
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC
+    </select>
+
+    <select id="queryEnableFlowRunJobNode" resultType="com.easy.etl.flowRunJob.vo.FlowRunJobPnodeVo">
+        SELECT
+            D.FLOW_RUN_JOB_ID,
+            D.EXECUTE_NODE_ID
+        FROM
+            (
+                SELECT
+                    D.FLOW_RUN_JOB_ID,
+                    D.EXECUTE_NODE_ID,
+                    SUM( CASE WHEN D.`STATUS` = #{toBeAllocated} THEN #{succed} ELSE D.`STATUS` END ) AS COMPLATE_STATUS
+                FROM
+                    TF_FLOW_RUN_JOB_PNODE D
+                WHERE
+                        D.EXECUTE_NODE_ID IN ( SELECT D.EXECUTE_NODE_ID FROM TF_FLOW_RUN_JOB_PNODE D WHERE D.STATUS = #{toBeAllocated} AND D.NEXT_NODE_STATUS = #{nextNodeStatus0})
+                     AND D.FLOW_RUN_JOB_ID in( SELECT D.FLOW_RUN_JOB_ID FROM TF_FLOW_RUN_JOB_PNODE D WHERE D.STATUS = #{toBeAllocated} AND D.NEXT_NODE_STATUS = #{nextNodeStatus0})
+                GROUP BY
+                    D.FLOW_RUN_JOB_ID,
+                    D.EXECUTE_NODE_ID
+            ) D
+        WHERE
+            D.COMPLATE_STATUS = #{succed}
+    </select>
+
+    <select id="queryFaileAndSuccedFlowRunJobNode" resultType="com.easy.etl.flowRunJob.vo.FlowRunJobPnodeVo">
+        SELECT
+            D.ID,
+            D.FLOW_RUN_JOB_ID,
+            D.FLOW_JOB_ID,
+            D.TASK_ID,
+            D.SOURCE_NODE_ID,
+            D.SOURCE_TASK_ID,
+            D.EXECUTE_NODE_ID,
+            D.EXECUTE_TASK_ID,
+            D.`STATUS`,
+            D.NEXT_NODE_STATUS,
+            D.FAILURE_POLICY
+        FROM
+            TF_FLOW_RUN_JOB_PNODE D
+        WHERE
+        D.STATUS IN
+        <foreach  item="item"  collection="status" open="(" separator="," close=" )">
+            #{item}
+        </foreach>
+        AND D.NEXT_NODE_STATUS = #{nextNodeStatus0}
+    </select>
+
+</mapper>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.projectTask.mapper.ProjectTaskFolderMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="projectTaskFolderResultMap" type="com.easy.etl.projectTask.entity.ProjectTaskFolder">
+        <id column="TASK_FOLDER_ID" property="taskFolderId"/>
+        <result column="PROJECT_ID" property="projectId"/>
+        <result column="PROJECT_WORK_SPACE_LAYER_REL_ID" property="projectWorkSpaceLayerRelId"/>
+        <result column="PID_PROJECT_WORK_SPACE_LAYER_REL_ID" property="pidProjectWorkSpaceLayerRelId"/>
+        <result column="PROJECT_WORK_SPACE_ID" property="projectWorkSpaceId"/>
+        <result column="WORK_SPACE_TYPE" property="workSpaceType"/>
+        <result column="FOLDER_NAME" property="folderName"/>
+        <result column="ALLOW_EDIT" property="allowEdit"/>
+        <result column="ALLOW_DELETE" property="allowDelete"/>
+        <result column="ENABLE" property="enable"/>
+        <result column="IS_DEL" property="isDel"/>
+        <result column="ADD_TIME" property="addTime"/>
+        <result column="ADD_USER_ID" property="addUserId"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="UPDATE_USER_ID" property="updateUserId"/>
+        <result column="VERSION" property="version"/>
+        <result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D.*
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            D.IS_DEL=1 AND D.ENABLE=1
+            <!--主键-->
+            <if test="param.taskFolderId != null and param.taskFolderId != ''">
+                AND D.TASK_FOLDER_ID =#{param.taskFolderId}
+            </if>
+            <!--归属项目-->
+            <if test="param.projectId != null and param.projectId != ''">
+                AND D.PROJECT_ID =#{param.projectId}
+            </if>
+            <!--分层-->
+            <if test="param.projectWorkSpaceLayerRelId != null and param.projectWorkSpaceLayerRelId != ''">
+                AND D.PROJECT_WORK_SPACE_LAYER_REL_ID =#{param.projectWorkSpaceLayerRelId}
+            </if>
+            <!--上级目录-->
+            <if test="param.taskFolderPid != null and param.taskFolderPid != ''">
+                AND D.TASK_FOLDER_PID =#{param.taskFolderPid}
+            </if>
+            <!--启用:0未启用,1:启用-->
+            <if test="param.enable != null">
+                AND D.ENABLE =#{param.enable}
+            </if>
+            <!--显示排序-->
+            <if test="param.showOrder != null">
+                AND D.SHOW_ORDER =#{param.showOrder}
+            </if>
+
+            <!--用户 -->
+            <if test="param.addUserId != null and param.addUserId != ''">
+                AND D.ADD_USER_ID =#{param.addUserId}
+            </if>
+            <if test="param.noTaskFolderId != null and param.noTaskFolderId != ''">
+                AND D.TASK_FOLDER_ID !=#{param.noTaskFolderId}
+            </if>
+
+            <if test="param.projectWorkSpaceId != null and param.projectWorkSpaceId != ''">
+                AND D.PROJECT_WORK_SPACE_ID =#{param.projectWorkSpaceId}
+            </if>
+            <if test="param.workSpaceType != null and param.workSpaceType != ''">
+                AND D.WORK_SPACE_TYPE =#{param.workSpaceType}
+            </if>
+        </where>
+    </sql>
+
+
+
+    <!--查询所有-->
+    <select id="queryProjectTaskFolderAll" resultType="com.easy.etl.projectTask.vo.ProjectTaskFolderVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_PROJECT_TASK_FOLDER D
+        <include refid="queryConditions"/>
+        ORDER BY D.ADD_TIME ASC
+    </select>
+
+    <!-- 代码生成器生成代码结束 -->
+</mapper>

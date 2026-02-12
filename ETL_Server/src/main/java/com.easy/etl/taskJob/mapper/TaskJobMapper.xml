@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.taskJob.mapper.TaskJobMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="taskJobResultMap" type="com.easy.etl.taskJob.entity.TaskJob">
+        <id column="JOB_ID" property="jobId"/>
+        <result column="WORK_SPACE_TYPE" property="workSpaceType"/>
+        <result column="DB_SOURCE_ID" property="dbSourceId"/>
+        <result column="CORN_STATUS" property="cornStatus"/>
+        <result column="START_DATE" property="startDate"/>
+        <result column="END_DATE" property="endDate"/>
+        <result column="CORN" property="corn"/>
+        <result column="FAILURE_POLICY" property="failurePolicy"/>
+        <result column="RUN_SCRIPT" property="runScript"/>
+        <result column="STATUS" property="status"/>
+        <result column="START_TIME" property="startTime"/>
+        <result column="END_TIME" property="endTime"/>
+        <result column="USAGE_TIME" property="usageTime"/>
+
+    </resultMap>
+
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D.WORK_SPACE_TYPE,
+        D.CORN_STATUS,
+        D.CORN,
+        D.STATUS,
+        D.ADD_TIME,
+        D.USAGE_TIME,
+        D.START_TIME,
+        D.END_TIME,
+        D1.TASK_ID,
+        D1.TASK_NAME,
+        D1.PROJECT_ID,
+        D1.PROJECT_WORK_SPACE_LAYER_REL_ID,
+        D1.PROJECT_WORK_SPACE_ID,
+        D1.WORK_SPACE_TYPE,
+        D2.PROJECT_NAME,
+        D3.NAME AS WORK_SPACE_TYPE_DESC
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            <!--主键-->
+            <if test="param.jobId != null and param.jobId != ''">
+                AND D.JOB_ID =#{param.jobId}
+            </if>
+            <!--与字典表关联code=WORK_SPACE_TASK_TYPE-->
+            <if test="param.workSpaceType != null and param.workSpaceType != ''">
+                AND D.WORK_SPACE_TYPE =#{param.workSpaceType}
+            </if>
+            <!--数据源ID-->
+            <if test="param.dbSourceId != null and param.dbSourceId != ''">
+                AND D.DB_SOURCE_ID =#{param.dbSourceId}
+            </if>
+            <!--状态1:开启调度-->
+            <if test="param.cornStatus != null">
+                AND D.CORN_STATUS =#{param.cornStatus}
+            </if>
+            <!--调度时间-->
+            <if test="param.startDate != null and param.startDate != '' and param.endDate != null and param.endDate != ''">
+                DATE_FORMAT(D.CORN,'%Y-%m-%d') between #{param.startDate} and #{param.endDate}
+            </if>
+            <!--失败策略0:失败结束,1:失败继续-->
+            <if test="param.failurePolicy != null">
+                AND D.FAILURE_POLICY =#{param.failurePolicy}
+            </if>
+            <!--运行脚本-->
+            <if test="param.runScript != null and param.runScript != ''">
+                AND D.RUN_SCRIPT =#{param.runScript}
+            </if>
+            <!--任务状态-->
+            <if test="param.status != null">
+                AND D.STATUS =#{param.status}
+            </if>
+            <!--任务运行开始时间-->
+            <if test="param.startTime != null and param.startTime != ''">
+                AND D.START_TIME =#{param.startTime}
+            </if>
+            <!--任务运行结束时间-->
+            <if test="param.endTime != null and param.endTime != ''">
+                AND D.END_TIME =#{param.endTime}
+            </if>
+            <!--用时-->
+            <if test="param.usageTime != null">
+                AND D.USAGE_TIME =#{param.usageTime}
+            </if>
+
+            <if test="param.projectMember != null and param.projectMember != ''">
+                AND D.PROJECT_ID IN(SELECT PROJECT_ID FROM TF_PROJECT_MEMBER WHERE STAFF_ID=#{param.projectMember})
+            </if>
+            <if test="param.planeDate != null and param.planeDate != ''">
+                AND  DATE_FORMAT(D.CORN,'%Y-%m-%d')=#{param.planeDate}
+            </if>
+        </where>
+    </sql>
+
+    <!--分页-->
+    <select id="queryTaskJobPage" resultType="com.easy.etl.taskJob.vo.TaskJobVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_TASK_JOB D
+        LEFT JOIN TF_PROJECT_TASK D1 ON D.TASK_ID = D1.TASK_ID
+        LEFT JOIN TF_PROJECT D2 ON D.PROJECT_ID=D2.PROJECT_ID
+        LEFT JOIN TD_DICT_VALUES D3 ON D1.WORK_SPACE_TYPE=D3.`VALUE` AND D3.DICT_CODE='WORK_SPACE_TASK_TYPE'
+        <include refid="queryConditions"/>
+        ORDER BY ${param.orderBy}
+    </select>
+
+    <!--查询所有-->
+    <select id="queryTaskJobAll" resultType="com.easy.etl.taskJob.vo.TaskJobVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_TASK_JOB D
+        LEFT JOIN TF_PROJECT_TASK D1 ON D.TASK_ID = D1.TASK_ID
+        LEFT JOIN TF_PROJECT D2 ON D.PROJECT_ID=D2.PROJECT_ID
+        LEFT JOIN TD_DICT_VALUES D3 ON D1.WORK_SPACE_TYPE=D3.`VALUE` AND D3.DICT_CODE='WORK_SPACE_TASK_TYPE'
+        <include refid="queryConditions"/>
+        ORDER BY D.CORN DESC,D.ADD_TIME DESC
+    </select>
+
+
+    <!-- 代码生成器生成代码结束 -->
+
+    <select id="queryJobDisableNum" resultType="com.easy.etl.taskJob.vo.TaskJobVo">
+        SELECT
+        D.JOB_ID,
+        COUNT(D1.LAZY_ID) AS DISABLE_NUM
+        FROM
+        TF_TASK_JOB D LEFT JOIN TF_TASK_JOB_RELY_ON D1 ON D.JOB_ID=D1.JOB_ID AND D1.LAZY_TASK_ENABLE!=#{param.lazyTaskEnable}
+        WHERE
+        DATE_FORMAT(d.CORN,'%Y-%m-%d')=#{param.day}
+        AND D.JOB_ID IN
+        <foreach item="item" collection="param.jobIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        GROUP BY D.JOB_ID
+    </select>
+</mapper>

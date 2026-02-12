@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.system.menu.mapper.MenuRoleMapper">
+	<!-- 通用查询映射结果 -->
+	<resultMap id="menuRoleResultMap"
+		type="com.easy.system.menu.entity.MenuRole">
+		<id column="ROLE_ID" property="roleId" />
+		<result column="MENU_ID" property="menuId" />
+		<result column="ROLE_NAME" property="roleName" />
+		<result column="ROLE" property="role" />
+		<result column="ALLOW_EDIT" property="allowEdit" />
+		<result column="ALLOW_DELETE" property="allowDelete" />
+		<result column="ENABLE" property="enable" />
+		<result column="IS_DEL" property="isDel" />
+		<result column="ADD_TIME" property="addTime" />
+		<result column="ADD_USER_ID" property="addUserId" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="UPDATE_USER_ID" property="updateUserId" />
+		<result column="VERSION" property="version" />
+		<result column="SHOW_ORDER" property="showOrder" />
+
+	</resultMap>
+
+
+
+	<!-- 代码生成器生成代码开始 -->
+
+	<!-- 字段 -->
+	<sql id="queryColumns">
+		D.*
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="queryConditions">
+		<where>
+			D.IS_DEL=1 AND D.ENABLE=1
+			<!--主键 -->
+			<if test="param.roleId != null and param.roleId != ''">
+				AND D.ROLE_ID =#{param.roleId}
+			</if>
+			<!--所属菜单 -->
+			<if test="param.menuId != null and param.menuId != ''">
+				AND D.MENU_ID =#{param.menuId}
+			</if>
+			<!--权限名称 -->
+			<if test="param.roleName != null and param.roleName != ''">
+				AND D.ROLE_NAME =#{param.roleName}
+			</if>
+			<!--权限 -->
+			<if test="param.role != null and param.role != ''">
+				AND D.ROLE =#{param.role}
+			</if>
+			<if test="param.companyId != null and param.companyId != ''">
+				AND D.ROLE_ID IN(SELECT F_ID FROM TD_COMPANY_FUNCTION
+				WHERE COMPANY_ID=#{param.companyId} AND LEVAL=2)
+			</if>
+		</where>
+	</sql>
+
+	<!--分页 -->
+	<select id="queryMenuRolePage"
+		resultType="com.easy.system.menu.vo.MenuRoleVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_MENU_ROLE D
+		<include refid="queryConditions" />
+		ORDER BY D.SHOW_ORDER DESC,D.UPDATE_TIME DESC
+	</select>
+
+	<!--查询所有 -->
+	<select id="queryMenuRoleAll"
+		resultType="com.easy.system.menu.vo.MenuRoleVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_MENU_ROLE D
+		<include refid="queryConditions" />
+		ORDER BY D.SHOW_ORDER DESC,D.UPDATE_TIME DESC
+	</select>
+
+	<!--根据条件查询单个 -->
+	<select id="queryMenuRoleByCondition"
+		resultType="com.easy.system.menu.vo.MenuRoleVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_MENU_ROLE D
+		<include refid="queryConditions" />
+		ORDER BY D.SHOW_ORDER DESC,D.UPDATE_TIME DESC LIMIT 1
+	</select>
+	<!-- 代码生成器生成代码结束 -->
+</mapper>

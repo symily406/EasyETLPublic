@@ -1,0 +1,54 @@
+$blue:#324157;
+$light-blue:#3A71A8;
+$red:#C03639;
+$pink: #E65D6E;
+$green: #30B08F;
+$tiffany: #4AB7BD;
+$yellow:#FEC171;
+$panGreen: #30B08F;
+$white:#fff;
+
+$menuText:#fff;
+$menuActiveText:#287BF7;
+$subMenuActiveText:#f4f4f5;
+
+$menuBg:#2c3e50;
+
+$menuHover:#263445;
+
+$subMenuBg:#1f2d3d;
+$subMenuHover:#001528;
+
+$sideBarWidth: 300;
+$sideBarMinWidth: 60;
+//logo与导航高度
+$logoNavHeight:3rem;
+
+//tag高度
+$tagHeight:2.5rem;
+
+//滚动条颜色
+$scrollColor:#409EFF;
+
+//背景色
+$backgroundColor:#2c3e50;
+$headerHeight:60;
+
+
+:export {
+  white:$white;
+  menuText: $menuText;
+  menuActiveText: $menuActiveText;
+  subMenuActiveText: $subMenuActiveText;
+  menuBg: $menuBg;
+  menuHover: $menuHover;
+  subMenuBg: $subMenuBg;
+  subMenuHover: $subMenuHover;
+  sideBarWidth: $sideBarWidth;
+  sideBarMinWidth:$sideBarMinWidth;
+  logoNavHeight:$logoNavHeight;
+  tagHeight:$tagHeight;
+  scrollColor:$scrollColor;
+  backgroundColor:$backgroundColor;
+  headerHeight:$headerHeight;
+}

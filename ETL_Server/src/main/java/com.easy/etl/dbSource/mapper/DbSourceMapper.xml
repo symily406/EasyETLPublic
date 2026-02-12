@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.dbSource.mapper.DbSourceMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="dbSourceResultMap" type="com.easy.etl.dbSource.entity.DbSource">
+        <id column="DB_SOURCE_ID" property="dbSourceId"/>
+        <result column="SOURCE_TYPE_ID" property="sourceTypeId"/>
+        <result column="DB_SOURCE_NAME" property="dbSourceName"/>
+        <result column="JDBC_URL" property="jdbcUrl"/>
+        <result column="JDBC_DRIVE" property="jdbcDrive"/>
+        <result column="DEFAULT_FS" property="defaultFs"/>
+        <result column="USER_NAME" property="userName"/>
+        <result column="PASSWORD" property="password"/>
+        <result column="SALT" property="salt"/>
+        <result column="DESCRIPTION" property="description"/>
+        <result column="IS_CONN" property="isConn"/>
+        <result column="QUOTE_NUM" property="quoteNum"/>
+        <result column="COMPANY_ID" property="companyId"/>
+        <result column="ORG_ID" property="orgId"/>
+        <result column="ALLOW_EDIT" property="allowEdit"/>
+        <result column="ALLOW_DELETE" property="allowDelete"/>
+        <result column="ENABLE" property="enable"/>
+        <result column="IS_DEL" property="isDel"/>
+        <result column="ADD_TIME" property="addTime"/>
+        <result column="ADD_USER_ID" property="addUserId"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="UPDATE_USER_ID" property="updateUserId"/>
+        <result column="VERSION" property="version"/>
+        <result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D
+        .
+        DB_SOURCE_ID
+        ,
+        D.SOURCE_TYPE_ID,
+        D.DB_SOURCE_NAME,
+        D.JDBC_URL,
+        D.JDBC_DRIVE,
+        D.USER_NAME,
+        D.SALT,
+        D.DB_CATALOG,
+        D.DB_SCHEMA,
+        D.DESCRIPTION,
+        D.DB_DIALECT,
+        D.DEFAULT_FS,
+        D.HAVE_KERBEROS,
+        D.KERBEROS_KEYTAB_FILE_PATH,
+        D.KERBEROS_PRINCIPAL,
+        D.FILE_TYPE,
+        D.IS_CONN,
+        D.COMPANY_ID,
+        D.ORG_ID,
+        D.ALLOW_EDIT,
+        D.ALLOW_DELETE,
+        D.ENABLE,
+        D.IS_DEL,
+        D.ADD_TIME,
+        D.ADD_USER_ID,
+        D.UPDATE_TIME,
+        D.UPDATE_USER_ID,
+        D.VERSION,
+        D.SHOW_ORDER,
+        D1.SOURCE_TYPE_CODE,
+        d2.`NAME` SOURCE_TYPE_NAME,
+        D1.SOURCE_TYPE,
+        D1.IS_CATALOG,
+        D1.IS_SCHEMA,
+        D1.IS_ACCOUNT,
+        D1.IS_PASSWORD,
+        IFNULL(D3.QUOTE_NUM,0) AS QUOTE_NUM
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            D.IS_DEL=1 AND D.ENABLE=1
+            <if test="param.sourceTypeId != null and param.sourceTypeId != ''">
+                AND D1.SOURCE_TYPE_ID=#{param.sourceTypeId}
+            </if>
+            <if test="param.searchKey != null and param.searchKey != ''">
+                AND (D.DB_SOURCE_NAME LIKE CONCAT('%', #{param.searchKey}, '%') OR D.DESCRIPTION LIKE CONCAT('%', #{param.searchKey}, '%') OR D.JDBC_URL LIKE CONCAT('%', #{param.searchKey}, '%'))
+            </if>
+
+
+            <!--归属企业 -->
+            <if test="param.companyId != null and param.companyId != ''">
+                AND D.COMPANY_ID =#{param.companyId}
+            </if>
+            <!--归属机构 -->
+            <if test="param.orgId != null and param.orgId != ''">
+                AND D.ORG_ID =#{param.orgId}
+            </if>
+            <!--用户 -->
+            <if test="param.addUserId != null and param.addUserId != ''">
+                AND D.ADD_USER_ID =#{param.addUserId}
+            </if>
+            <if test="param.projectId != null and param.projectId != ''">
+                AND D.DB_SOURCE_ID NOT IN(SELECT DB_SOURCE_ID FROM TF_PROJECT_DB_SOURCE WHERE PROJECT_ID=#{param.projectId})
+            </if>
+
+            <if test="param.dbSourceId != null and param.dbSourceId != ''">
+                AND D.DB_SOURCE_ID=#{param.dbSourceId}
+            </if>
+        </where>
+    </sql>
+
+    <!--分页-->
+    <select id="queryDbSourcePage" resultType="com.easy.etl.dbSource.vo.DbSourceVo">
+        WITH X AS (
+            SELECT D.DB_SOURCE_ID,COUNT(*) AS QUOTE_NUM FROM TF_PROJECT_DB_SOURCE D WHERE D.IS_DEL=1 GROUP BY D.DB_SOURCE_ID
+        )
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TD_DB_SOURCE D LEFT JOIN TD_DB_SOURCE_TYPE D1 ON D.SOURCE_TYPE_ID=D1.SOURCE_TYPE_ID
+        LEFT JOIN TD_DICT_VALUES D2 ON D1.SOURCE_TYPE_CODE=D2.`VALUE` AND D2.DICT_CODE='DB_SOURCE_TYPE'
+        LEFT JOIN X D3 ON D.DB_SOURCE_ID=D3.DB_SOURCE_ID
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC
+    </select>
+
+    <!--查询所有-->
+    <select id="queryDbSourceAll" resultType="com.easy.etl.dbSource.vo.DbSourceVo">
+        WITH X AS (
+        SELECT D.DB_SOURCE_ID,COUNT(*) AS QUOTE_NUM FROM TF_PROJECT_DB_SOURCE D WHERE D.IS_DEL=1 GROUP BY D.DB_SOURCE_ID
+        )
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TD_DB_SOURCE D LEFT JOIN TD_DB_SOURCE_TYPE D1 ON D.SOURCE_TYPE_ID=D1.SOURCE_TYPE_ID
+        LEFT JOIN TD_DICT_VALUES D2 ON D1.SOURCE_TYPE_CODE=D2.`VALUE` AND D2.DICT_CODE='DB_SOURCE_TYPE'
+        LEFT JOIN X D3 ON D.DB_SOURCE_ID=D3.DB_SOURCE_ID
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC
+    </select>
+
+    <!--根据条件查询单个-->
+    <select id="queryDbSourceByCondition" resultType="com.easy.etl.dbSource.vo.DbSourceVo">
+        WITH X AS (
+        SELECT D.DB_SOURCE_ID,COUNT(*) AS QUOTE_NUM FROM TF_PROJECT_DB_SOURCE D WHERE D.IS_DEL=1 GROUP BY D.DB_SOURCE_ID
+        )
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TD_DB_SOURCE D LEFT JOIN TD_DB_SOURCE_TYPE D1 ON D.SOURCE_TYPE_ID=D1.SOURCE_TYPE_ID
+        LEFT JOIN TD_DICT_VALUES D2 ON D1.SOURCE_TYPE_CODE=D2.`VALUE` AND D2.DICT_CODE='DB_SOURCE_TYPE'
+        LEFT JOIN X D3 ON D.DB_SOURCE_ID=D3.DB_SOURCE_ID
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC LIMIT 1
+    </select>
+    <!-- 代码生成器生成代码结束 -->
+</mapper>

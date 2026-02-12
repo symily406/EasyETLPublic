@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.system.duty.mapper.DutyMapper">
+	<!-- 通用查询映射结果 -->
+	<resultMap id="dutyResultMap"
+		type="com.easy.system.duty.entity.Duty">
+		<id column="DUTY_ID" property="dutyId" />
+		<result column="DUTY_NAME" property="dutyName" />
+		<result column="COMPANY_ID" property="companyId" />
+		<result column="ORG_ID" property="orgId" />
+		<result column="ALLOW_EDIT" property="allowEdit" />
+		<result column="ALLOW_DELETE" property="allowDelete" />
+		<result column="ENABLE" property="enable" />
+		<result column="IS_DEL" property="isDel" />
+		<result column="ADD_TIME" property="addTime" />
+		<result column="ADD_USER_ID" property="addUserId" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="UPDATE_USER_ID" property="updateUserId" />
+		<result column="VERSION" property="version" />
+		<result column="SHOW_ORDER" property="showOrder" />
+
+	</resultMap>
+	
+		<!--查询用户岗位，只返回一个最高级的岗位 -->
+	<select id="queryDutyByStaffId"
+		resultType="com.easy.system.duty.vo.DutyVo">
+		SELECT * FROM TD_DUTY D  WHERE D.DUTY_ID IN(SELECT DUTY_ID FROM TD_STAFF_DUTY WHERE STAFF_ID=#{staffId}) ORDER BY D.DUTY_LEVAL DESC
+	</select>
+	
+
+	<!-- 代码生成器生成代码开始 -->
+
+	<!-- 字段 -->
+	<sql id="queryColumns">
+		D.*,C.COMPANY_NAME,O.ORG_NAME
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="queryConditions">
+		<where>
+			D.IS_DEL=1 AND D.ENABLE=1
+			<!--岗位ID -->
+			<if test="param.dutyId != null and param.dutyId != ''">
+				AND D.DUTY_ID =#{param.dutyId}
+			</if>
+			<!--岗位名称 -->
+			<if test="param.dutyName != null and param.dutyName != ''">
+				AND D.DUTY_NAME =#{param.dutyName}
+			</if>
+			<!--归属企业 -->
+			<if test="param.companyId != null and param.companyId != ''">
+				AND D.COMPANY_ID =#{param.companyId}
+			</if>
+			<!--归属部门 -->
+			<if test="param.orgId!= null and param.orgId!= ''">
+				AND D.ORG_ID =#{param.orgId}
+			</if>
+		</where>
+	</sql>
+
+	<!--分页 -->
+	<select id="queryDutyPage"
+		resultType="com.easy.system.duty.vo.DutyVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_DUTY D LEFT JOIN TD_COMPANY C ON D.COMPANY_ID=C.COMPANY_ID
+		LEFT JOIN TD_ORG O ON D.ORG_ID=O.ORG_ID
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC
+	</select>
+
+	<!--查询所有 -->
+	<select id="queryDutyAll"
+		resultType="com.easy.system.duty.vo.DutyVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_DUTY D LEFT JOIN TD_COMPANY C ON D.COMPANY_ID=C.COMPANY_ID
+		LEFT JOIN TD_ORG O ON D.ORG_ID=O.ORG_ID
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC
+	</select>
+
+	<!--根据条件查询单个 -->
+	<select id="queryDutyByCondition"
+		resultType="com.easy.system.duty.vo.DutyVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_DUTY D LEFT JOIN TD_COMPANY C ON D.COMPANY_ID=C.COMPANY_ID
+		LEFT JOIN TD_ORG O ON D.ORG_ID=O.ORG_ID
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC LIMIT 1
+	</select>
+	<!-- 代码生成器生成代码结束 -->
+</mapper>

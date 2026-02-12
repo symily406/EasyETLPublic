@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.machine.mapper.MachineMemoryMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="machineMemoryResultMap" type="com.easy.etl.machine.entity.MachineMemory">
+        <id column="MEMORY_ID" property="memoryId"/>
+        <result column="MACHINE_ID" property="machineId"/>
+        <result column="TOTAL" property="total"/>
+        <result column="USED" property="used"/>
+        <result column="FREE" property="free"/>
+
+    </resultMap>
+
+
+</mapper>

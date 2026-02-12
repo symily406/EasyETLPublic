@@ -1,0 +1,100 @@
+#app{
+	.nav-container{
+		width: 100%;
+		height: $logoNavHeight+$tagHeight;
+		position: fixed;
+		top: 0px;
+		background: #fff;
+		
+		.el-header{
+			padding: 0px;
+			height: 100% !important;
+		}
+		.navbar{
+			padding-left: 1rem;
+			padding-right:1rem;
+			line-height: $logoNavHeight;
+			height: $logoNavHeight;
+		}
+		
+		.menuMode{
+			width: 1.5rem;
+			float: left;
+			height: $logoNavHeight;
+			overflow: hidden;
+		}
+		
+		.menuMode button{
+			font-size: 1.5rem;
+			color: #000;
+			padding: 0px;
+			margin-top: 10px;
+		}
+		
+		.breadcrumb{
+			float: left;
+			padding:1rem;
+			font-weight: bold;
+			color: #000;
+		}
+		
+		.toolbar{
+			float: right;
+			height: $logoNavHeight;
+			overflow: hidden;
+			
+			.header-search{
+					
+					.el-select{
+                        display: inline-block;
+                        input{
+                            border-top: none;
+							border-left: none;
+							border-right: none;
+                        }
+                        /* selecte 框的高度设置，默认是 40px*/
+                        .el-input__inner{
+                            height: 30px;
+							    border-radius: 0px;
+                        }
+                        /* 下面设置右侧按钮居中 */
+                        .el-input__suffix {
+                            top: 5px;
+                        }
+                        .el-input__icon {
+                            line-height: inherit;
+                        }
+                        .el-input__suffix-inner {
+                            display: inline-block;
+                        }
+                    }
+					
+			}
+			
+			.el-button{
+				font-size: 1.2rem;
+				color: #000;
+			}
+			
+			span{
+				padding-right: 5px;
+				float:left;
+			}
+		}
+
+		
+		.tagbar{
+			height:$tagHeight;
+			
+			.el-tabs{
+				width: 100%;
+				height: $tagHeight;
+				overflow: hidden;
+				.el-tabs__content{
+					display: none;
+				}
+			}
+			
+		}
+	}
+}

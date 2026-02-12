@@ -1,0 +1,1 @@
+mvn install:install-file -Dfile=spring-boot-ext.jar -DgroupId=com.spring.boot.ext -DartifactId=spring-boot-ext -Dversion=0.0.1 -Dpackaging=jar

@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.system.company.mapper.CompanyMapper">
+	<!-- 通用查询映射结果 -->
+	<resultMap id="companyResultMap"
+		type="com.easy.system.company.entity.Company">
+		<id column="COMPANY_ID" property="companyId" />
+		<result column="COMPANY_NAME" property="companyName" />
+		<result column="PLATFORM_NAME" property="platformName" />
+		<result column="PROVINCE" property="province" />
+		<result column="CITY" property="city" />
+		<result column="COUNTY" property="county" />
+		<result column="ADDRESS" property="address" />
+		<result column="INDEX_PATH" property="indexPath" />
+		<result column="ALLOW_EDIT" property="allowEdit" />
+		<result column="ALLOW_DELETE" property="allowDelete" />
+		<result column="ENABLE" property="enable" />
+		<result column="IS_DEL" property="isDel" />
+		<result column="ADD_TIME" property="addTime" />
+		<result column="ADD_USER_ID" property="addUserId" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="UPDATE_USER_ID" property="updateUserId" />
+		<result column="VERSION" property="version" />
+		<result column="SHOW_ORDER" property="showOrder" />
+
+	</resultMap>
+	
+	<!-- 企业部门下拉选择 -->
+	<select id="queryCompanyDropDown" resultType="com.easy.system.company.vo.CompanyDropDownVo">
+		SELECT
+		D.COMPANY_ID,D.COMPANY_NAME
+		FROM TD_COMPANY D
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC
+	</select>
+
+	<!-- 代码生成器生成代码开始 -->
+
+	<!-- 字段 -->
+	<sql id="queryColumns">
+		D.*,P.AREA_NAME PROVINCE_TEXT,P1.AREA_NAME CITY_TEXT,P2.AREA_NAME COUNTY_TEXT
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="queryConditions">
+		<where>
+			D.IS_DEL=1 AND D.ENABLE=1
+			<!--主键 -->
+			<if test="param.companyId != null and param.companyId != ''">
+				AND D.COMPANY_ID =#{param.companyId}
+			</if>
+			<!--企业名称 -->
+			<if test="param.companyName != null and param.companyName != ''">
+				AND D.COMPANY_NAME =#{param.companyName}
+			</if>
+			<!--平台名称 -->
+			<if test="param.platformName != null and param.platformName != ''">
+				AND D.PLATFORM_NAME =#{param.platformName}
+			</if>
+			<!--省 -->
+			<if test="param.province != null and param.province != ''">
+				AND D.PROVINCE =#{param.province}
+			</if>
+			<!--市 -->
+			<if test="param.city != null and param.city != ''">
+				AND D.CITY =#{param.city}
+			</if>
+			<!--县 -->
+			<if test="param.county != null and param.county != ''">
+				AND D.COUNTY =#{param.county}
+			</if>
+			<!--地址 -->
+			<if test="param.address != null and param.address != ''">
+				AND D.ADDRESS =#{param.address}
+			</if>
+			<!--后台首页路径 -->
+			<if test="param.indexPath != null and param.indexPath != ''">
+				AND D.INDEX_PATH =#{param.indexPath}
+			</if>
+
+		</where>
+	</sql>
+
+	<!--分页 -->
+	<select id="queryCompanyPage"
+		resultType="com.easy.system.company.vo.CompanyVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_COMPANY D
+		LEFT JOIN TD_AREA P ON D.PROVINCE=P.AREA_ID
+		LEFT JOIN TD_AREA P1 ON D.CITY=P1.AREA_ID
+		LEFT JOIN TD_AREA P2 ON D.COUNTY=P2.AREA_ID
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC
+	</select>
+
+	<!--查询所有 -->
+	<select id="queryCompanyAll"
+		resultType="com.easy.system.company.vo.CompanyVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_COMPANY D
+		LEFT JOIN TD_AREA P ON D.PROVINCE=P.AREA_ID
+		LEFT JOIN TD_AREA P1 ON D.CITY=P1.AREA_ID
+		LEFT JOIN TD_AREA P2 ON D.COUNTY=P2.AREA_ID
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC
+	</select>
+
+	<!--根据条件查询单个 -->
+	<select id="queryCompanyByCondition"
+		resultType="com.easy.system.company.vo.CompanyVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_COMPANY D
+		LEFT JOIN TD_AREA P ON D.PROVINCE=P.AREA_ID
+		LEFT JOIN TD_AREA P1 ON D.CITY=P1.AREA_ID
+		LEFT JOIN TD_AREA P2 ON D.COUNTY=P2.AREA_ID
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC LIMIT 1
+	</select>
+	<!-- 代码生成器生成代码结束 -->
+</mapper>

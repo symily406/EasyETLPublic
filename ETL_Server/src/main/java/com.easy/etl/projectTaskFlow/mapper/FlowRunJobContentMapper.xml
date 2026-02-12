@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.projectTaskFlow.mapper.FlowRunJobContentMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="flowRunJobContentResultMap" type="com.easy.etl.projectTaskFlow.entity.FlowRunJobContent">
+        <id column="FLOW_RUN_JOB_ID" property="flowRunJobId"/>
+        <result column="FLOW_JOB_ID" property="flowJobId"/>
+        <result column="FLOW_CONTENT" property="flowContent"/>
+    </resultMap>
+
+</mapper>

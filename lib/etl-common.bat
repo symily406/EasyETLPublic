@@ -1,0 +1,1 @@
+mvn install:install-file -Dfile=etl-common-1.0-SNAPSHOT.jar -DgroupId=com.easy.etl.common -DartifactId=etl-common -Dversion=1.0 -Dpackaging=jar

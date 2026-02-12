@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.projectDbSource.mapper.ProjectDbSourceMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="projectDbSourceResultMap" type="com.easy.etl.projectDbSource.entity.ProjectDbSource">
+        <id column="QUOTE_ID" property="quoteId"/>
+        <result column="PROJECT_ID" property="projectId"/>
+        <result column="DB_SOURCE_ID" property="dbSourceId"/>
+
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D.QUOTE_ID,
+        D.DB_SOURCE_ID,
+        D1.SOURCE_TYPE_ID,
+        D1.DB_SOURCE_NAME,
+        D1.JDBC_URL,
+        D1.JDBC_DRIVE,
+        D1.DEFAULT_FS,
+        D1.USER_NAME,
+        D1.SALT,
+        D1.DESCRIPTION,
+        D1.IS_CONN,
+        D1.DB_CATALOG,
+        D1.DB_SCHEMA,
+        D4.VALUE AS SOURCE_TYPE_NAME,
+        D2.SOURCE_TYPE_IMAGE,
+        D2.SOURCE_TYPE,
+        D2.IS_SCHEMA,
+        D2.IS_CATALOG,
+        D3.PROJECT_NAME
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            AND D.IS_DEL=1
+            <!--主键-->
+            <if test="param.quoteId != null and param.quoteId != ''">
+                AND D.QUOTE_ID =#{param.quoteId}
+            </if>
+            <!--归属项目-->
+            <if test="param.projectId != null and param.projectId != ''">
+                AND D.PROJECT_ID =#{param.projectId}
+            </if>
+            <!--数据源-->
+            <if test="param.dbSourceId != null and param.dbSourceId != ''">
+                AND D.DB_SOURCE_ID =#{param.dbSourceId}
+            </if>
+            <if test="param.searchKey != null and param.searchKey != ''">
+                AND (D1.DB_SOURCE_NAME LIKE CONCAT('%', #{param.searchKey}, '%') OR D1.DESCRIPTION LIKE CONCAT('%',
+                #{param.searchKey}, '%') OR D1.JDBC_URL LIKE CONCAT('%', #{param.searchKey}, '%'))
+            </if>
+            <if test="param.sourceTypeId != null and param.sourceTypeId != ''">
+                AND D2.SOURCE_TYPE_ID=#{param.sourceTypeId}
+            </if>
+            <if test="param.projectName != null and param.projectName != ''">
+                AND D3.PROJECT_NAME LIKE CONCAT('%', #{param.projectName}, '%')
+            </if>
+        </where>
+    </sql>
+
+    <!--分页-->
+    <select id="queryProjectDbSourcePage" resultType="com.easy.etl.projectDbSource.vo.ProjectDbSourceVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_PROJECT_DB_SOURCE D
+        LEFT JOIN TD_DB_SOURCE D1 ON D.DB_SOURCE_ID = D1.DB_SOURCE_ID
+        LEFT JOIN TD_DB_SOURCE_TYPE D2 ON D1.SOURCE_TYPE_ID = D2.SOURCE_TYPE_ID
+        LEFT JOIN TF_PROJECT D3 ON D.PROJECT_ID=D3.PROJECT_ID
+        LEFT JOIN TD_DICT_VALUES D4 ON D2.SOURCE_TYPE_CODE=D4.VALUE AND D4.DICT_CODE='DB_SOURCE_TYPE'
+        <include refid="queryConditions"/>
+        ORDER BY D1.SHOW_ORDER DESC,D1.ADD_TIME DESC
+    </select>
+
+    <select id="queryProjectDbSourceAll" resultType="com.easy.etl.projectDbSource.vo.ProjectDbSourceVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_PROJECT_DB_SOURCE D
+        LEFT JOIN TD_DB_SOURCE D1 ON D.DB_SOURCE_ID = D1.DB_SOURCE_ID
+        LEFT JOIN TD_DB_SOURCE_TYPE D2 ON D1.SOURCE_TYPE_ID = D2.SOURCE_TYPE_ID
+        LEFT JOIN TF_PROJECT D3 ON D.PROJECT_ID=D3.PROJECT_ID
+        LEFT JOIN TD_DICT_VALUES D4 ON D2.SOURCE_TYPE_CODE=D4.VALUE AND D4.DICT_CODE='DB_SOURCE_TYPE'
+        <include refid="queryConditions"/>
+        ORDER BY D1.SHOW_ORDER DESC,D1.ADD_TIME DESC
+    </select>
+
+    <select id="queryProjectDbSourceCount" resultType="com.easy.etl.projectDbSource.vo.ProjectDbSourceVo">
+        SELECT PROJECT_ID, count(*) as dbSourceNum
+        from TF_PROJECT_DB_SOURCE
+        where 1=1
+        <if test="list != null and list.size > 0">
+            AND  PROJECT_ID IN
+            <foreach collection="list" item="item" open="(" separator="," close=")">
+                #{item.projectId}
+            </foreach>
+        </if>
+
+        group by PROJECT_ID
+    </select>
+
+    <!-- 代码生成器生成代码结束 -->
+</mapper>

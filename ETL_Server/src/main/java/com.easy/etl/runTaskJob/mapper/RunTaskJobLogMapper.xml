@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.runTaskJob.mapper.RunTaskJobLogMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="runTaskJobLogResultMap" type="com.easy.etl.runTaskJob.entity.RunTaskJobLog">
+        <id column="LOG_ID" property="logId"/>
+        <result column="JOB_ID" property="jobId"/>
+        <result column="TASK_ID" property="taskId"/>
+        <result column="LOG_CONTENT" property="logContent"/>
+        <result column="ADD_TIME" property="addTime"/>
+
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D
+        .
+        *
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            <!--日志ID-->
+            <if test="param.logId != null and param.logId != ''">
+                AND D.LOG_ID =#{param.logId}
+            </if>
+            <!--运任任务ID-->
+            <if test="param.jobId != null and param.jobId != ''">
+                AND D.JOB_ID =#{param.jobId}
+            </if>
+            <!--任务ID-->
+            <if test="param.taskId != null and param.taskId != ''">
+                AND D.TASK_ID =#{param.taskId}
+            </if>
+        </where>
+    </sql>
+
+    <!--分页-->
+    <select id="queryRunTaskJobLogPage" resultType="com.easy.etl.runTaskJob.vo.RunTaskJobLogVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_RUN_TASK_JOB_LOG D
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC
+    </select>
+
+    <!--查询所有-->
+    <select id="queryRunTaskJobLogAll" resultType="com.easy.etl.runTaskJob.vo.RunTaskJobLogVo">
+        SELECT
+            D.LOG_ID,
+            D.LOG_CONTENT,
+            D.ADD_TIME,
+            D.JOB_ID,
+            J.TASK_ID,
+            J.TASK_TYPE,
+            D.STATUS
+        FROM
+            TF_RUN_TASK_JOB_LOG D
+                LEFT JOIN TF_RUN_TASK_JOB J ON D.JOB_ID = J.JOB_ID
+        <include refid="queryConditions"/>
+        ORDER BY D.ADD_TIME ASC
+    </select>
+
+    <!--根据条件查询单个-->
+    <select id="queryRunTaskJobLogByCondition" resultType="com.easy.etl.runTaskJob.vo.RunTaskJobLogVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_RUN_TASK_JOB_LOG D
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC LIMIT 1
+    </select>
+    <!-- 代码生成器生成代码结束 -->
+</mapper>

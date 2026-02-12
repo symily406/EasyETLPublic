@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.system.taskSchedule.mapper.TaskScheduleMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="taskScheduleResultMap" type="com.easy.system.taskSchedule.entity.TaskSchedule">
+        <id column="TASK_SCHEDULE_ID" property="taskScheduleId"/>
+        <result column="NAME" property="name"/>
+        <result column="CORN" property="corn"/>
+        <result column="CLASS_PATH" property="classPath"/>
+        <result column="PARAMETER" property="parameter"/>
+        <result column="BOOT_UP" property="bootUp"/>
+        <result column="STATUS" property="status"/>
+        <result column="REMARKS" property="remarks"/>
+        <result column="LEVEL" property="level"/>
+        <result column="COMPANY_ID" property="companyId"/>
+        <result column="ORG_ID" property="orgId"/>
+        <result column="ALLOW_EDIT" property="allowEdit"/>
+        <result column="ALLOW_DELETE" property="allowDelete"/>
+        <result column="ENABLE" property="enable"/>
+        <result column="IS_DEL" property="isDel"/>
+        <result column="ADD_TIME" property="addTime"/>
+        <result column="ADD_USER_ID" property="addUserId"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="UPDATE_USER_ID" property="updateUserId"/>
+        <result column="VERSION" property="version"/>
+        <result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D.*,
+        D1.`NAME` AS BOOT_UP_DESC,
+	    D2.`NAME` AS EXECUTION_STATUS_DESC,
+	    D3.`NAME` AS LEVAL_DESC,
+	    D4.`NAME` AS STATUS_DESC
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            D.IS_DEL=1
+            <if test="param.enable != null">
+                AND D.ENABLE =#{param.enable}
+            </if>
+            <!--主键-->
+            <if test="param.taskScheduleId != null and param.taskScheduleId != ''">
+                AND D.TASK_SCHEDULE_ID =#{param.taskScheduleId}
+            </if>
+            <!--任务名称-->
+            <if test="param.name != null and param.name != ''">
+                AND D.NAME =#{param.name}
+            </if>
+            <!--执行周期配置-->
+            <if test="param.corn != null and param.corn != ''">
+                AND D.CORN =#{param.corn}
+            </if>
+            <!--任务类的全路径-->
+            <if test="param.classPath != null and param.classPath != ''">
+                AND D.CLASS_PATH =#{param.classPath}
+            </if>
+            <!--参数-->
+            <if test="param.parameter != null and param.parameter != ''">
+                AND D.PARAMETER =#{param.parameter}
+            </if>
+            <!--1:随系统起动,0:不随系统起动-->
+            <if test="param.bootUp != null">
+                AND D.BOOT_UP =#{param.bootUp}
+            </if>
+            <!--执行状态-->
+            <if test="param.status != null">
+                AND D.STATUS =#{param.status}
+            </if>
+            <!--备注说明-->
+            <if test="param.remarks != null and param.remarks != ''">
+                AND D.REMARKS =#{param.remarks}
+            </if>
+            <!--任务等级-->
+            <if test="param.level != null">
+                AND D.LEVEL =#{param.level}
+            </if>
+
+            <!--归属企业 -->
+            <if test="param.companyId != null and param.companyId != ''">
+                AND D.COMPANY_ID =#{param.companyId}
+            </if>
+            <!--归属机构 -->
+            <if test="param.orgId != null and param.orgId != ''">
+                AND D.ORG_ID =#{param.orgId}
+            </if>
+            <!--用户 -->
+            <if test="param.addUserId != null and param.addUserId != ''">
+                AND D.ADD_USER_ID =#{param.addUserId}
+            </if>
+        </where>
+    </sql>
+
+    <!--分页-->
+    <select id="queryTaskSchedulePage" resultType="com.easy.system.taskSchedule.vo.TaskScheduleVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TD_TASK_SCHEDULE D
+        LEFT JOIN TD_DICT_VALUES D1 ON D.BOOT_UP=D1.`VALUE` AND D1.DICT_CODE='TASK_SCHEDULE_BOOT_UP_ENUM'
+        LEFT JOIN TD_DICT_VALUES D2 ON D.EXECUTION_STATUS=D2.`VALUE` AND D2.DICT_CODE='TASK_SCHEDULE_EXECUTION_ENUM'
+        LEFT JOIN TD_DICT_VALUES D3 ON D.LEVEL=D3.`VALUE` AND D3.DICT_CODE='TASK_SCHEDULE_LEVAL_ENUM'
+        LEFT JOIN TD_DICT_VALUES D4 ON D.`STATUS`=D4.`VALUE` AND D4.DICT_CODE='TASK_SCHEDULE_STATUS_ENUM'
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC
+    </select>
+
+    <!--查询所有-->
+    <select id="queryTaskScheduleAll" resultType="com.easy.system.taskSchedule.vo.TaskScheduleVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TD_TASK_SCHEDULE D
+        FROM TD_TASK_SCHEDULE D
+        LEFT JOIN TD_DICT_VALUES D1 ON D.BOOT_UP=D1.`VALUE` AND D1.DICT_CODE='TASK_SCHEDULE_BOOT_UP_ENUM'
+        LEFT JOIN TD_DICT_VALUES D2 ON D.ENABLE=D2.`VALUE` AND D2.DICT_CODE='ENABLE'
+        LEFT JOIN TD_DICT_VALUES D3 ON D.LEVEL=D3.`VALUE` AND D3.DICT_CODE='TASK_SCHEDULE_LEVAL_ENUM'
+        LEFT JOIN TD_DICT_VALUES D4 ON D.`STATUS`=D4.`VALUE` AND D4.DICT_CODE='TASK_SCHEDULE_STATUS_ENUM'
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC
+    </select>
+</mapper>

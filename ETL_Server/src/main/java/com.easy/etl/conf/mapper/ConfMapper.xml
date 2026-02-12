@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.conf.mapper.ConfMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="confResultMap" type="com.easy.etl.conf.entity.Conf">
+        <id column="CONF_ID" property="confId"/>
+        <result column="CONF_NAME" property="confName"/>
+        <result column="IS_DEFAULT" property="isDefault"/>
+        <result column="COMPANY_ID" property="companyId"/>
+        <result column="ORG_ID" property="orgId"/>
+        <result column="ALLOW_EDIT" property="allowEdit"/>
+        <result column="ALLOW_DELETE" property="allowDelete"/>
+        <result column="ENABLE" property="enable"/>
+        <result column="IS_DEL" property="isDel"/>
+        <result column="ADD_TIME" property="addTime"/>
+        <result column="ADD_USER_ID" property="addUserId"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="UPDATE_USER_ID" property="updateUserId"/>
+        <result column="VERSION" property="version"/>
+        <result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D.*
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            D.IS_DEL=1 AND D.ENABLE=1
+            <!--主键-->
+            <if test="param.confId != null and param.confId != ''">
+                AND D.CONF_ID =#{param.confId}
+            </if>
+            <!--配置名称-->
+            <if test="param.confName != null and param.confName != ''">
+                AND D.CONF_NAME =#{param.confName}
+            </if>
+            <!--默认配置1:默认配置-->
+            <if test="param.isDefault != null">
+                AND D.IS_DEFAULT =#{param.isDefault}
+            </if>
+
+            <!--归属企业 -->
+            <if test="param.companyId != null and param.companyId != ''">
+                AND D.COMPANY_ID =#{param.companyId}
+            </if>
+            <!--归属机构 -->
+            <if test="param.orgId != null and param.orgId != ''">
+                AND D.ORG_ID =#{param.orgId}
+            </if>
+            <!--用户 -->
+            <if test="param.addUserId != null and param.addUserId != ''">
+                AND D.ADD_USER_ID =#{param.addUserId}
+            </if>
+        </where>
+    </sql>
+
+    <!--分页-->
+    <select id="queryConfPage" resultType="com.easy.etl.conf.vo.ConfVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TD_CONF D
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC
+    </select>
+
+</mapper>

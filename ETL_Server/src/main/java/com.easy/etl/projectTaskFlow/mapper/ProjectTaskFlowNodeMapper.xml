@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.projectTaskFlow.mapper.ProjectTaskFlowNodeMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="projectTaskFlowNodeResultMap" type="com.easy.etl.projectTaskFlow.entity.ProjectTaskFlowNode">
+        <id column="NODE_ID" property="nodeId"/>
+        <result column="TASK_ID" property="taskId"/>
+        <result column="EXECUTE_TASK_ID" property="executeTaskId"/>
+        <result column="NODE_TYPE" property="nodeType"/>
+
+    </resultMap>
+
+    <select id="queryProjectTaskFlowNode" resultType="com.easy.etl.projectTaskFlow.vo.ProjectTaskFlowNodeVo">
+        SELECT
+            D.TASK_ID,
+            D.NODE_ID AS EXECUTE_NODE_ID,
+            D.EXECUTE_TASK_ID,
+            D.NODE_TYPE,
+            D1.SCRIPT_CONTENT,
+            IFNULL(D2.WORK_SPACE_TYPE,0) AS WORK_SPACE_TYPE,
+            D2.DB_SOURCE_ID,
+            D.SEQ_INDEX
+        FROM
+            TF_PROJECT_TASK_FLOW_NODE D
+                LEFT JOIN TF_PROJECT_TASK_SCRIPT D1 ON D.EXECUTE_TASK_ID = D1.TASK_ID
+                LEFT JOIN TF_PROJECT_TASK D2 ON D.EXECUTE_TASK_ID=D2.TASK_ID
+        WHERE
+            D.TASK_ID = #{taskId}
+    </select>
+</mapper>

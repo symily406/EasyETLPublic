@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.system.file.mapper.FileChunkMapper">
+	<!-- 通用查询映射结果 -->
+	<resultMap id="fileChunkResultMap"
+		type="com.easy.system.file.entity.FileChunk">
+		<id column="ID" property="id" />
+		<result column="IDENTIFIER" property="identifier" />
+		<result column="MD5" property="md5" />
+		<result column="CHUNK_NUMBER" property="chunkNumber" />
+		<result column="TOTAL_CHUNKS" property="totalChunks" />
+		<result column="CHUNK_SIZE" property="chunkSize" />
+		<result column="CURRENT_CHUNK_SIZE" property="currentChunkSize" />
+		<result column="TOTAL_SIZE" property="totalSize" />
+		<result column="FILE_NAME" property="fileName" />
+		<result column="COMPANY_ID" property="companyId" />
+		<result column="ORG_ID" property="orgId" />
+		<result column="ALLOW_EDIT" property="allowEdit" />
+		<result column="ALLOW_DELETE" property="allowDelete" />
+		<result column="ENABLE" property="enable" />
+		<result column="IS_DEL" property="isDel" />
+		<result column="ADD_TIME" property="addTime" />
+		<result column="ADD_USER_ID" property="addUserId" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="UPDATE_USER_ID" property="updateUserId" />
+		<result column="VERSION" property="version" />
+		<result column="SHOW_ORDER" property="showOrder" />
+
+	</resultMap>
+
+	<!-- 代码生成器生成代码开始 -->
+
+	<!-- 字段 -->
+	<sql id="queryColumns">
+		D.*
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="queryConditions">
+		<where>
+			D.IS_DEL=1 AND D.ENABLE=1
+			<!--每个文件的唯一标示 -->
+			<if test="param.identifier != null and param.identifier != ''">
+				AND D.IDENTIFIER =#{param.identifier}
+			</if>
+			<!--文件MD5 -->
+			<if test="param.md5 != null and param.md5 != ''">
+				AND D.MD5 =#{param.md5}
+			</if>
+			<!--当前块的次序，第一个块是 1，注意不是从 0 开始的。 -->
+			<if test="param.chunkNumber != null">
+				AND D.CHUNK_NUMBER =#{param.chunkNumber}
+			</if>
+			<!--分片总数 -->
+			<if test="param.totalChunks != null">
+				AND D.TOTAL_CHUNKS =#{param.totalChunks}
+			</if>
+			<!--分块大小 -->
+			<if test="param.chunkSize != null">
+				AND D.CHUNK_SIZE =#{param.chunkSize}
+			</if>
+			<!--当前块的大小，实际大小 -->
+			<if test="param.currentChunkSize != null">
+				AND D.CURRENT_CHUNK_SIZE =#{param.currentChunkSize}
+			</if>
+			<!--文件总大小 -->
+			<if test="param.totalSize != null">
+				AND D.TOTAL_SIZE =#{param.totalSize}
+			</if>
+			<!--文件名 -->
+			<if test="param.fileName != null and param.fileName != ''">
+				AND D.FILE_NAME =#{param.fileName}
+			</if>
+			<!--启用:0未启用,1:启用 -->
+			<if test="param.enable != null">
+				AND D.ENABLE =#{param.enable}
+			</if>
+			<!--显示排序 -->
+			<if test="param.showOrder != null">
+				AND D.SHOW_ORDER =#{param.showOrder}
+			</if>
+
+		</where>
+	</sql>
+
+	<!--查询所有 -->
+	<select id="queryFileChunkAll"
+		resultType="com.easy.system.file.vo.FileChunkVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TM_FILE_CHUNK D
+		<include refid="queryConditions" />
+		ORDER BY D.CHUNK_NUMBER ASC
+	</select>
+	<!-- 代码生成器生成代码结束 -->
+</mapper>

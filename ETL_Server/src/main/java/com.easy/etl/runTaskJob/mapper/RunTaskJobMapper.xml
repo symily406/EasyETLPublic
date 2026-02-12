@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.runTaskJob.mapper.RunTaskJobMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="runTaskJobResultMap" type="com.easy.etl.runTaskJob.entity.RunTaskJob">
+        <id column="JOB_ID" property="jobId"/>
+        <result column="TASK_ID" property="taskId"/>
+        <result column="PROJECT_ID" property="projectId"/>
+        <result column="LAYER_ID" property="layerId"/>
+        <result column="TASK_FOLDER_ID" property="taskFolderId"/>
+        <result column="DB_SOURCE_ID" property="dbSourceId"/>
+        <result column="SCRIPT_CONTENT" property="scriptContent"/>
+        <result column="TASK_TYPE" property="taskType"/>
+        <result column="NEXT_RUN_TIME" property="nextRunTime"/>
+        <result column="ADD_TYPE" property="addType"/>
+        <result column="STATUS" property="status"/>
+        <result column="START_TIME" property="startTime"/>
+        <result column="END_TIME" property="endTime"/>
+        <result column="RUN_NUM" property="runNum"/>
+        <result column="IS_RETRY" property="isRetry"/>
+        <result column="OLD_JOB_ID" property="oldJobId"/>
+        <result column="ALLOW_EDIT" property="allowEdit"/>
+        <result column="ALLOW_DELETE" property="allowDelete"/>
+        <result column="ENABLE" property="enable"/>
+        <result column="IS_DEL" property="isDel"/>
+        <result column="ADD_TIME" property="addTime"/>
+        <result column="ADD_USER_ID" property="addUserId"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="UPDATE_USER_ID" property="updateUserId"/>
+        <result column="VERSION" property="version"/>
+        <result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D.JOB_ID,D.TASK_ID,D.ADD_TYPE,D.STATUS,
+        D.START_TIME,D.END_TIME,D.USAGE_TIME,
+        D.READ_RECORDS,D.READ_WRITE_FAILURES,
+        D.RUN_NUM,D.IS_RETRY,D.OLD_JOB_ID,D.DB_TYPE,
+        D.IP,D.HAS_RESULT,D.TASK_TYPE,
+        D.FLOW_RUN_JOB_ID,D.FLOW_JOB_ID,
+        D.EXECUTE_NODE_ID,D.IS_HANDLE,
+        D.WORK_SPACE_TYPE,
+        D1.`NAME` AS WORK_SPACE_TYPE_NAME,
+	    D2.`NAME` AS STATUS_NAME,
+	    D3.`NAME` AS ADD_TYPE_NAME,
+        D.ADD_TIME
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            D.IS_DEL=1 AND D.ENABLE=1
+            <!--主键-->
+            <if test="param.jobId != null and param.jobId != ''">
+                AND D.JOB_ID =#{param.jobId}
+            </if>
+            <!--任务ID-->
+            <if test="param.taskId != null and param.taskId != ''">
+                AND D.TASK_ID =#{param.taskId}
+            </if>
+            <!--归属项目-->
+            <if test="param.projectId != null and param.projectId != ''">
+                AND D.PROJECT_ID =#{param.projectId}
+            </if>
+            <!--归属目录-->
+            <if test="param.taskFolderId != null and param.taskFolderId != ''">
+                AND D.TASK_FOLDER_ID =#{param.taskFolderId}
+            </if>
+            <!--数据源TASK_TYPE为2时有效-->
+            <if test="param.dbSourceId != null and param.dbSourceId != ''">
+                AND D.DB_SOURCE_ID =#{param.dbSourceId}
+            </if>
+            <!--任务类型1:同步任务-向导,100同步任务脚本,2:sparkSQL-->
+            <if test="param.taskType != null">
+                AND D.TASK_TYPE =#{param.taskType}
+            </if>
+            <!--下次运行时间-->
+            <if test="param.nextRunTime != null and param.nextRunTime != ''">
+                AND D.NEXT_RUN_TIME =#{param.nextRunTime}
+            </if>
+            <!--任务添加方式1:手动添加,2:定时任务添加-->
+            <if test="param.addType != null">
+                AND D.ADD_TYPE =#{param.addType}
+            </if>
+            <!--任务运行开始时间-->
+            <if test="param.startTime != null and param.startTime != ''">
+                AND D.START_TIME =#{param.startTime}
+            </if>
+            <!--任务运行结束时间-->
+            <if test="param.endTime != null and param.endTime != ''">
+                AND D.END_TIME =#{param.endTime}
+            </if>
+            <!--运行次数-->
+            <if test="param.runNum != null">
+                AND D.RUN_NUM =#{param.runNum}
+            </if>
+            <!--是否重试1:重试-->
+            <if test="param.isRetry != null">
+                AND D.IS_RETRY =#{param.isRetry}
+            </if>
+            <!--原运行任务,当任务出错重试时有值-->
+            <if test="param.oldJobId != null and param.oldJobId != ''">
+                AND D.OLD_JOB_ID =#{param.oldJobId}
+            </if>
+            <!--启用:0未启用,1:启用-->
+            <if test="param.enable != null">
+                AND D.ENABLE =#{param.enable}
+            </if>
+            <!--显示排序-->
+            <if test="param.showOrder != null">
+                AND D.SHOW_ORDER =#{param.showOrder}
+            </if>
+
+            <!--用户 -->
+            <if test="param.addUserId != null and param.addUserId != ''">
+                AND D.ADD_USER_ID =#{param.addUserId}
+            </if>
+
+            <!--运行次数-->
+            <if test="param.status != null">
+                AND D.STATUS =#{param.status}
+            </if>
+        </where>
+    </sql>
+
+    <!--分页-->
+    <select id="queryRunTaskJobPage" resultType="com.easy.etl.runTaskJob.vo.RunTaskJobVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_RUN_TASK_JOB D
+        LEFT JOIN TD_DICT_VALUES D1 ON D.WORK_SPACE_TYPE=D1.`VALUE` AND D1.DICT_CODE='WORK_SPACE_TASK_TYPE'
+        LEFT JOIN TD_DICT_VALUES D2 ON D.`STATUS`=D2.`VALUE` AND D2.DICT_CODE='TASK_STATUS_ENUM'
+        LEFT JOIN TD_DICT_VALUES D3 ON D.ADD_TYPE=D3.`VALUE` AND D3.DICT_CODE='TASK_ADD_TYPE_ENUM'
+        <include refid="queryConditions"/>
+        ORDER BY ${param.orderBy}
+    </select>
+
+    <!--查询所有-->
+    <select id="queryRunTaskJobAll" resultType="com.easy.etl.runTaskJob.vo.RunTaskJobVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_RUN_TASK_JOB D
+        LEFT JOIN TD_DICT_VALUES D1 ON D.WORK_SPACE_TYPE=D1.`VALUE` AND D1.DICT_CODE='WORK_SPACE_TASK_TYPE'
+        LEFT JOIN TD_DICT_VALUES D2 ON D.`STATUS`=D2.`VALUE` AND D2.DICT_CODE='TASK_STATUS_ENUM'
+        LEFT JOIN TD_DICT_VALUES D3 ON D.ADD_TYPE=D3.`VALUE` AND D3.DICT_CODE='TASK_ADD_TYPE_ENUM'
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC
+    </select>
+
+    <!--根据条件查询单个-->
+    <select id="queryRunTaskJobByCondition" resultType="com.easy.etl.runTaskJob.vo.RunTaskJobVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_RUN_TASK_JOB D
+        LEFT JOIN TD_DICT_VALUES D1 ON D.WORK_SPACE_TYPE=D1.`VALUE` AND D1.DICT_CODE='WORK_SPACE_TASK_TYPE'
+        LEFT JOIN TD_DICT_VALUES D2 ON D.`STATUS`=D2.`VALUE` AND D2.DICT_CODE='TASK_STATUS_ENUM'
+        LEFT JOIN TD_DICT_VALUES D3 ON D.ADD_TYPE=D3.`VALUE` AND D3.DICT_CODE='TASK_ADD_TYPE_ENUM'
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC LIMIT 1
+    </select>
+    <!-- 代码生成器生成代码结束 -->
+
+    <select id="queryRunTaskJob" resultType="com.easy.etl.runTaskJob.vo.RunTaskJobVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_RUN_TASK_JOB D
+        <where>
+            AND D.TASK_ID NOT IN(SELECT TASK_ID from TF_RUN_TASK_JOB_LAZY)
+            AND D.STATUS=2
+            AND D.NEXT_RUN_TIME <![CDATA[ <= ]]> #{param.date}
+            AND D.IP=#{param.ip}
+        </where>
+        ORDER BY D.ADD_TYPE ASC,D.NEXT_RUN_TIME ASC LIMIT #{param.limitSize}
+    </select>
+
+    <select id="queryTaskJobInfo" resultType="com.easy.etl.rabbitmq.task.TaskJobInfo">
+        SELECT
+            D.JOB_ID,
+            D.TASK_ID,
+            D.DB_TYPE,
+            D.WORK_SPACE_TYPE AS TASK_TYPE,
+            D.WORK_SPACE_TYPE,
+            D.EVN_CONTENT,
+            D.ADD_TYPE,
+            D.PRE_SCRIPT_CONTENT,
+            D.SCRIPT_CONTENT,
+            D.HAS_RESULT,
+            D.RUN_NUM,
+            D1.DB_SOURCE_ID,
+            D1.JDBC_URL,
+            D1.JDBC_DRIVE,
+            D1.DEFAULT_FS,
+            D1.USER_NAME,
+            D1.PASSWORD,
+            D1.DB_DIALECT
+        FROM
+            TF_RUN_TASK_JOB D
+                LEFT JOIN TD_DB_SOURCE D1 ON D.DB_SOURCE_ID = D1.DB_SOURCE_ID
+        WHERE D.STATUS=1
+        ORDER BY D.ADD_TYPE ASC,D.NEXT_RUN_TIME ASC LIMIT #{limitSize}
+    </select>
+
+    <select id="queryLastRunTaskJob" resultType="com.easy.etl.runTaskJob.vo.RunTaskJobVo">
+        WITH X AS (
+        SELECT MAX(START_TIME) START_TIME,TASK_ID FROM TF_RUN_TASK_JOB
+        <where>
+            IS_DEL=1
+            <if test="taskIds !=null and taskIds.size>0">
+                AND TASK_ID in
+                <!--进行foreacd遍历-->
+                <foreach collection="taskIds" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        GROUP BY TASK_ID
+        )
+        SELECT
+        D4.*
+        FROM TF_RUN_TASK_JOB D4
+        INNER JOIN X D2 ON D4.TASK_ID=D2.TASK_ID AND D4.START_TIME=D2.START_TIME
+    </select>
+
+    <select id="queryTaskJobByTaskId" resultType="com.easy.etl.runTaskJob.vo.RunTaskJobVo">
+        SELECT D.JOB_ID,
+               D.TASK_ID,
+               D.USAGE_TIME
+        FROM TF_RUN_TASK_JOB D
+        WHERE D.TASK_ID = #{taskId}
+          AND DATE_FORMAT(D.ADD_TIME, '%Y-%m-%d') = #{day}
+          AND D.CACHE_RESULT = 1
+          AND D.HAS_RESULT = 1
+          AND D.TASK_TYPE = 1
+          AND D.ADD_TYPE = 1
+          AND D.`STATUS` = 0
+        ORDER BY D.JOB_ID DESC limit 8
+    </select>
+</mapper>

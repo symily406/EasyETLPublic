@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.system.taskSchedule.mapper.TaskScheduleLogMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="taskScheduleLogResultMap" type="com.easy.system.taskSchedule.entity.TaskScheduleLog">
+        <id column="LOG_ID" property="logId"/>
+        <result column="TASK_SCHEDULE_ID" property="taskScheduleId"/>
+        <result column="EXECUTE_TIME" property="executeTime"/>
+        <result column="STATUS" property="status"/>
+        <result column="CONTENT" property="content"/>
+        <result column="ALLOW_EDIT" property="allowEdit"/>
+        <result column="ALLOW_DELETE" property="allowDelete"/>
+        <result column="ENABLE" property="enable"/>
+        <result column="IS_DEL" property="isDel"/>
+        <result column="ADD_TIME" property="addTime"/>
+        <result column="ADD_USER_ID" property="addUserId"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="UPDATE_USER_ID" property="updateUserId"/>
+        <result column="VERSION" property="version"/>
+        <result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D.*,D1.NAME AS EXECUTION_STATUS_DESC
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            D.IS_DEL=1 AND D.ENABLE=1
+            <!--主键-->
+            <if test="param.logId != null and param.logId != ''">
+                AND D.LOG_ID =#{param.logId}
+            </if>
+            <!--所属任务-->
+            <if test="param.taskScheduleId != null and param.taskScheduleId != ''">
+                AND D.TASK_SCHEDULE_ID =#{param.taskScheduleId}
+            </if>
+            <!--执行时间-->
+            <if test="param.executeTime != null and param.executeTime != ''">
+                AND D.EXECUTE_TIME =#{param.executeTime}
+            </if>
+            <!--执行状态-->
+            <if test="param.executionStatus != null">
+                AND D.EXECUTION_STATUS =#{param.executionStatus}
+            </if>
+
+        </where>
+    </sql>
+
+    <!--分页-->
+    <select id="queryTaskScheduleLogPage" resultType="com.easy.system.taskSchedule.vo.TaskScheduleLogVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TD_TASK_SCHEDULE_LOG D  LEFT JOIN TD_DICT_VALUES D1 ON D.EXECUTION_STATUS=D1.VALUE AND D1.DICT_CODE='TASK_SCHEDULE_EXECUTION_ENUM'
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME DESC
+    </select>
+</mapper>

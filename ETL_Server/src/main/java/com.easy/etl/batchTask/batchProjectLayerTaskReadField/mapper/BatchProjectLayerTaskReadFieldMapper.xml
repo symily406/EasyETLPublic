@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.batchTask.batchProjectLayerTaskReadField.mapper.BatchProjectLayerTaskReadFieldMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="batchProjectLayerTaskReadFieldResultMap"
+               type="com.easy.etl.batchTask.batchProjectLayerTaskReadField.entity.BatchProjectLayerTaskReadField">
+        <id column="READ_FIELD_ID" property="readFieldId"/>
+        <result column="READ_ID" property="readId"/>
+        <result column="TASK_ID" property="taskId"/>
+        <result column="PROJECT_ID" property="projectId"/>
+        <result column="LAYER_ID" property="layerId"/>
+        <result column="FIELD_NAME" property="fieldName"/>
+        <result column="FIELD_TYPE" property="fieldType"/>
+        <result column="FIELD_FORMAT" property="fieldFormat"/>
+        <result column="ALLOW_EDIT" property="allowEdit"/>
+        <result column="ALLOW_DELETE" property="allowDelete"/>
+        <result column="ENABLE" property="enable"/>
+        <result column="IS_DEL" property="isDel"/>
+        <result column="ADD_TIME" property="addTime"/>
+        <result column="ADD_USER_ID" property="addUserId"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="UPDATE_USER_ID" property="updateUserId"/>
+        <result column="VERSION" property="version"/>
+        <result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        D.*,IFNULL(D1.VALUE,0) AS IS_NUM
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            D.IS_DEL=1
+            <!--主键-->
+            <if test="param.readFieldId != null and param.readFieldId != ''">
+                AND D.READ_FIELD_ID =#{param.readFieldId}
+            </if>
+            <!--批处理分层任务来源ID-->
+            <if test="param.readId != null and param.readId != ''">
+                AND D.READ_ID =#{param.readId}
+            </if>
+            <!--归属任务-->
+            <if test="param.taskId != null and param.taskId != ''">
+                AND D.TASK_ID =#{param.taskId}
+            </if>
+            <!--归属项目-->
+            <if test="param.projectId != null and param.projectId != ''">
+                AND D.PROJECT_ID =#{param.projectId}
+            </if>
+            <!--字段名-->
+            <if test="param.fieldName != null and param.fieldName != ''">
+                AND LOWER(D.FIELD_NAME) =LOWER(#{param.fieldName})
+            </if>
+            <!--字段类型-->
+            <if test="param.fieldType != null and param.fieldType != ''">
+                AND D.FIELD_TYPE =#{param.fieldType}
+            </if>
+            <!--字段注释-->
+            <if test="param.comment != null and param.comment != ''">
+                AND D.COMMENT =#{param.comment}
+            </if>
+            <!--字段长度-->
+            <if test="param.columnSize != null and param.columnSize != ''">
+                AND D.COLUMN_SIZE =#{param.columnSize}
+            </if>
+            <if test="param.fieldFormat != null and param.fieldFormat != ''">
+                AND LOWER(D.FIELD_FORMAT) =LOWER(#{param.fieldFormat})
+            </if>
+            <!--小数位数-->
+            <if test="param.point != null and param.point != ''">
+                AND D.POINT =#{param.point}
+            </if>
+        </where>
+    </sql>
+
+    <!--查询所有-->
+    <select id="queryBatchProjectLayerTaskReadFieldAll"
+            resultType="com.easy.etl.batchTask.batchProjectLayerTaskReadField.vo.BatchProjectLayerTaskReadFieldVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_BATCH_PROJECT_LAYER_TASK_READ_FIELD D LEFT JOIN TD_DICT_VALUES D1 ON D.FIELD_TYPE=D1.NAME AND D1.DICT_CODE='DB_NUMBER'
+        <include refid="queryConditions"/>
+        ORDER BY D.SHOW_ORDER ASC
+    </select>
+
+    <!--根据条件查询单个-->
+    <select id="queryBatchProjectLayerTaskReadFieldByCondition" resultType="com.easy.etl.batchTask.batchProjectLayerTaskReadField.vo.BatchProjectLayerTaskReadFieldVo">
+        SELECT
+        <include refid="queryColumns" />
+        FROM TF_BATCH_PROJECT_LAYER_TASK_READ_FIELD D LEFT JOIN TD_DICT_VALUES D1 ON D.FIELD_TYPE=D1.NAME AND D1.DICT_CODE='DB_NUMBER'
+        <include refid="queryConditions" />
+        ORDER BY D.SHOW_ORDER ASC LIMIT 1
+    </select>
+</mapper>

@@ -1,0 +1,101 @@
+server:
+  port: 9627
+  servlet:
+    context-path: /taskExecute
+  # 下面是配置undertow作为服务器的参数
+  undertow:
+    # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
+    io-threads: 4
+    # 阻塞任务线程池, 当执行类似servlet请求阻塞操作, undertow会从这个线程池中取得线程,它的值设置取决于系统的负载
+    worker-threads: 20
+    # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理
+    # 每块buffer的空间大小,越小的空间被利用越充分
+    buffer-size: 1024
+    # 是否分配的直接内存
+    direct-buffers: true
+  error:
+    whitelabel:
+      enabled: false
+############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
+spring:
+  timeout: 5000 #连接超时时间
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  database: mysql
+  #开发模式开关
+  dev: true
+  #操作日志写入数据库
+  saveLog: false
+  #返回结果长输出长度
+  resultLength: 500 #设为-1表示不限制
+  datasource:
+    timeout: 5000 #连接超时时间
+    dynamic:
+      primary: master #设置默认的数据源或者数据源组,默认值即为master
+      strict: false #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
+      datasource:
+        master:
+          url: jdbc:mysql://node01:3306/easy_etl_execute?useUnicode=true&characterEncoding=utf8&useOldAliasMetadataBehavior=true&useTimezone=true&serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&nullCatalogMeansCurrent=true
+          username: root
+          password: 1
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          type: com.alibaba.druid.pool.DruidDataSource
+  #默认缓存ehcache,cacheType:值为redis(redis缓存),ehcache(ehcache缓存)
+  #缓存配置
+  cacheType: redis
+  #ehcache缓存配置
+  cache:
+    #用户权限缓存
+    type: redis
+    ehcache:
+      config: classpath:ehcache.xml
+  #redis缓存配置
+  redis:
+    # Redis数据库索引（默认为0）
+    database: 1
+    # Redis服务器地址
+    host: node01
+    # Redis服务器连接端口
+    port: 6379
+    # Redis服务器连接密码（默认为空）
+    password: null
+    jedis:
+      pool:
+        # 连接池最大连接数（使用负值表示没有限制）
+        max-active: -1
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1s
+        # 连接池中的最大空闲连接
+        max-idle: 500
+        # 连接池中的最小空闲连接
+        min-idle: 50
+  #zookeeper配置
+  zookeeper:
+    address: 127.0.0.1:2181
+    #会话超时时间设置为30000毫秒（30秒）
+    sessionTimeout: 30000
+    #连接超时时间设置为10000毫秒（10秒）
+    connectionTimeout: 10000
+    #是否执行器
+    isExecute: true
+mybatis-plus:
+  mapper-locations: classpath:**/mapper/**/*.xml
+  configuration:
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+    call-setters-on-nulls: true
+  global-config:
+    banner: false
+    db-config:
+      logic-delete-value: 0 # 逻辑已删除值(默认为 0)
+      #系统配置
+      logic-not-delete-value: 1 # 逻辑未删除值(默认为 1)
+#其它配置
+configurer:
+  #服务类型1:服务端,2:执行器
+  server:
+    type: 2
+  #字符串编码
+  charset: UTF-8
+

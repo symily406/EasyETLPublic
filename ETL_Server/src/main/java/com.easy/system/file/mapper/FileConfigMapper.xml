@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.system.file.mapper.FileConfigMapper">
+	<!-- 通用查询映射结果 -->
+	<resultMap id="fileConfigResultMap"
+		type="com.easy.system.file.entity.FileConfig">
+		<id column="CONFIG_ID" property="configId" />
+		<result column="FILE_TYPE" property="fileType" />
+		<result column="SAVE_TYPE" property="saveType" />
+		<result column="NAME" property="name" />
+		<result column="ACCEPT" property="accept" />
+		<result column="CHUNK_SIZE" property="chunkSize" />
+		<result column="LEVAL" property="leval" />
+		<result column="ALLOW_EDIT" property="allowEdit" />
+		<result column="ALLOW_DELETE" property="allowDelete" />
+		<result column="ENABLE" property="enable" />
+		<result column="IS_DEL" property="isDel" />
+		<result column="ADD_TIME" property="addTime" />
+		<result column="ADD_USER_ID" property="addUserId" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="UPDATE_USER_ID" property="updateUserId" />
+		<result column="VERSION" property="version" />
+		<result column="SHOW_ORDER" property="showOrder" />
+
+	</resultMap>
+
+	<!-- 代码生成器生成代码开始 -->
+
+	<!-- 字段 -->
+	<sql id="queryColumns">
+		D.*,fileType.NAME as fileTypeName,saveType.name as
+		saveTypeName
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="queryConditions">
+		<where>
+			D.IS_DEL=1 AND D.ENABLE=1
+			<!--主键 -->
+			<if test="param.configId != null and param.configId != ''">
+				AND D.CONFIG_ID =#{param.configId}
+			</if>
+			<!--文件类型:字典表取数 -->
+			<if test="param.fileType != null and param.fileType != ''">
+				AND D.FILE_TYPE =#{param.fileType}
+			</if>
+			<!--文件存储方式:字典表取数 -->
+			<if test="param.saveType != null and param.saveType != ''">
+				AND D.SAVE_TYPE =#{param.saveType}
+			</if>
+			<!--名称 -->
+			<if test="param.name != null and param.name != ''">
+				AND instr(D.NAME,#{param.name})>0
+			</if>
+			<!--允许上传类型 -->
+			<if test="param.accept != null and param.accept != ''">
+				AND D.ACCEPT =#{param.accept}
+			</if>
+			<!--分片上传大小,单位M -->
+			<if test="param.chunkSize != null">
+				AND D.CHUNK_SIZE =#{param.chunkSize}
+			</if>
+
+			<if test="param.companyId != null and param.companyId != ''">
+				AND D.COMPANY_ID =#{param.companyId}
+			</if>
+
+			<if test="param.orgId != null and param.orgId != ''">
+				AND D.ORG_ID =#{param.orgId}
+			</if>
+
+			<if
+				test="param.queryFileTypes != null and param.queryFileTypes.size>0">
+				AND FILE_TYPE IN
+				<foreach collection="param.queryFileTypes" item="item"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+
+		</where>
+	</sql>
+
+	<!--分页 -->
+	<select id="queryFileConfigPage"
+		resultType="com.easy.system.file.vo.FileConfigVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_FILE_CONFIG D
+		LEFT JOIN TD_DICT_VALUES FILETYPE ON D.FILE_TYPE=FILETYPE.VALUE AND
+		FILETYPE.DICT_CODE='file_type_code'
+		LEFT JOIN TD_DICT_VALUES SAVETYPE
+		ON D.SAVE_TYPE=SAVETYPE.VALUE AND SAVETYPE.DICT_CODE='file_save_type'
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC
+	</select>
+
+	<!--查询所有 -->
+	<select id="queryFileConfigAll"
+		resultType="com.easy.system.file.vo.FileConfigVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_FILE_CONFIG D
+		left join td_dict_values fileType on
+		d.FILE_TYPE=fileType.VALUE and fileType.DICT_CODE='file_type_code'
+		left join td_dict_values saveType on d.SAVE_TYPE=saveType.VALUE and
+		saveType.DICT_CODE='file_save_type'
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC
+	</select>
+
+	<!--根据条件查询单个 -->
+	<select id="queryFileConfigByCondition"
+		resultType="com.easy.system.file.vo.FileConfigVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_FILE_CONFIG D
+		left join td_dict_values fileType on
+		d.FILE_TYPE=fileType.VALUE and fileType.DICT_CODE='file_type_code'
+		left join td_dict_values saveType on d.SAVE_TYPE=saveType.VALUE and
+		saveType.DICT_CODE='file_save_type'
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME ASC LIMIT 1
+	</select>
+	<!-- 代码生成器生成代码结束 -->
+</mapper>

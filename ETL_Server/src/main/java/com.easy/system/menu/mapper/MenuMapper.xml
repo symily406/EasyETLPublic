@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.system.menu.mapper.MenuMapper">
+	<!-- 通用查询映射结果 -->
+	<resultMap id="menuResultMap"
+		type="com.easy.system.menu.entity.Menu">
+		<id column="MENU_ID" property="menuId" />
+		<result column="PID" property="pid" />
+		<result column="MENU_NAME" property="menuName" />
+		<result column="SHOW_MENU_NAME" property="showMenuName" />
+		<result column="TITLE" property="title" />
+		<result column="PAGE_NAME" property="pageName" />
+		<result column="URL" property="url" />
+		<result column="ICON" property="icon" />
+		<result column="IS_MENU" property="isMenu" />
+		<result column="IS_CLOSE" property="isClose" />
+		<result column="IS_EXTERNAL" property="isExternal" />
+		<result column="IS_HIDDEN" property="isHidden" />
+		<result column="ALLOW_EDIT" property="allowEdit" />
+		<result column="ALLOW_DELETE" property="allowDelete" />
+		<result column="ENABLE" property="enable" />
+		<result column="IS_DEL" property="isDel" />
+		<result column="ADD_TIME" property="addTime" />
+		<result column="ADD_USER_ID" property="addUserId" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="UPDATE_USER_ID" property="updateUserId" />
+		<result column="VERSION" property="version" />
+		<result column="SHOW_ORDER" property="showOrder" />
+
+	</resultMap>
+
+
+	<!-- 代码生成器生成代码开始 -->
+
+	<!-- 字段 -->
+	<sql id="queryColumns">
+		D.*,ifnull(D1.MENU_NAME,'一级菜单') AS parentMenuName
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="queryConditions">
+		<where>
+			D.IS_DEL=1
+			<!--主键 -->
+			<if test="param.menuId != null and param.menuId != ''">
+				AND D.MENU_ID =#{param.menuId}
+			</if>
+			<!--上级ID -->
+			<if test="param.pid != null and param.pid != ''">
+				AND D.PID =#{param.pid}
+			</if>
+			<!--菜单名称 -->
+			<if test="param.menuName != null and param.menuName != ''">
+				AND D.MENU_NAME =#{param.menuName}
+			</if>
+			<!--菜单显示名称 -->
+			<if test="param.showMenuName != null and param.showMenuName != ''">
+				AND D.SHOW_MENU_NAME =#{param.showMenuName}
+			</if>
+			<!--标题 -->
+			<if test="param.title != null and param.title != ''">
+				AND D.TITLE =#{param.title}
+			</if>
+			<!--路由地址 -->
+			<if test="param.routePath != null and param.routePath != ''">
+				AND D.ROUTE_PATH =#{param.routePath}
+			</if>
+			<!--页面名称 -->
+			<if test="param.pageName != null and param.pageName != ''">
+				AND D.PAGE_NAME =#{param.pageName}
+			</if>
+			<!--访问地址:如果不是外部地址则和路由地址一样 -->
+			<if test="param.url != null and param.url != ''">
+				AND D.URL =#{param.url}
+			</if>
+			<!--图标 -->
+			<if test="param.icon != null and param.icon != ''">
+				AND D.ICON =#{param.icon}
+			</if>
+			<!--是否菜单0:否,1:是 -->
+			<if test="param.isMenu != null">
+				AND D.IS_MENU =#{param.isMenu}
+			</if>
+			<!--是否可以关闭0:否,1:是 -->
+			<if test="param.isClose != null">
+				AND D.IS_CLOSE =#{param.isClose}
+			</if>
+			<!--是否外部地址0:否,1:是 -->
+			<if test="param.isExternal != null">
+				AND D.IS_EXTERNAL =#{param.isExternal}
+			</if>
+			<!--是否隐藏0:否,1:是 -->
+			<if test="param.isHidden != null">
+				AND D.IS_HIDDEN =#{param.isHidden}
+			</if>
+			
+			<!--是否启用 -->
+			<if test="param.enable != null">
+				AND D.ENABLE =#{param.enable}
+			</if>
+
+			<if test="param.companyId != null and param.companyId != ''">
+				AND D.MENU_ID IN(SELECT F_ID FROM TD_COMPANY_FUNCTION
+				WHERE COMPANY_ID=#{param.companyId} AND LEVAL IN(0,1))
+			</if>
+			
+			<if test="param.staffId != null and param.staffId != ''">
+				AND D.MENU_ID IN(
+					SELECT F_ID FROM TR_ROLE_FUNCTION WHERE R_ID IN (
+						SELECT ROLE_ID FROM TR_STAFF_ROLE WHERE STAFF_ID=#{param.staffId}
+					)
+				)
+			</if>
+		</where>
+	</sql>
+
+	<!--分页 -->
+	<select id="queryMenuPage"
+		resultType="com.easy.system.menu.vo.MenuVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_MENU D LEFT JOIN TD_MENU D1 ON D.PID = D1.MENU_ID
+		<include refid="queryConditions" />
+		ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME ASC
+	</select>
+
+	<!--查询所有 -->
+	<select id="queryMenuAll"
+		resultType="com.easy.system.menu.vo.MenuVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_MENU D LEFT JOIN TD_MENU D1 ON D.PID = D1.MENU_ID
+		<include refid="queryConditions" />
+		ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME ASC
+	</select>
+
+	<!--根据条件查询单个 -->
+	<select id="queryMenuByCondition"
+		resultType="com.easy.system.menu.vo.MenuVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TD_MENU D
+		<include refid="queryConditions" />
+		ORDER BY D.SHOW_ORDER DESC,D.ADD_TIME ASC LIMIT 1
+	</select>
+	<!-- 代码生成器生成代码结束 -->
+</mapper>

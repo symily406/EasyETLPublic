@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.batchTask.batchProjectLayerTaskFieldMap.mapper.BatchProjectLayerTaskFieldMapMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="batchProjectLayerTaskFieldMapResultMap"
+               type="com.easy.etl.batchTask.batchProjectLayerTaskFieldMap.entity.BatchProjectLayerTaskFieldMap">
+        <id column="ID" property="id"/>
+        <result column="TASK_ID" property="taskId"/>
+        <result column="PROJECT_ID" property="projectId"/>
+        <result column="LAYER_ID" property="layerId"/>
+        <result column="READ_ID" property="readId"/>
+        <result column="WRITE_ID" property="writeId"/>
+        <result column="READ_FIELD_ID" property="readFieldId"/>
+        <result column="WRITE_FIELD_ID" property="writeFieldId"/>
+        <result column="ALLOW_EDIT" property="allowEdit"/>
+        <result column="ALLOW_DELETE" property="allowDelete"/>
+        <result column="ENABLE" property="enable"/>
+        <result column="IS_DEL" property="isDel"/>
+        <result column="ADD_TIME" property="addTime"/>
+        <result column="ADD_USER_ID" property="addUserId"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="UPDATE_USER_ID" property="updateUserId"/>
+        <result column="VERSION" property="version"/>
+        <result column="SHOW_ORDER" property="showOrder"/>
+
+    </resultMap>
+
+    <!-- 代码生成器生成代码开始 -->
+
+    <!-- 字段 -->
+    <sql id="queryColumns">
+        DISTINCT
+        M.READ_FIELD_ID,
+        M.WRITE_FIELD_ID,
+        M.SHOW_ORDER,
+        R.FIELD_NAME AS READ_FIELD_NAME,
+        R.FIELD_TYPE AS READ_FIELD_TYPE,
+        R.COLUMN_SIZE AS READ_COLUMN_SIZE,
+        R.POINT AS READ_POINT,
+        R.FIELD_FORMAT AS READ_FIELD_FORMAT,
+        W.FIELD_NAME AS WRITE_FIELD_NAME,
+        W.FIELD_TYPE AS WRITE_FIELD_TYPE,
+        W.COLUMN_SIZE AS WRITE_COLUMN_SIZE,
+        W.POINT AS WRITE_POINT
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="queryConditions">
+        <where>
+            M.IS_DEL=1 AND M.ENABLE=1
+            <!--归属任务-->
+            <if test="param.taskId != null and param.taskId != ''">
+                AND M.TASK_ID =#{param.taskId}
+            </if>
+            <!--归属项目-->
+            <if test="param.projectId != null and param.projectId != ''">
+                AND  M.PROJECT_ID =#{param.projectId}
+            </if>
+            <!--任务来源ID-->
+            <if test="param.readId != null and param.readId != ''">
+                AND  M.READ_ID =#{param.readId}
+            </if>
+            <!--任务写入ID-->
+            <if test="param.writeId != null and param.writeId != ''">
+                AND  M.WRITE_ID =#{param.writeId}
+            </if>
+            <!--来源字段-->
+            <if test="param.readFieldId != null and param.readFieldId != ''">
+                AND  M.READ_FIELD_ID =#{param.readFieldId}
+            </if>
+            <!--写入字段-->
+            <if test="param.writeFieldId != null and param.writeFieldId != ''">
+                AND  M.WRITE_FIELD_ID =#{param.writeFieldId}
+            </if>
+        </where>
+    </sql>
+
+
+
+    <!--查询所有-->
+    <select id="queryBatchProjectLayerTaskFieldMapAll"
+            resultType="com.easy.etl.batchTask.batchProjectLayerTaskFieldMap.vo.BatchProjectLayerTaskFieldMapVo">
+        SELECT
+        <include refid="queryColumns"/>
+        FROM TF_BATCH_PROJECT_LAYER_TASK_FIELD_MAP M
+        LEFT JOIN TF_BATCH_PROJECT_LAYER_TASK_READ_FIELD R ON M.TASK_ID = R.TASK_ID AND M.READ_FIELD_ID=R.READ_FIELD_ID AND M.READ_ID=R.READ_ID
+        LEFT JOIN TF_BATCH_PROJECT_LAYER_TASK_WRITE_FIELD W ON M.TASK_ID = W.TASK_ID AND M.WRITE_FIELD_ID=W.WRITE_FIELD_ID AND M.WRITE_ID=W.WRITE_ID
+        <include refid="queryConditions"/>
+        ORDER BY M.SHOW_ORDER ASC
+    </select>
+</mapper>

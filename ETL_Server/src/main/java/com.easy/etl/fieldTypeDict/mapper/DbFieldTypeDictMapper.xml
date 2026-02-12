@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.etl.fieldTypeDict.mapper.DbFieldTypeDictMapper">
+
+
+
+    <select id="queryReadToWriteColumn" resultType="com.easy.etl.common.db.model.ColumnInfo">
+        WITH WRITE_COLUMN AS (
+        SELECT
+            d.SOURCE_TYPE_ID,
+            D.FIELD_TYPE,
+            D.ENUM,
+            D.COLUMN_SIZE,
+            D.COLUMN_DEFINITION,
+            D.CODE
+        FROM
+            td_db_field_type_dict D
+                INNER JOIN TD_DB_SOURCE D1 ON D.SOURCE_TYPE_ID = D1.SOURCE_TYPE_ID
+        WHERE
+            D1.DB_SOURCE_ID = #{param.dbSourceId}  AND d.PARENT_SOURCE_TYPE_ID != '0'
+        )
+        SELECT
+            D.FIELD_NAME,
+            D.FIELD_TYPE,
+            D.COMMENT,
+            D.COLUMN_SIZE,
+            D.POINT,
+            R.DB_SOURCE_ID,
+            S.SOURCE_TYPE_ID,
+            C.ENUM,
+            C.CODE,
+            IFNULL( W.FIELD_TYPE, 'varchar' ) AS WRITE_FIELD_TYPE,
+            IFNULL( W.ENUM, 'VARCHAR' ) AS WRITE_ENUM,
+            IFNULL( W.COLUMN_SIZE, 0 ) AS WRITE_COLUMN_SIZE,
+            W.COLUMN_DEFINITION AS WRITE_COLUMN_DEFINITION
+        FROM
+            TF_BATCH_PROJECT_LAYER_TASK_READ_FIELD d
+                LEFT JOIN TF_BATCH_PROJECT_LAYER_TASK_READ R ON D.TASK_ID = R.TASK_ID
+                LEFT JOIN TD_DB_SOURCE S ON R.DB_SOURCE_ID = S.DB_SOURCE_ID
+                LEFT JOIN td_db_field_type_dict c ON s.SOURCE_TYPE_ID = c.SOURCE_TYPE_ID  AND c.PARENT_SOURCE_TYPE_ID = '0'  AND d.FIELD_TYPE = c.FIELD_TYPE
+                LEFT JOIN WRITE_COLUMN W ON C.CODE = W.CODE and s.SOURCE_TYPE_ID=w.SOURCE_TYPE_ID
+        WHERE
+            d.TASK_ID = #{param.taskId}
+        ORDER BY
+            d.SHOW_ORDER
+    </select>
+</mapper>

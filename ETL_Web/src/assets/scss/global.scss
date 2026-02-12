@@ -1,0 +1,275 @@
+@import './variables.scss';
+@import './side_container.scss';
+@import './nav_container.scss';
+@import './main_container.scss';
+@import './index_container.scss';
+@import './operation_container.scss';
+@import './task-index-container.scss';
+@import './task_side_container.scss';
+@import './task_main_container.scss';
+@import './task_nav_container.scss';
+html,
+body {
+	padding: 0px;
+	margin: 0px;
+	overflow: hidden;
+	height: 100%;
+	padding-right:0 !important;
+}
+
+body {
+	height: 100%;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+	font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+}
+
+
+
+.scrollable-container {
+	overflow: auto;
+}
+
+
+label {
+	font-weight: normal;
+}
+
+html {
+	height: 100%;
+	box-sizing: border-box;
+}
+
+/**
+ * 位置
+ */
+.fleft{ float: left;}
+.fright{float: right;}
+.tcenter{ text-align: center;}
+.tleft{ text-align: left;}
+/**
+ * 颜色
+ */
+.cred{color: red;}
+.cblue{color: #409EFF;}
+.cblack{color: #000;}
+.cgreen{color:#117700;}
+.cyellow{color: #E6A23C;}
+.cgrey{color:#ccc}
+/**
+ * 背景色
+ */
+.bg-white{
+	background-color: #fff;
+}
+
+/**
+ * 字体大小
+ */
+.f12{
+	font-size: 12px;
+}
+.f10{
+	font-size:10px;
+}
+
+.f18{
+	font-size:18px;
+}
+
+.menu-icon{
+	    margin-right: 5px;
+	    width: 24px;
+	    text-align: center;
+	    font-size: 14px;
+	    vertical-align: middle;
+}
+
+#app {
+	height: 100%;
+}
+
+.app-container{
+	text-align:left;
+	//padding: 5px;
+	height: 100%;
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: inherit;
+}
+
+.no-padding {
+	padding: 0px !important;
+}
+
+.padding-content {
+	padding: 4px 0;
+}
+
+a:focus,
+a:active {
+	outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+	cursor: pointer;
+	color: inherit;
+	text-decoration: none;
+}
+
+div:focus {
+	outline: none;
+}
+
+.fr {
+	float: right;
+}
+
+.fl {
+	float: left;
+}
+
+.pr-5 {
+	padding-right: 5px;
+}
+
+.pl-5 {
+	padding-left: 5px;
+}
+
+.block {
+	display: block;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+.inlineBlock {
+	display: block;
+}
+
+.clearfix {
+	&:after {
+		visibility: hidden;
+		display: block;
+		font-size: 0;
+		content: " ";
+		clear: both;
+		height: 0;
+	}
+}
+
+.tox-tinymce-aux {
+    z-index: 999999;
+}
+
+.max-width-100-ratio{
+	width: 100%;
+}
+.el-input-number-left{
+	.el-input-number .el-input__inner {
+	    text-align: left;
+	}
+}
+
+.el-dialog__title{
+	font-size: 14px;
+}
+
+.app-container{
+	padding: 5px;
+	height: 100%;
+	
+	.headr-container{
+		.el-form-item{
+			margin-bottom:5px
+		}
+	}
+	.el-dialog__wrapper{
+		overflow: hidden;
+		.form-container{
+			.el-form-item {
+			    margin-bottom: 15px;
+			}
+		}
+		.el-dialog__body {
+		     padding: 10px 10px;
+		}
+	}
+	.page-container{
+		margin-top: 10px;
+		margin-right: 10px;
+		text-align: right;
+	}
+	.card-panel{
+		.el-card__header{
+			padding: 10px 10px;
+			font-size: 14px;
+		}
+		.el-card__body {
+		    padding: 10px 10px;
+			span{
+				font-size: 14px;
+			}
+		}
+	}
+	.file-container{
+		.el-card__header{
+			padding: 5px 5px;
+			font-size: 14px;
+		}
+	}
+	
+}
+
+.treeSelect{
+		.vue-treeselect{
+			margin-top: 5px;
+			.vue-treeselect__placeholder {
+				line-height: 32px;
+			}
+			.vue-treeselect__control {
+				height: 32px !important;
+			}
+			.vue-treeselect__placeholder {
+				padding-left:10px;
+			}
+			.vue-treeselect__single-value{
+				padding-left:10px;
+			}
+			input{
+				height: 32px;
+				line-height: 32px;
+			}
+		}
+		.el-form-item__content {
+		     line-height: 32px;
+		     position: relative;
+		     font-size: 13px;
+		}
+	}
+.tree-select-item {
+				font-size: 12px; 
+				height: 12px; 
+				line-height:12px;
+			}
+	
+.form-box-card{
+	.el-card__body {
+		padding: 0px;
+	}
+}
+
+.button-padding-none{
+	padding: 0px;
+}
+
+
+ 

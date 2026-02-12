@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.easy.system.operationLog.mapper.OperationLogMapper">
+	<!-- 通用查询映射结果 -->
+	<resultMap id="operationLogResultMap"
+		type="com.easy.system.operationLog.entity.OperationLog">
+		<id column="LOG_ID" property="logId" />
+		<result column="NAME" property="name" />
+		<result column="MODE" property="mode" />
+		<result column="IP" property="ip" />
+		<result column="USAGE_TIME" property="usageTime" />
+		<result column="LOG_TYPE" property="logType" />
+		<result column="COMPANY_ID" property="companyId" />
+		<result column="ORG_ID" property="orgId" />
+		<result column="ALLOW_EDIT" property="allowEdit" />
+		<result column="ALLOW_DELETE" property="allowDelete" />
+		<result column="ENABLE" property="enable" />
+		<result column="IS_DEL" property="isDel" />
+		<result column="ADD_TIME" property="addTime" />
+		<result column="ADD_USER_ID" property="addUserId" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="UPDATE_USER_ID" property="updateUserId" />
+		<result column="VERSION" property="version" />
+		<result column="SHOW_ORDER" property="showOrder" />
+
+	</resultMap>
+
+	<!-- 代码生成器生成代码开始 -->
+
+	<!-- 字段 -->
+	<sql id="queryColumns">
+		D.*,D1.NAME AS STAFF_NAME
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="queryConditions">
+		<where>
+			D.IS_DEL=1 AND D.ENABLE=1
+			<!--主键 -->
+			<if test="param.logId != null and param.logId != ''">
+				AND D.LOG_ID =#{param.logId}
+			</if>
+			<!--名称 -->
+			<if test="param.name != null and param.name != ''">
+				AND INSTR(D.NAME,#{param.name})>0
+			</if>
+			<!--请求方式 -->
+			<if test="param.mode != null and param.mode != ''">
+				AND D.MODE =#{param.mode}
+			</if>
+			<!--IP地址 -->
+			<if test="param.ip != null and param.ip != ''">
+				AND D.IP =#{param.ip}
+			</if>
+			<!--用时 -->
+			<if test="param.usageTime != null">
+				AND D.USAGE_TIME =#{param.usageTime}
+			</if>
+			<!--日志类型1:登陆日志,2:其它操作日志 -->
+			<if test="param.logType != null">
+				AND D.LOG_TYPE =#{param.logType}
+			</if>
+			<!--启用:0未启用,1:启用 -->
+			<if test="param.enable != null">
+				AND D.ENABLE =#{param.enable}
+			</if>
+			<!--显示排序 -->
+			<if test="param.showOrder != null">
+				AND D.SHOW_ORDER =#{param.showOrder}
+			</if>
+
+			<!--归属企业 -->
+			<if test="param.companyId != null and param.companyId != ''">
+				AND D.COMPANY_ID =#{param.companyId}
+			</if>
+			<!--归属机构 -->
+			<if test="param.orgId != null and param.orgId != ''">
+				AND D.ORG_ID =#{param.orgId}
+			</if>
+			<!--用户 -->
+			<if test="param.addUserId != null and param.addUserId != ''">
+				AND D.ADD_USER_ID =#{param.addUserId}
+			</if>
+			<!--操作人 -->
+			<if test="param.staffName != null and param.staffName != ''">
+				AND INSTR(D1.NAME,#{param.staffName})>0
+			</if>
+
+			<if
+				test="param.startDate != null and param.startDate != '' and param.endDate != null and param.endDate != ''">
+				and DATE_FORMAT(D.ADD_TIME,'%Y-%m-%d') BETWEEN
+				#{param.startDate} and #{param.endDate}
+			</if>
+
+			<if test="param.logTypes != null and param.logTypes.size()>0">
+				AND D.LOG_TYPE in
+				<foreach collection="param.logTypes" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</sql>
+
+	<!--分页 -->
+	<select id="queryOperationLogPage"
+		resultType="com.easy.system.operationLog.vo.OperationLogVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TH_OPERATION_LOG D LEFT JOIN TD_STAFF_INFO D1 ON
+		D.ADD_USER_ID=D1.STAFF_ID
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME DESC
+	</select>
+
+	<!--查询所有 -->
+	<select id="queryOperationLogAll"
+		resultType="com.easy.system.operationLog.vo.OperationLogVo">
+		SELECT
+		<include refid="queryColumns" />
+		FROM TH_OPERATION_LOG D LEFT JOIN TD_STAFF_INFO D1 ON
+		D.ADD_USER_ID=D1.STAFF_ID
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME DESC
+	</select>
+
+	<!--根据条件查询单个 -->
+	<select id="queryOperationLogByCondition"
+		resultType="com.easy.system.operationLog.vo.OperationLogVo">
+		SELECT
+		D.*,D1.REQUEST_INFO,D1.RESPONSE_INFO,D2.NAME AS STAFF_NAME
+		FROM
+		TH_OPERATION_LOG D LEFT JOIN TH_OPERATION_LOG_INFO D1 ON
+		D.LOG_ID=D1.LOG_ID LEFT JOIN TD_STAFF_INFO D2 ON
+		D.ADD_USER_ID=D2.STAFF_ID
+		<include refid="queryConditions" />
+		ORDER BY D.ADD_TIME DESC LIMIT 1
+	</select>
+	<!-- 代码生成器生成代码结束 -->
+</mapper>
