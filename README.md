@@ -94,8 +94,9 @@ EasyETL是一款开源的分布式 DAG 调度系统,面向非技术背景用户�
 | 网盘       | 地址                                                                                                            |
 |:---------|:--------------------------------------------------------------------------------------------------------------|
 | **百度云盘** |  https://pan.baidu.com/s/1xkyiJqy-1XLGx0nqJtNWIw?pwd=easy 提取码: easy                                                 |
+| **天翼云盘** |  https://cloud.189.cn/t/UVBnqmmqQzAj （访问码：69w8）                                               |
 
-百度网盘下载后，将文件解压后导入虚似机，即可使用。
+网盘下载后，将文件解压后导入虚似机，详情请参考使用说明。
 
 使用说明：https://www.yuque.com/easyetl/yy8raz/zlfib65yris3z5fl?singleDoc#
 
