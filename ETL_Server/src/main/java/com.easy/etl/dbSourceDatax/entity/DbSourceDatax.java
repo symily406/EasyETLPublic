@@ -19,44 +19,26 @@ import javax.validation.constraints.NotEmpty;
 @TableName(value = "TD_DB_SOURCE_DATAX", autoResultMap = true)
 public class DbSourceDatax extends BaseEntity {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1492831266398250588L;
 
-    /**
-     * 主键
-     */
+
     @TableId(value = "TEMPLATE_ID", type = IdType.ASSIGN_ID)
     private String templateId;
 
-    /**
-     * 模板类型
-     */
+
     @TableField(value = "TEMPLATE_CODE")
-    @NotEmpty(message = "templateCode模板类型不能为空")
-    @Length(max = 32, message = "templateCode模板类型不能超过32个字符")
     private String templateCode;
-    /**
-     * 名称
-     */
+
     @TableField(value = "NAME")
-    @Length(max = 32, message = "name名称不能超过32个字符")
     private String name;
-    /**
-     * 模板内容
-     */
+
     @TableField(value = "CONTENT")
-    @NotEmpty(message = "content模板内容不能为空")
     private String content;
-    /**
-     * 启用
-     */
+
     @TableField(value = "ENABLE")
     private Integer enable;
-    /**
-     * 显示排序
-     */
+
     @TableField(value = "SHOW_ORDER")
     private Integer showOrder;
 
@@ -65,66 +47,48 @@ public class DbSourceDatax extends BaseEntity {
         super();
     }
 
-    /**
-     * 主键-数据库字段:TEMPLATE_ID
-     */
+
     public String getTemplateId() {
         return templateId;
     }
 
-    /**
-     * 主键-数据库字段:TEMPLATE_ID
-     */
+
     public void setTemplateId(String templateId) {
         this.templateId = templateId;
     }
 
 
-    /**
-     * 模板类型-数据库字段:TEMPLATE_CODE
-     */
+
     public String getTemplateCode() {
         return templateCode;
     }
 
-    /**
-     * 模板类型-数据库字段:TEMPLATE_CODE
-     */
+
     public void setTemplateCode(String templateCode) {
         this.templateCode = templateCode;
     }
 
-    /**
-     * 名称-数据库字段:NAME
-     */
+
     public String getName() {
         return name;
     }
 
-    /**
-     * 名称-数据库字段:NAME
-     */
+
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * 模板内容-数据库字段:CONTENT
-     */
+
     public String getContent() {
         return content;
     }
 
-    /**
-     * 模板内容-数据库字段:CONTENT
-     */
+
     public void setContent(String content) {
         this.content = content;
     }
 
-    /**
-     * 启用-数据库字段:ENABLE
-     */
+
     public Integer getEnable() {
         return enable;
     }
@@ -133,9 +97,7 @@ public class DbSourceDatax extends BaseEntity {
         this.enable = enable;
     }
 
-    /**
-     * 显示排序-数据库字段:SHOW_ORDER
-     */
+
     public Integer getShowOrder() {
         return showOrder;
     }

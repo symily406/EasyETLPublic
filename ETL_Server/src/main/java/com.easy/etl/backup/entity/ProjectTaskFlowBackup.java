@@ -21,24 +21,16 @@ import javax.validation.constraints.NotEmpty;
 @TableName(value = "TF_PROJECT_TASK_FLOW_BACKUP", autoResultMap = true)
 public class ProjectTaskFlowBackup extends ProjectTaskFlow {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1492831266398250588L;
 
 
 
-    /**
-     * 备份来源归属任务
-     */
+
     @TableField(value = "BACKUP_TASK_ID")
-    @NotEmpty(message = "backupTaskId备份来源归属任务不能为空")
-    @Length(max = 32, message = "backupTaskId备份来源归属任务不能超过32个字符")
     private String backupTaskId;
 
-    /**
-     * 删除标识0:已删,1:正常
-     */
+
     private Integer isDel;
 
     public ProjectTaskFlowBackup() {

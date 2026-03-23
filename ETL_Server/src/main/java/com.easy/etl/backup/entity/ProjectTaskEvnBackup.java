@@ -22,29 +22,19 @@ import com.baomidou.mybatisplus.annotation.TableName;
 @TableName(value = "TF_PROJECT_TASK_EVN_BACKUP", autoResultMap = true)
 public class ProjectTaskEvnBackup extends ProjectTaskEvn {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1492831266398250588L;
 
 
-    /**
-     * 来源ID
-     */
+
     @TableField(value = "BACKUP_ID")
-    @Length(max = 32, message = "backupId来源ID不能超过32个字符")
     private String backupId;
 
-    /**
-     * 备份来源任务
-     */
+
     @TableField(value = "BACKUP_TASK_ID")
-    @Length(max = 32, message = "backupTaskId备份来源任务不能超过32个字符")
     private String backupTaskId;
 
-    /**
-     * 删除标识0:已删,1:正常
-     */
+
     private Integer isDel;
 
     public ProjectTaskEvnBackup() {

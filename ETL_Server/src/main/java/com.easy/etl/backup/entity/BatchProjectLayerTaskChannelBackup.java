@@ -20,32 +20,21 @@ import org.hibernate.validator.constraints.Length;
 @TableName(value = "TF_BATCH_PROJECT_LAYER_TASK_CHANNEL_BACKUP", autoResultMap = true)
 public class BatchProjectLayerTaskChannelBackup extends BatchProjectLayerTaskChannel {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1492831266398250588L;
 
 
-    /**
-     * 来源ID
-     */
+
     @TableField(value = "BACKUP_CHANNEL_ID")
-    @Length(max = 32, message = "backupChannelId来源ID不能超过32个字符")
     private String backupChannelId;
 
-    /**
-     * 备份归属任务
-     */
+
     @TableField(value = "BACKUP_TASK_ID")
-    @NotEmpty(message = "backupTaskId备份归属任务不能为空")
-    @Length(max = 32, message = "backupTaskId备份归属任务不能超过32个字符")
     private String backupTaskId;
 
 
 
-    /**
-     * 删除标识0:已删,1:正常
-     */
+
     private Integer isDel;
 
 

@@ -18,45 +18,25 @@ public class ProjectWorkSpaceLayerRel extends Entity {
 
     private static final long serialVersionUID = 1492831266398250588L;
 
-    /**
-     * 主键
-     */
+
     @TableId(value = "PROJECT_WORK_SPACE_LAYER_REL_ID", type = IdType.ASSIGN_ID)
     private String projectWorkSpaceLayerRelId;
 
-    /**
-     * 项目空间
-     */
+
     @TableField(value = "PROJECT_WORK_SPACE_ID")
-    @NotEmpty(message = "projectWorkSpaceId项目空间ID不能为空")
-    @Length(max = 32, message = "projectWorkSpaceId项目空间ID不能超过32个字符")
     private String projectWorkSpaceId;
 
-    /**
-     * 项目
-     */
+
     @TableField(value = "PROJECT_ID")
-    @NotEmpty(message = "projectId项目不能为空")
-    @Length(max = 32, message = "projectId项目不能超过32个字符")
     private String projectId;
-    /**
-     * 工作空间
-     */
+
     @TableField(value = "WORK_SPACE_ID")
-    @NotEmpty(message = "workSpaceId工作空间不能为空")
-    @Length(max = 32, message = "workSpaceId工作空间不能超过32个字符")
     private String workSpaceId;
-    /**
-     * 分层
-     */
+
     @TableField(value = "WORK_SPACE_LAYER_ID")
-    @NotEmpty(message = "workSpaceLayerId分层不能为空")
-    @Length(max = 32, message = "workSpaceLayerId分层不能超过32个字符")
     private String workSpaceLayerId;
 
-    /**
-     * 启用:0未启用,1:启用
-     */
+
     @TableField(value = "ENABLE", fill = FieldFill.INSERT)
     private Integer enable;
 
@@ -66,16 +46,12 @@ public class ProjectWorkSpaceLayerRel extends Entity {
         super();
     }
 
-    /**
-     * 主键-数据库字段:PROJECT_WORK_SPACE_LAYER_REL_ID
-     */
+
     public String getProjectWorkSpaceLayerRelId() {
         return projectWorkSpaceLayerRelId;
     }
 
-    /**
-     * 主键-数据库字段:PROJECT_WORK_SPACE_LAYER_REL_ID
-     */
+
     public void setProjectWorkSpaceLayerRelId(String projectWorkSpaceLayerRelId) {
         this.projectWorkSpaceLayerRelId = projectWorkSpaceLayerRelId;
     }
@@ -88,44 +64,32 @@ public class ProjectWorkSpaceLayerRel extends Entity {
         this.projectWorkSpaceId = projectWorkSpaceId;
     }
 
-    /**
-     * 项目-数据库字段:PROJECT_ID
-     */
+
     public String getProjectId() {
         return projectId;
     }
 
-    /**
-     * 项目-数据库字段:PROJECT_ID
-     */
+
     public void setProjectId(String projectId) {
         this.projectId = projectId;
     }
 
-    /**
-     * 工作空间-数据库字段:WORK_SPACE_ID
-     */
+
     public String getWorkSpaceId() {
         return workSpaceId;
     }
 
-    /**
-     * 工作空间-数据库字段:WORK_SPACE_ID
-     */
+
     public void setWorkSpaceId(String workSpaceId) {
         this.workSpaceId = workSpaceId;
     }
 
-    /**
-     * 分层-数据库字段:WORK_SPACE_LAYER_ID
-     */
+
     public String getWorkSpaceLayerId() {
         return workSpaceLayerId;
     }
 
-    /**
-     * 分层-数据库字段:WORK_SPACE_LAYER_ID
-     */
+
     public void setWorkSpaceLayerId(String workSpaceLayerId) {
         this.workSpaceLayerId = workSpaceLayerId;
     }

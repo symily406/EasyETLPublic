@@ -19,52 +19,32 @@ import javax.validation.constraints.NotEmpty;
 @TableName(value = "TF_MACHINE_CPU", autoResultMap = true)
 public class MachineCpu extends Model<MachineCpu> {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1492831266398250588L;
 
-    /**
-     * 主键
-     */
+
     @TableId(value = "CPU_ID", type = IdType.ASSIGN_ID)
     private String cpuId;
 
-    /**
-     * 归属服务器
-     */
+
     @TableField(value = "MACHINE_ID")
-    @NotEmpty(message = "machineId归属服务器不能为空")
-    @Length(max = 32, message = "machineId归属服务器不能超过32个字符")
     private String machineId;
-    /**
-     * 核心数
-     */
+
     @TableField(value = "CPU_NUM")
     private Integer cpuNum;
-    /**
-     * CPU总的使用率
-     */
+
     @TableField(value = "TOTAL")
     private Integer total;
-    /**
-     * CPU系统使用率
-     */
+
     @TableField(value = "SYS")
     private Integer sys;
-    /**
-     * CPU用户使用率
-     */
+
     @TableField(value = "USED")
     private Integer used;
-    /**
-     * CPU当前等待率
-     */
+
     @TableField(value = "WAIT")
     private Integer wait;
-    /**
-     * CPU当前空闲率
-     */
+
     @TableField(value = "FREE")
     private Integer free;
 
@@ -73,38 +53,28 @@ public class MachineCpu extends Model<MachineCpu> {
         super();
     }
 
-    /**
-     * 主键-数据库字段:CPU_ID
-     */
+
     public String getCpuId() {
         return cpuId;
     }
 
-    /**
-     * 主键-数据库字段:CPU_ID
-     */
+
     public void setCpuId(String cpuId) {
         this.cpuId = cpuId;
     }
 
 
-    /**
-     * 归属服务器-数据库字段:MACHINE_ID
-     */
+
     public String getMachineId() {
         return machineId;
     }
 
-    /**
-     * 归属服务器-数据库字段:MACHINE_ID
-     */
+
     public void setMachineId(String machineId) {
         this.machineId = machineId;
     }
 
-    /**
-     * 核心数-数据库字段:CPU_NUM
-     */
+
     public Integer getCpuNum() {
         return cpuNum;
     }
@@ -113,9 +83,7 @@ public class MachineCpu extends Model<MachineCpu> {
         this.cpuNum = cpuNum;
     }
 
-    /**
-     * CPU总的使用率-数据库字段:TOTAL
-     */
+
     public Integer getTotal() {
         return total;
     }
@@ -124,9 +92,7 @@ public class MachineCpu extends Model<MachineCpu> {
         this.total = total;
     }
 
-    /**
-     * CPU系统使用率-数据库字段:SYS
-     */
+
     public Integer getSys() {
         return sys;
     }
@@ -135,9 +101,7 @@ public class MachineCpu extends Model<MachineCpu> {
         this.sys = sys;
     }
 
-    /**
-     * CPU用户使用率-数据库字段:USED
-     */
+
     public Integer getUsed() {
         return used;
     }
@@ -146,9 +110,7 @@ public class MachineCpu extends Model<MachineCpu> {
         this.used = used;
     }
 
-    /**
-     * CPU当前等待率-数据库字段:WAIT
-     */
+
     public Integer getWait() {
         return wait;
     }
@@ -157,9 +119,7 @@ public class MachineCpu extends Model<MachineCpu> {
         this.wait = wait;
     }
 
-    /**
-     * CPU当前空闲率-数据库字段:FREE
-     */
+
     public Integer getFree() {
         return free;
     }

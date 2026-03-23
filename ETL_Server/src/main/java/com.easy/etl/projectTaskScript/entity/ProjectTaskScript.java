@@ -20,55 +20,30 @@ import javax.validation.constraints.NotEmpty;
 @TableName(value = "TF_PROJECT_TASK_SCRIPT", autoResultMap = true)
 public class ProjectTaskScript extends Entity {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1492831266398250588L;
 
-    /**
-     * 主键
-     */
+
     @TableId(value = "TASK_ID", type = IdType.ASSIGN_ID)
     private String taskId;
 
-    /**
-     * 归属项目
-     */
+
     @TableField(value = "PROJECT_ID")
-    @NotEmpty(message = "projectId归属项目不能为空")
-    @Length(max = 32, message = "projectId归属项目不能超过32个字符")
     private String projectId;
-    /**
-     * 工作空间分层
-     */
+
     @TableField(value = "PROJECT_WORK_SPACE_LAYER_REL_ID")
-    @NotEmpty(message = "projectWorkSpaceLayerRelId工作空间分层不能为空")
-    @Length(max = 32, message = "projectWorkSpaceLayerRelId工作空间分层不能超过32个字符")
     private String projectWorkSpaceLayerRelId;
-    /**
-     * 项目空间ID
-     */
+
     @TableField(value = "PROJECT_WORK_SPACE_ID")
-    @Length(max = 32, message = "projectWorkSpaceId项目空间ID不能超过32个字符")
     private String projectWorkSpaceId;
-    /**
-     * 工作空间任务类型
-     */
+
     @TableField(value = "WORK_SPACE_TYPE")
-    @Length(max = 8, message = "workSpaceType工作空间任务类型不能超过8个字符")
     private String workSpaceType;
-    /**
-     * 目录ID
-     */
+
     @TableField(value = "TASK_FOLDER_ID")
-    @NotEmpty(message = "taskFolderId目录ID不能为空")
-    @Length(max = 32, message = "taskFolderId目录ID不能超过32个字符")
     private String taskFolderId;
-    /**
-     * 脚本或sql内容
-     */
+
     @TableField(value = "SCRIPT_CONTENT")
-    @Length(max = 0, message = "scriptContent脚本或sql内容不能超过0个字符")
     private String scriptContent;
 
     @TableField(value = "VERSION")
@@ -79,101 +54,73 @@ public class ProjectTaskScript extends Entity {
         super();
     }
 
-    /**
-     * 归属任务-数据库字段:TASK_ID
-     */
+
     public String getTaskId() {
         return taskId;
     }
 
-    /**
-     * 归属任务-数据库字段:TASK_ID
-     */
+
     public void setTaskId(String taskId) {
         this.taskId = taskId;
     }
 
 
-    /**
-     * 归属项目-数据库字段:PROJECT_ID
-     */
+
     public String getProjectId() {
         return projectId;
     }
 
-    /**
-     * 归属项目-数据库字段:PROJECT_ID
-     */
+
     public void setProjectId(String projectId) {
         this.projectId = projectId;
     }
 
-    /**
-     * 工作空间分层-数据库字段:PROJECT_WORK_SPACE_LAYER_REL_ID
-     */
+
     public String getProjectWorkSpaceLayerRelId() {
         return projectWorkSpaceLayerRelId;
     }
 
-    /**
-     * 工作空间分层-数据库字段:PROJECT_WORK_SPACE_LAYER_REL_ID
-     */
+
     public void setProjectWorkSpaceLayerRelId(String projectWorkSpaceLayerRelId) {
         this.projectWorkSpaceLayerRelId = projectWorkSpaceLayerRelId;
     }
 
-    /**
-     * 项目空间ID-数据库字段:PROJECT_WORK_SPACE_ID
-     */
+
     public String getProjectWorkSpaceId() {
         return projectWorkSpaceId;
     }
 
-    /**
-     * 项目空间ID-数据库字段:PROJECT_WORK_SPACE_ID
-     */
+
     public void setProjectWorkSpaceId(String projectWorkSpaceId) {
         this.projectWorkSpaceId = projectWorkSpaceId;
     }
 
-    /**
-     * 工作空间任务类型-数据库字段:WORK_SPACE_TYPE
-     */
+
     public String getWorkSpaceType() {
         return workSpaceType;
     }
 
-    /**
-     * 工作空间任务类型-数据库字段:WORK_SPACE_TYPE
-     */
+
     public void setWorkSpaceType(String workSpaceType) {
         this.workSpaceType = workSpaceType;
     }
 
-    /**
-     * 目录ID-数据库字段:TASK_FOLDER_ID
-     */
+
     public String getTaskFolderId() {
         return taskFolderId;
     }
 
-    /**
-     * 目录ID-数据库字段:TASK_FOLDER_ID
-     */
+
     public void setTaskFolderId(String taskFolderId) {
         this.taskFolderId = taskFolderId;
     }
 
-    /**
-     * 脚本或sql内容-数据库字段:SCRIPT_CONTENT
-     */
+
     public String getScriptContent() {
         return scriptContent;
     }
 
-    /**
-     * 脚本或sql内容-数据库字段:SCRIPT_CONTENT
-     */
+
     public void setScriptContent(String scriptContent) {
         this.scriptContent = scriptContent;
     }

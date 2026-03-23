@@ -24,41 +24,28 @@ import org.springframework.format.annotation.DateTimeFormat;
 @TableName(value = "TF_KILL_JOB", autoResultMap = true)
 public class KillJob implements Serializable {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1492831266398250588L;
 
-    /**
-     * 主键
-     */
+
     @TableId(value = "JOB_ID", type = IdType.ASSIGN_ID)
     private String jobId;
 
     @TableField(value = "APPLICATION_ID")
     private String applicationId;
 
-    /**
-     * 执行器IP
-     */
+
     @TableField(value = "IP")
-    @Length(max = 64, message = "ip执行器IP不能超过64个字符")
     private String ip;
-    /**
-     * 完成时间
-     */
+
     @TableField(value = "COMPLETION_TIME")
     private Date completionTime;
-    /**
-     * 执行状态
-     */
+
     @TableField(value = "STATUS")
     private Integer status;
 
 
-    /**
-     * 添加时间
-     */
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -70,52 +57,38 @@ public class KillJob implements Serializable {
         super();
     }
 
-    /**
-     * 主键-数据库字段:JOB_ID
-     */
+
     public String getJobId() {
         return jobId;
     }
 
-    /**
-     * 主键-数据库字段:JOB_ID
-     */
+
     public void setJobId(String jobId) {
         this.jobId = jobId;
     }
 
 
-    /**
-     * 执行器IP-数据库字段:IP
-     */
+
     public String getIp() {
         return ip;
     }
 
-    /**
-     * 执行器IP-数据库字段:IP
-     */
+
     public void setIp(String ip) {
         this.ip = ip;
     }
 
-    /**
-     * 完成时间-数据库字段:COMPLETION_TIME
-     */
+
     public Date getCompletionTime() {
         return completionTime;
     }
 
-    /**
-     * 完成时间-数据库字段:COMPLETION_TIME
-     */
+
     public void setCompletionTime(Date completionTime) {
         this.completionTime = completionTime;
     }
 
-    /**
-     * 执行状态-数据库字段:STATUS
-     */
+
     public Integer getStatus() {
         return status;
     }

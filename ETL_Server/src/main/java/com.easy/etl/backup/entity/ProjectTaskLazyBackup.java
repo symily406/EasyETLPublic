@@ -26,33 +26,21 @@ import org.springframework.format.annotation.DateTimeFormat;
 @TableName(value = "TF_PROJECT_TASK_LAZY_BACKUP", autoResultMap = true)
 public class ProjectTaskLazyBackup extends ProjectTaskLazy {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1492831266398250588L;
 
 
 
-    /**
-     * 备份来源任务
-     */
+
     @TableField(value = "BACKUP_TASK_LAZY_ID")
-    @NotEmpty(message = "backupTaskLazyId备份来源任务不能为空")
-    @Length(max = 32, message = "backupTaskLazyId备份来源任务不能超过32个字符")
     private String backupTaskLazyId;
 
-    /**
-     * 备份来源归属任务
-     */
+
     @TableField(value = "BACKUP_TASK_ID")
-    @Length(max = 32, message = "backupTaskId备份来源归属任务不能超过32个字符")
     private String backupTaskId;
 
-    /**
-     * 备份任务来源依懒任务ID
-     */
+
     @TableField(value = "BACKUP_LAZY_TASK_ID")
-    @Length(max = 32, message = "backupLazyTaskId备份任务来源依懒任务ID不能超过32个字符")
     private String backupLazyTaskId;
 
 

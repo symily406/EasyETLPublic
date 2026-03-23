@@ -13,9 +13,7 @@ import com.easy.etl.common.conf.Yarn;
 @TableName(value = "TD_CONF_YARN", autoResultMap = true)
 public class ConfYarn extends Yarn {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1492831266398250588L;
 
 

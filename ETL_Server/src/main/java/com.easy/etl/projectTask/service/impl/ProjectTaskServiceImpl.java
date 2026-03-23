@@ -1,27 +1,8 @@
 package com.easy.etl.projectTask.service.impl;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.easy.etl.common.db.em.DbEnum;
-import com.easy.etl.common.db.model.ColumnInfo;
-import com.easy.etl.core.constant.GlobalConstant;
-import com.easy.etl.datax.enums.DataXEnum;
-import com.easy.etl.datax.kit.DataXKit;
-import com.easy.etl.datax.model.*;
-import com.easy.etl.datax.model.core.Core;
-import com.easy.etl.datax.model.core.CoreSpeed;
-import com.easy.etl.datax.model.core.DataXServer;
-import com.easy.etl.datax.model.reader.ReaderConnection;
-import com.easy.etl.datax.model.writer.WriterConnection;
-import com.easy.etl.datax.rdbms.RdbmsReaderParameter;
-import com.easy.etl.datax.rdbms.RdbmsWriterParameter;
-import com.easy.etl.em.TaskTypeEnum;
-import com.easy.etl.em.WorkSpaceTypeEnum;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.easy.etl.batchTask.batchProjectLayerTaskChannel.entity.BatchProjectLayerTaskChannel;
 import com.easy.etl.batchTask.batchProjectLayerTaskChannel.mapper.BatchProjectLayerTaskChannelMapper;
 import com.easy.etl.batchTask.batchProjectLayerTaskFieldMap.dto.BatchProjectLayerTaskFieldMapDTO;
@@ -31,18 +12,30 @@ import com.easy.etl.batchTask.batchProjectLayerTaskRead.mapper.BatchProjectLayer
 import com.easy.etl.batchTask.batchProjectLayerTaskRead.vo.BatchProjectLayerTaskReadVo;
 import com.easy.etl.batchTask.batchProjectLayerTaskWrite.mapper.BatchProjectLayerTaskWriteMapper;
 import com.easy.etl.batchTask.batchProjectLayerTaskWrite.vo.BatchProjectLayerTaskWriteVo;
-import com.easy.etl.conf.entity.Conf;
+import com.easy.etl.common.db.em.DbEnum;
+import com.easy.etl.common.db.model.ColumnInfo;
 import com.easy.etl.conf.service.IConfService;
 import com.easy.etl.conf.vo.ConfVo;
-import com.easy.etl.dbSource.entity.DbSource;
+import com.easy.etl.datax.kit.DataXKit;
+import com.easy.etl.datax.model.Connection;
+import com.easy.etl.datax.model.ErrorLimit;
+import com.easy.etl.datax.model.Plugin;
+import com.easy.etl.datax.model.Speed;
+import com.easy.etl.datax.model.core.Core;
+import com.easy.etl.datax.model.core.CoreSpeed;
+import com.easy.etl.datax.model.core.DataXServer;
+import com.easy.etl.datax.model.reader.ReaderConnection;
+import com.easy.etl.datax.model.writer.WriterConnection;
+import com.easy.etl.datax.rdbms.RdbmsReaderParameter;
+import com.easy.etl.datax.rdbms.RdbmsWriterParameter;
 import com.easy.etl.dbSource.service.IDbSourceService;
+import com.easy.etl.em.WorkSpaceTypeEnum;
 import com.easy.etl.projectMember.dto.ProjectMemberDTO;
 import com.easy.etl.projectMember.mapper.ProjectMemberMapper;
 import com.easy.etl.projectMember.vo.ProjectMemberWorkSpaceVo;
 import com.easy.etl.projectTask.dto.ProjectTaskDTO;
 import com.easy.etl.projectTask.dto.ProjectTaskFolderDTO;
 import com.easy.etl.projectTask.entity.ProjectTask;
-import com.easy.etl.projectTask.entity.ProjectTaskFolder;
 import com.easy.etl.projectTask.entity.ProjectTaskSchedue;
 import com.easy.etl.projectTask.mapper.ProjectTaskFolderMapper;
 import com.easy.etl.projectTask.mapper.ProjectTaskMapper;
@@ -58,13 +51,12 @@ import com.easy.etl.projectTaskParameter.entity.ProjectTaskParameter;
 import com.easy.etl.projectTaskParameter.mapper.ProjectTaskParameterMapper;
 import com.easy.etl.projectTaskScript.entity.ProjectTaskScript;
 import com.easy.etl.projectTaskScript.mapper.ProjectTaskScriptMapper;
-import com.easy.etl.projectWorkSpaceLayer.vo.ProjectWorkSpaceLayerVo;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.Param;
+import com.spring.boot.ext.plugin.mybatis.service.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.spring.boot.ext.plugin.mybatis.service.impl.BaseServiceImpl;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 项目任务-服务类

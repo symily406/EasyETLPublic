@@ -16,4 +16,3 @@ public class ConfSql extends Sql {
         super();
     }
 }
-

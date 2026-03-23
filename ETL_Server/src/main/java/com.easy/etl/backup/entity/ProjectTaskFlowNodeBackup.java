@@ -21,33 +21,21 @@ import java.io.Serializable;
 @TableName(value = "TF_PROJECT_TASK_FLOW_NODE_BACKUP", autoResultMap = true)
 public class ProjectTaskFlowNodeBackup extends ProjectTaskFlowNode {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1492831266398250588L;
 
 
 
-    /**
-     * 备份来源节点ID
-     */
+
     @TableField(value = "BACKUP_NODE_ID")
-    @Length(max = 64, message = "backupNodeId备份来源节点ID不能超过64个字符")
     private String backupNodeId;
 
-    /**
-     * 备份来源归属任务
-     */
+
     @TableField(value = "BACKUP_TASK_ID")
-    @NotEmpty(message = "backupTaskId备份来源归属任务不能为空")
-    @Length(max = 32, message = "backupTaskId备份来源归属任务不能超过32个字符")
     private String backupTaskId;
 
-    /**
-     * 备份来源执行任务ID
-     */
+
     @TableField(value = "BACKUP_EXECUTE_TASK_ID")
-    @Length(max = 32, message = "backupExecuteTaskId备份来源执行任务ID不能超过32个字符")
     private String backupExecuteTaskId;
 
 

@@ -21,19 +21,13 @@ import javax.validation.constraints.NotEmpty;
 @TableName(value = "TF_PROJECT_TASK_SCHEDUE_BACKUP", autoResultMap = true)
 public class ProjectTaskSchedueBackup extends ProjectTaskSchedue {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1492831266398250588L;
 
 
 
-    /**
-     * 备份来源任务
-     */
+
     @TableField(value = "BACKUP_TASK_ID")
-    @NotEmpty(message = "backupTaskId备份来源任务不能为空")
-    @Length(max = 32, message = "backupTaskId备份来源任务不能超过32个字符")
     private String backupTaskId;
 
 

@@ -20,23 +20,15 @@ import com.baomidou.mybatisplus.annotation.TableName;
 @TableName(value = "TF_PROJECT_WORK_SPACE_LAYER", autoResultMap = true)
 public class ProjectWorkSpaceLayer extends Entity {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1492831266398250588L;
 
-    /**
-     * 主键
-     */
+
     @TableId(value = "WORK_SPACE_LAYER_ID", type = IdType.ASSIGN_ID)
     private String workSpaceLayerId;
 
-    /**
-     * 名称
-     */
+
     @TableField(value = "WORK_SPACE_LAYER_NAME")
-    @NotEmpty(message = "workSpaceLayerName名称不能为空")
-    @Length(max = 64, message = "workSpaceLayerName名称不能超过64个字符")
     private String workSpaceLayerName;
 
 
@@ -44,31 +36,23 @@ public class ProjectWorkSpaceLayer extends Entity {
         super();
     }
 
-    /**
-     * 主键-数据库字段:WORK_SPACE_LAYER_ID
-     */
+
     public String getWorkSpaceLayerId() {
         return workSpaceLayerId;
     }
 
-    /**
-     * 主键-数据库字段:WORK_SPACE_LAYER_ID
-     */
+
     public void setWorkSpaceLayerId(String workSpaceLayerId) {
         this.workSpaceLayerId = workSpaceLayerId;
     }
 
 
-    /**
-     * 名称-数据库字段:WORK_SPACE_LAYER_NAME
-     */
+
     public String getWorkSpaceLayerName() {
         return workSpaceLayerName;
     }
 
-    /**
-     * 名称-数据库字段:WORK_SPACE_LAYER_NAME
-     */
+
     public void setWorkSpaceLayerName(String workSpaceLayerName) {
         this.workSpaceLayerName = workSpaceLayerName;
     }

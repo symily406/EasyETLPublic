@@ -22,59 +22,36 @@ import com.baomidou.mybatisplus.annotation.TableName;
 @TableName(value = "TF_BATCH_PROJECT_LAYER_TASK_FIELD_MAP_BACKUP", autoResultMap = true)
 public class BatchProjectLayerTaskFieldMapBackup extends BatchProjectLayerTaskFieldMap {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1492831266398250588L;
 
 
 
-    /**
-     * 来源ID
-     */
+
     @TableField(value = "BACKUP_ID")
-    @Length(max = 32, message = "backupId来源ID不能超过32个字符")
     private String backupId;
 
-    /**
-     * 备份归属任务
-     */
+
     @TableField(value = "BACKUP_TASK_ID")
-    @NotEmpty(message = "backupTaskId备份归属任务不能为空")
-    @Length(max = 32, message = "backupTaskId备份归属任务不能超过32个字符")
     private String backupTaskId;
 
-    /**
-     * 备份任务来源ID
-     */
+
     @TableField(value = "BACKUP_READ_ID")
-    @Length(max = 64, message = "backupReadId备份任务来源ID不能超过64个字符")
     private String backupReadId;
 
-    /**
-     * 备份任务写入ID
-     */
+
     @TableField(value = "BACKUP_WRITE_ID")
-    @Length(max = 32, message = "backupWriteId备份任务写入ID不能超过32个字符")
     private String backupWriteId;
 
-    /**
-     * 备份来源字段ID
-     */
+
     @TableField(value = "BACKUP_READ_FIELD_ID")
-    @Length(max = 32, message = "backupReadFieldId备份来源字段ID不能超过32个字符")
     private String backupReadFieldId;
 
-    /**
-     * 备份写入字段
-     */
+
     @TableField(value = "BACKUP_WRITE_FIELD_ID")
-    @Length(max = 32, message = "backupWriteFieldId备份写入字段不能超过32个字符")
     private String backupWriteFieldId;
 
-    /**
-     * 删除标识0:已删,1:正常
-     */
+
     private Integer isDel;
 
 

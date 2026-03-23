@@ -23,35 +23,21 @@ import java.time.LocalDateTime;
 @TableName(value = "TF_RUN_TASK_JOB_LAZY", autoResultMap = true)
 public class RunTaskJobLazy extends Model<RunTaskJobLazy> {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1492831266398250588L;
 
-    /**
-     * 主键
-     */
+
     @TableId(value = "LAZY_ID", type = IdType.ASSIGN_ID)
     private String lazyId;
 
-    /**
-     * 运任任务ID
-     */
+
     @TableField(value = "JOB_ID")
-    @NotEmpty(message = "jobId运任任务ID不能为空")
-    @Length(max = 32, message = "jobId运任任务ID不能超过32个字符")
     private String jobId;
-    /**
-     * 任务ID
-     */
+
     @TableField(value = "TASK_ID")
-    @NotEmpty(message = "taskId任务ID不能为空")
-    @Length(max = 32, message = "taskId任务ID不能超过32个字符")
     private String taskId;
 
-    /**
-     * 添加时间
-     */
+
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -64,45 +50,33 @@ public class RunTaskJobLazy extends Model<RunTaskJobLazy> {
         super();
     }
 
-    /**
-     * 主键-数据库字段:LAZY_ID
-     */
+
     public String getLazyId() {
         return lazyId;
     }
 
-    /**
-     * 主键-数据库字段:LAZY_ID
-     */
+
     public void setLazyId(String lazyId) {
         this.lazyId = lazyId;
     }
 
 
-    /**
-     * 运任任务ID-数据库字段:JOB_ID
-     */
+
     public String getJobId() {
         return jobId;
     }
 
-    /**
-     * 运任任务ID-数据库字段:JOB_ID
-     */
+
     public void setJobId(String jobId) {
         this.jobId = jobId;
     }
 
-    /**
-     * 任务ID-数据库字段:TASK_ID
-     */
+
     public String getTaskId() {
         return taskId;
     }
 
-    /**
-     * 任务ID-数据库字段:TASK_ID
-     */
+
     public void setTaskId(String taskId) {
         this.taskId = taskId;
     }

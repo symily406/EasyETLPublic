@@ -1,0 +1,1 @@
+mvn install:install-file -Dfile=kingbase8-8.6.0.jar -DgroupId=cn.com.kingbase -DartifactId=kingbase8 -Dversion=8.6.0 -Dpackaging=jar

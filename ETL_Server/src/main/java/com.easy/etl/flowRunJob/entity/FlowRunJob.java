@@ -24,39 +24,26 @@ import org.springframework.format.annotation.DateTimeFormat;
 @TableName(value = "TF_FLOW_RUN_JOB", autoResultMap = true)
 public class FlowRunJob extends Model<FlowRunJob> {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1492831266398250588L;
 
 
 
 
-    /**
-     * 主键
-     */
+
     @TableId(value = "FLOW_RUN_JOB_ID", type = IdType.ASSIGN_ID)
     @TableField(value = "FLOW_RUN_JOB_ID")
-    @Length(max = 32, message = "flowRunJobId主键不能超过32个字符")
     private String flowRunJobId;
 
     @TableField(value = "FLOW_JOB_ID")
     private String flowJobId;
-    /**
-     * 归属任务
-     */
+
     @TableField(value = "TASK_ID")
-    @NotEmpty(message = "taskId归属任务不能为空")
-    @Length(max = 32, message = "taskId归属任务不能超过32个字符")
     private String taskId;
-    /**
-     * 状态
-     */
+
     @TableField(value = "STATUS")
     private Integer status;
-    /**
-     * 执行时间
-     */
+
     @TableField(value = "EXECUTE_TIME")
     private Date executeTime;
 
@@ -67,9 +54,7 @@ public class FlowRunJob extends Model<FlowRunJob> {
     @TableField(value = "FAILURE_POLICY")
     private Integer failurePolicy;
 
-    /**
-     * 添加时间
-     */
+
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -100,52 +85,38 @@ public class FlowRunJob extends Model<FlowRunJob> {
         super();
     }
 
-    /**
-     * 归属工作流JOB-数据库字段:FLOW_JOB_ID
-     */
+
     public String getFlowJobId() {
         return flowJobId;
     }
 
-    /**
-     * 归属工作流JOB-数据库字段:FLOW_JOB_ID
-     */
+
     public void setFlowJobId(String flowJobId) {
         this.flowJobId = flowJobId;
     }
 
 
-    /**
-     * 主键-数据库字段:FLOW_RUN_JOB_ID
-     */
+
     public String getFlowRunJobId() {
         return flowRunJobId;
     }
 
-    /**
-     * 主键-数据库字段:FLOW_RUN_JOB_ID
-     */
+
     public void setFlowRunJobId(String flowRunJobId) {
         this.flowRunJobId = flowRunJobId;
     }
 
-    /**
-     * 归属任务-数据库字段:TASK_ID
-     */
+
     public String getTaskId() {
         return taskId;
     }
 
-    /**
-     * 归属任务-数据库字段:TASK_ID
-     */
+
     public void setTaskId(String taskId) {
         this.taskId = taskId;
     }
 
-    /**
-     * 状态-数据库字段:STATUS
-     */
+
     public Integer getStatus() {
         return status;
     }
@@ -154,16 +125,12 @@ public class FlowRunJob extends Model<FlowRunJob> {
         this.status = status;
     }
 
-    /**
-     * 执行时间-数据库字段:EXECUTE_TIME
-     */
+
     public Date getExecuteTime() {
         return executeTime;
     }
 
-    /**
-     * 执行时间-数据库字段:EXECUTE_TIME
-     */
+
     public void setExecuteTime(Date executeTime) {
         this.executeTime = executeTime;
     }

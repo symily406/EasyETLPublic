@@ -19,30 +19,20 @@ import javax.validation.constraints.NotEmpty;
 @TableName(value = "TF_PROJECT_TASK_FLOW_NODE", autoResultMap = true)
 public class ProjectTaskFlowNode extends Model<ProjectTaskFlowNode> {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1492831266398250588L;
 
-    /**
-     * 主键
-     */
+
     @TableId(value = "NODE_ID", type = IdType.ASSIGN_ID)
     private String nodeId;
 
-    /**
-     * 归属任务
-     */
+
     @TableField(value = "TASK_ID")
-    @NotEmpty(message = "taskId归属任务不能为空")
-    @Length(max = 32, message = "taskId归属任务不能超过32个字符")
     private String taskId;
 
     @TableField(value = "EXECUTE_TASK_ID")
     private String executeTaskId;
-    /**
-     * 节点类型
-     */
+
     @TableField(value = "NODE_TYPE")
     private Integer nodeType;
 

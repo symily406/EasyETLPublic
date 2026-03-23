@@ -20,57 +20,34 @@ import com.baomidou.mybatisplus.annotation.TableName;
 @TableName(value = "TD_DB_SOURCE_TYPE", autoResultMap = true)
 public class DbSourceType extends BaseEntity {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1492831266398250588L;
 
-    /**
-     * 主键
-     */
+
     @TableId(value = "SOURCE_TYPE_ID", type = IdType.ASSIGN_ID)
     private String sourceTypeId;
 
 
-    /**
-     * 名称
-     */
+
     @TableField(value = "SOURCE_TYPE_CODE")
-    @NotEmpty(message = "sourceTypeCode名称不能为空")
-    @Length(max = 64, message = "sourceTypeCode名称不能超过64个字符")
     private String sourceTypeCode;
 
-    /**
-     * 名称
-     */
+
     @TableField(value = "SOURCE_TYPE_NAME")
-    @NotEmpty(message = "sourceTypeName名称不能为空")
-    @Length(max = 64, message = "sourceTypeName名称不能超过64个字符")
     private String sourceTypeName;
-    /**
-     * 图片
-     */
+
     @TableField(value = "SOURCE_TYPE_IMAGE")
-    @NotEmpty(message = "sourceTypeImage图片不能为空")
-    @Length(max = 64, message = "sourceTypeImage图片不能超过64个字符")
     private String sourceTypeImage;
-    /**
-     * 驱动
-     */
+
     @TableField(value = "JDBC_DRIVE")
-    @Length(max = 64, message = "jdbcDrive驱动不能超过64个字符")
     private String jdbcDrive;
-    /**
-     * 数据源类型
-     */
+
     @TableField(value = "SOURCE_TYPE")
     private Integer sourceType;
     @TableField(value = "IS_CATALOG")
     private Integer isCatalog;
 
-    /**
-     * 是否有scheam
-     */
+
     @TableField(value = "IS_SCHEMA")
     private Integer isSchema;
 
@@ -79,9 +56,7 @@ public class DbSourceType extends BaseEntity {
 
     @TableField(value = "IS_PASSWORD")
     private Integer isPassword;
-    /**
-     * 生成建表语句
-     */
+
     @TableField(value = "ENABLE_CREATE_DDL")
     private Integer enableCreateDdl;
 
@@ -90,66 +65,48 @@ public class DbSourceType extends BaseEntity {
         super();
     }
 
-    /**
-     * 主键-数据库字段:SOURCE_TYPE_ID
-     */
+
     public String getSourceTypeId() {
         return sourceTypeId;
     }
 
-    /**
-     * 主键-数据库字段:SOURCE_TYPE_ID
-     */
+
     public void setSourceTypeId(String sourceTypeId) {
         this.sourceTypeId = sourceTypeId;
     }
 
 
-    /**
-     * 名称-数据库字段:SOURCE_TYPE_NAME
-     */
+
     public String getSourceTypeName() {
         return sourceTypeName;
     }
 
-    /**
-     * 名称-数据库字段:SOURCE_TYPE_NAME
-     */
+
     public void setSourceTypeName(String sourceTypeName) {
         this.sourceTypeName = sourceTypeName;
     }
 
-    /**
-     * 图片-数据库字段:SOURCE_TYPE_IMAGE
-     */
+
     public String getSourceTypeImage() {
         return sourceTypeImage;
     }
 
-    /**
-     * 图片-数据库字段:SOURCE_TYPE_IMAGE
-     */
+
     public void setSourceTypeImage(String sourceTypeImage) {
         this.sourceTypeImage = sourceTypeImage;
     }
 
-    /**
-     * 驱动-数据库字段:JDBC_DRIVE
-     */
+
     public String getJdbcDrive() {
         return jdbcDrive;
     }
 
-    /**
-     * 驱动-数据库字段:JDBC_DRIVE
-     */
+
     public void setJdbcDrive(String jdbcDrive) {
         this.jdbcDrive = jdbcDrive;
     }
 
-    /**
-     * 数据源类型-数据库字段:SOURCE_TYPE
-     */
+
     public Integer getSourceType() {
         return sourceType;
     }
@@ -166,9 +123,7 @@ public class DbSourceType extends BaseEntity {
         this.isSchema = isSchema;
     }
 
-    /**
-     * 生成建表语句-数据库字段:ENABLE_CREATE_DDL
-     */
+
     public Integer getEnableCreateDdl() {
         return enableCreateDdl;
     }
